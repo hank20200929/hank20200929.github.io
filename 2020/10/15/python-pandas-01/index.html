@@ -1,0 +1,262 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="机智の老何"><meta name="copyright" content="机智の老何"><meta name="generator" content="Hexo 5.2.0"><meta name="theme" content="hexo-theme-yun"><title>pandas笔记01-Pandas数据结构 | 每日笔记</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.19/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>document.addEventListener("DOMContentLoaded", () => {
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link rel="shortcut icon" type="image/svg+xml" href="/yun.svg"><link rel="mask-icon" href="/yun.svg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="每日笔记" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"每日笔记","version":"1.0.0","say":{"api":"/data/sentences.json"},"local_search":{"path":"/search.xml"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194"]}};
+  </script><meta name="description" content="Series，DataFrame，索引对象   引用规定： from pandas import Series,DataFrameimport pandas as pd  SeriesSeries是一种类似于一维数组的对象，它由一组数据（各种Numpy数据类型）以及一组与之相关的数据标签（即索引）组成。 123series1 &#x3D; Series([&amp;#x27;num1&amp;#x27;,&amp;#x27;nu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pandas笔记01-Pandas数据结构">
+<meta property="og:url" content="http://blog.dailynotes.cn/2020/10/15/python-pandas-01/index.html">
+<meta property="og:site_name" content="每日笔记">
+<meta property="og:description" content="Series，DataFrame，索引对象   引用规定： from pandas import Series,DataFrameimport pandas as pd  SeriesSeries是一种类似于一维数组的对象，它由一组数据（各种Numpy数据类型）以及一组与之相关的数据标签（即索引）组成。 123series1 &#x3D; Series([&amp;#x27;num1&amp;#x27;,&amp;#x27;nu">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-15T01:48:57.000Z">
+<meta property="article:modified_time" content="2020-10-15T05:34:16.338Z">
+<meta property="article:author" content="机智の老何">
+<meta property="article:tag" content="pandas">
+<meta name="twitter:card" content="summary"><script src="/js/ui/mode.js"></script></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script defer src="/js/ui/fireworks.js"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="机智の老何"><img width="96" loading="lazy" src="https://i.loli.net/2020/10/15/t8p3jxRBSNYiMsq.png" alt="机智の老何"></a><div class="site-author-name"><a href="/about/">机智の老何</a></div><a class="site-name" href="/about/site.html">每日笔记</a><sub class="site-subtitle">Records of Daily Matters.</sub><div class="site-desciption">记录每天发生的事情</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">22</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">6</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">10</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://www.baidu.com" title="百度一下"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:468507720@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/35725984" title="哔哩哔哩动画" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#Series"><span class="toc-number">1.</span> <span class="toc-text">Series</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#DataFrame"><span class="toc-number">2.</span> <span class="toc-text">DataFrame</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E5%AF%B9%E8%B1%A1"><span class="toc-number">3.</span> <span class="toc-text">索引对象</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="http://blog.dailynotes.cn/2020/10/15/python-pandas-01/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="机智の老何"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="每日笔记"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">pandas笔记01-Pandas数据结构</h1><div class="post-meta"><div class="post-time" style="display:block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2020-10-15 09:48:57" itemprop="dateCreated datePublished" datetime="2020-10-15T09:48:57+08:00">2020-10-15</time></div><span class="post-count"><span class="post-symbolcount"><span class="post-meta-item-icon" title="本文字数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-file-word-line"></use></svg></span> <span title="本文字数">2k</span><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读时长"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-timer-line"></use></svg></span> <span title="阅读时长">7m</span></span></span><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/Python/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">Python</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/pandas/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">pandas</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><blockquote>
+<p>Series，DataFrame，索引对象</p>
+</blockquote>
+<blockquote>
+<p>引用规定：</p>
+<p>from pandas import Series,DataFrame<br>import pandas as pd</p>
+</blockquote>
+<h5 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h5><p>Series是一种类似于一维数组的对象，它由一组数据（各种Numpy数据类型）以及一组与之相关的数据标签（即索引）组成。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">series1 = Series([<span class="string">&#x27;num1&#x27;</span>,<span class="string">&#x27;num2&#x27;</span>,<span class="string">&#x27;num3&#x27;</span>,<span class="string">&#x27;num4&#x27;</span>])</span><br><span class="line">print(series1.values)</span><br><span class="line">print(series1.index)</span><br></pre></td></tr></table></figure>
+
+<p>Series的字符串表现形式为：索引在左边，值在右边。由于我们没有为数据指定索引，于是会自动创建一个0到N-1（N为数据的长度）的整数型索引。</p>
+<p>通常，我们希望所创建的Series带有一个可以对各个数据点进行标记的索引：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">series2 = Series([<span class="string">&#x27;num1&#x27;</span>,<span class="string">&#x27;num2&#x27;</span>,<span class="string">&#x27;num3&#x27;</span>,<span class="string">&#x27;num4&#x27;</span>], index=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line">print(series2)</span><br></pre></td></tr></table></figure>
+
+<p>通过Series的values和index属性获取其数组表示形式和索引对象：</p>
+<p>Series对象本身及其索引都有一个name属性，该属性跟pandas其他的关键功能关系非常密切。<br>Series的索引也可以通过赋值的方式就地修改:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">series2.name=<span class="string">&#x27;series2Name&#x27;</span></span><br><span class="line">series2.index.name=<span class="string">&#x27;series2IndexName&#x27;</span></span><br><span class="line">series2.index=[<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;b&#x27;</span>,<span class="string">&#x27;c&#x27;</span>,<span class="string">&#x27;d&#x27;</span>]</span><br><span class="line">print(series2)</span><br></pre></td></tr></table></figure>
+
+<p>可以通过索引的方式选取Series中的单个或一组值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var1=series2[<span class="string">&#x27;a&#x27;</span>]</span><br><span class="line">print(var1)</span><br><span class="line">var2=series2[[<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;b&#x27;</span>]]</span><br><span class="line">print(var2)</span><br></pre></td></tr></table></figure>
+
+<p>还可以将Series看做是一个定长的有序字典，因为它是索引值到数据值的一个映射。它可以用在许多原本需要字典参数的函数中</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">&#x27;a&#x27;</span> <span class="keyword">in</span> series2)</span><br><span class="line">print(<span class="string">&#x27;t&#x27;</span> <span class="keyword">in</span> series2)</span><br></pre></td></tr></table></figure>
+
+<p>如果数据被存放在一个Python字典中，也可以直接通过这个字典来创建Series：<br>传入字典，则结果Series的索引就是原字典的键（有序排列）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dict=&#123;<span class="string">&#x27;name&#x27;</span>:<span class="string">&#x27;Tim&#x27;</span>,<span class="string">&#x27;age&#x27;</span>:<span class="number">25</span>,<span class="string">&#x27;sex&#x27;</span>:<span class="string">&#x27;1&#x27;</span>&#125;</span><br><span class="line">series3=Series(dict)</span><br><span class="line">print(series3)</span><br></pre></td></tr></table></figure>
+
+<p>如果索引列所对应的数据找不到，其结果就为NaN（即“非数字”not a number，在pandas中，它用于表示缺失或NA值 not available）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">info=[<span class="string">&#x27;name&#x27;</span>,<span class="string">&#x27;school&#x27;</span>,<span class="string">&#x27;age&#x27;</span>]</span><br><span class="line">series4=Series(dict,index=info)</span><br><span class="line">print(series4)</span><br></pre></td></tr></table></figure>
+
+<p>pandas的isnull和notnull函数可用于检测缺失数据：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(series4.isnull());print(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">print(series4.notnull())</span><br></pre></td></tr></table></figure>
+
+<p>对于许多应用而言，Series最重要的一个功能是：它在算术运算中会自动对齐不同索引的数据：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(series3+series4)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>以上内容输出如下</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">&#x27;num1&#x27;</span> <span class="string">&#x27;num2&#x27;</span> <span class="string">&#x27;num3&#x27;</span> <span class="string">&#x27;num4&#x27;</span>]</span><br><span class="line">RangeIndex(start=<span class="number">0</span>, stop=<span class="number">4</span>, step=<span class="number">1</span>)</span><br><span class="line">---------------</span><br><span class="line"><span class="number">1</span>    num1</span><br><span class="line"><span class="number">2</span>    num2</span><br><span class="line"><span class="number">3</span>    num3</span><br><span class="line"><span class="number">4</span>    num4</span><br><span class="line">dtype: object</span><br><span class="line">---------------</span><br><span class="line">a    num1</span><br><span class="line">b    num2</span><br><span class="line">c    num3</span><br><span class="line">d    num4</span><br><span class="line">Name: series2Name, dtype: object</span><br><span class="line">---------------</span><br><span class="line">num1</span><br><span class="line">---------------</span><br><span class="line">a    num1</span><br><span class="line">b    num2</span><br><span class="line">Name: series2Name, dtype: object</span><br><span class="line">---------------</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="literal">False</span></span><br><span class="line">---------------</span><br><span class="line">name    Tim</span><br><span class="line">age      <span class="number">25</span></span><br><span class="line">sex       <span class="number">1</span></span><br><span class="line">dtype: object</span><br><span class="line">---------------</span><br><span class="line">name      Tim</span><br><span class="line">school    NaN</span><br><span class="line">age        <span class="number">25</span></span><br><span class="line">dtype: object</span><br><span class="line">---------------</span><br><span class="line">name      <span class="literal">False</span></span><br><span class="line">school     <span class="literal">True</span></span><br><span class="line">age       <span class="literal">False</span></span><br><span class="line">dtype: bool</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">name       <span class="literal">True</span></span><br><span class="line">school    <span class="literal">False</span></span><br><span class="line">age        <span class="literal">True</span></span><br><span class="line">dtype: bool</span><br><span class="line">---------------</span><br><span class="line">age           <span class="number">50</span></span><br><span class="line">name      TimTim</span><br><span class="line">school       NaN</span><br><span class="line">sex          NaN</span><br><span class="line">dtype: object</span><br><span class="line">---------------</span><br></pre></td></tr></table></figure>
+
+<h5 id="DataFrame"><a href="#DataFrame" class="headerlink" title="DataFrame"></a>DataFrame</h5><p>DataFrame是一个表格型的数据结构，它含有一组有序的列，每列可以是不同的值类型（数值、字符串、布尔值等）。DataFrame既有行索引也有列索引，它可以被看做由Series组成的字典（共用同一个索引）。跟其他类似的数据结构相比（如R的data.frame）,DataFrame中面向行和面向列的操作基本上是平衡的。其实，DataFrame中的数据是以一个或多个二维块存放的（而不是列表、字典或别的一维数据结构）。</p>
+<p>虽然DataFrame是以二维结构保存数据的，但你仍然可以轻松地将其表示为更高维度的数据（层次化索引的表格型结构，这是pandas中许多高级数据处理功能的关键要素）。</p>
+<p>构建DataFrame的方式很多，最常用的一种是直接传入一个由等长列表或Numpy数组组成的字典,结果DataFrame会自动加上索引（跟Series一样），且全部列会被有序排列：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如果指定了列序列，则DataFrame的列就会按照指定顺序进行排列：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>跟Series一样，如果传入的列在数据中找不到，就会产生NA值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>通过类似字典标记的方式或属性的方式，可以将DataFrame的列获取为一个Series。返回的Series拥有原DataFrame相同的索引，且其name属性也已经被相应的设置好了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>行也可以通过位置或名称的方式进行获取，比如用索引字段ix：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>列可以通过赋值的方式进行修改。例如，我们可以给那个空的“debt”列赋上一个标量值或一组值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>将列表或数组赋值给某个列时，其长度必须跟DataFrame的长度相匹配。如果赋值的是一个Series，就会精确匹配DataFrame的索引，所有的空位都将被填上缺失值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>为不存在的列赋值会创建出一个新列。关键字del用于删除列：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong>通过索引方式返回的列只是相应数据的视图而已，并不是副本。因此，对返回的Series所做的任何就地修改全都会反映到源DataFrame上。通过Series的copy方法即可显示的复制列。</p>
+<p>另一种常见的数据形式是嵌套字典（也就是字典的字典）。如果将它传给DataFrame，他就会被解释为：外层字典的键作为列，内层键作为行索引：内层字典的键会被合并、排序以形成最终的索引。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>可以对该结果进行转置：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如果显示指定了索引，则会进行数据对齐：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>由Series组成的字典也差不多一样的用法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如果设置了DataFrame的index和columns的name属性，这些信息会被显示出来。跟Series一样，values属性也会以二维ndarray的形式返回DataFrame中的数据：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>下表列出可以输入给DataFrame构造器的数据：</p>
+<table>
+<thead>
+<tr>
+<th>二维ndarray</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>由数组、列表或元组组成的字典</td>
+</tr>
+<tr>
+<td>Numpy结构化、记录数组</td>
+</tr>
+<tr>
+<td>由Series组成的字典</td>
+</tr>
+<tr>
+<td>由字典组成的字典</td>
+</tr>
+<tr>
+<td>字典或Series的列表</td>
+</tr>
+<tr>
+<td>由列表或元组组成的列表</td>
+</tr>
+<tr>
+<td>另一个DataFrame</td>
+</tr>
+<tr>
+<td>Numpy的MaskedArray</td>
+</tr>
+</tbody></table>
+<h5 id="索引对象"><a href="#索引对象" class="headerlink" title="索引对象"></a>索引对象</h5><p>pandas的索引对象负责管理轴标签和其他元数据（比如轴名称等）。构建Series或DataFrame时，所用到的任何数组或其他序列的标签都会被转换成一个Index：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Index对象是不可修改的（immutable），因此用户不能对其进行修改。不可修改性非常重要，这使Index对象在多个数据结构之间安全共享。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>下表列出了pandas中内置的Index类。由于开发人员的不懈努力，Index甚至可以被继承从而实现特别的轴索引功能。</p>
+<table>
+<thead>
+<tr>
+<th>Index</th>
+<th>最泛化的Index对象，将轴标签表示为一个由Python对象组成的Numpy数组</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Int64Index</td>
+<td>针对整数的特殊Index</td>
+</tr>
+<tr>
+<td>MultiIndex</td>
+<td>“层次化”索引对象，表示单个轴上的多层索引。可以看做由元组组成的数组</td>
+</tr>
+<tr>
+<td>DatetimeIndex</td>
+<td>存储纳秒级时间戳（用Numpy的datetime64类型表示）</td>
+</tr>
+<tr>
+<td>PeriodIndex</td>
+<td>针对Period数据（时间间隔）的特殊Index</td>
+</tr>
+</tbody></table>
+<p>除了长得像数组，Index的功能也类似一个固定大小的集合。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>每个索引都有一些方法和属性，它们可用于设置逻辑并回答有关该索引所包含的数据的常见问题。下表列出了Index的方法和属性。</p>
+<table>
+<thead>
+<tr>
+<th>append</th>
+<th>连接另一个Index对象，产生一个新的Index</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>diff</td>
+<td>计算差集，并得到一个Index</td>
+</tr>
+<tr>
+<td>intersection</td>
+<td>计算交集</td>
+</tr>
+<tr>
+<td>union</td>
+<td>计算并集</td>
+</tr>
+<tr>
+<td>isin</td>
+<td>计算一个指示各值是否都包含在参数集合中的布尔型数组</td>
+</tr>
+<tr>
+<td>delete</td>
+<td>删除索引i处的元素，并得到新的Index</td>
+</tr>
+<tr>
+<td>drop</td>
+<td>删除传入的值，并得到新的Index</td>
+</tr>
+<tr>
+<td>insert</td>
+<td>将元素插入到索引i处，并得到新的Index</td>
+</tr>
+<tr>
+<td>is_monotonic</td>
+<td>当各元素均大于等于前一个元素时，返回True</td>
+</tr>
+<tr>
+<td>is_unique</td>
+<td>当Index没有重复值时，返回True</td>
+</tr>
+<tr>
+<td>unique</td>
+<td>计算Index中唯一值的数组</td>
+</tr>
+</tbody></table>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">看我整理的这么好，来打赏点呗~</div><div id="qr" style="display:none;"><div style="display:inline-block"><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/20200930114156633.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQxMTM3Mw==,size_16,color_FFFFFF,t_70"><img loading="lazy" src="https://img-blog.csdnimg.cn/20200930114156633.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQxMTM3Mw==,size_16,color_FFFFFF,t_70" alt="支付宝" title="支付宝"></a><div><span style="color:#00A3EE"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-alipay-line"></use></svg></span></div></div><div style="display:inline-block"><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/20200930114243891.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQxMTM3Mw==,size_16,color_FFFFFF,t_70"><img loading="lazy" src="https://img-blog.csdnimg.cn/20200930114243891.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQxMTM3Mw==,size_16,color_FFFFFF,t_70" alt="微信支付" title="微信支付"></a><div><span style="color:#2DC100"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-pay-line"></use></svg></span></div></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>机智の老何</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="http://blog.dailynotes.cn/2020/10/15/python-pandas-01/" title="pandas笔记01-Pandas数据结构">http://blog.dailynotes.cn/2020/10/15/python-pandas-01/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2020/10/15/python-notes-05/" rel="prev" title="python笔记-05 Python列表"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">python笔记-05 Python列表</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2020/10/15/python-pandas-excel-01/" rel="next" title="Pandas处理excel数据"><span class="post-nav-text">Pandas处理excel数据</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>点击按钮跳转 GitHub Issues 评论。</span><br><span>若没有本文 Issue，您可以使用 Comment 模版新建。</span><br><a class="hty-button hty-button--raised" id="github-issues" target="_blank" rel="noopener" href="https://github.com/YunYouJun/yunyoujun.github.io/issues?q=is:issue+pandas笔记01-Pandas数据结构">GitHub Issues</a></div><div id="valine-container"></div><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function initValine() {
+  const valineConfig = {"enable":true,"appId":"R6zMhu6tVOtUxK8fQk5mfgQt-gzGzoHsz","appKey":"4jG3KwGXwMS6EQwc0hDKiUSp","placeholder":"Just go go","avatar":null,"pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"serverURLs":"https://r6zmhu6t.lc-cn-n1-shared.com","enableQQ":true,"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = window.location.pathname
+  new Valine(valineConfig)
+}
+setTimeout(initValine, 1000)</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2019 – 2020 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 机智の老何</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(๑•̀ㅂ•́)و✧</span><script>function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2020-09-29T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div id="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv" title="总访客量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user-line"></use></svg></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg></span><span id="busuanzi_value_site_pv"></span></span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script></body></html>
