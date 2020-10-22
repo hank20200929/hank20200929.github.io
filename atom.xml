@@ -6,7 +6,7 @@
   <link href="http://blog.dailynotes.cn/atom.xml" rel="self"/>
   
   <link href="http://blog.dailynotes.cn/"/>
-  <updated>2020-10-22T14:52:01.364Z</updated>
+  <updated>2020-10-22T15:04:00.617Z</updated>
   <id>http://blog.dailynotes.cn/</id>
   
   <author>
@@ -17,39 +17,18 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>test</title>
-    <link href="http://blog.dailynotes.cn/2020/10/22/test/"/>
-    <id>http://blog.dailynotes.cn/2020/10/22/test/</id>
-    <published>2020-10-22T14:48:36.000Z</published>
-    <updated>2020-10-22T14:52:01.364Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;这些会在首页上显示吗？&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;description&lt;/code&gt;: 描述（只出现在预览卡片上，不出现在正文中）（默认使用 &lt;code&gt;400&lt;/code&gt; 字重以表强调，略细于加粗字体）&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;excerpt&lt;/code&gt;: 摘要（不需要在 &lt;code&gt;Front-matter&lt;/code&gt; 中设置，通过 &lt;code&gt;&amp;lt;!-- more --&amp;gt;&lt;/code&gt; 截断实现，预览卡片与正文中均出现）&lt;/li&gt;
-&lt;/ul&gt;</summary>
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
     <title>hadoop笔记02-Ubuntu18安装Hadoop</title>
     <link href="http://blog.dailynotes.cn/2020/10/20/hadoop-notes-02/"/>
     <id>http://blog.dailynotes.cn/2020/10/20/hadoop-notes-02/</id>
     <published>2020-10-20T06:41:46.000Z</published>
-    <updated>2020-10-20T08:59:47.371Z</updated>
+    <updated>2020-10-22T15:04:00.617Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;h5 id=&quot;Hadoop介绍&quot;&gt;&lt;a href=&quot;#Hadoop介绍&quot; class=&quot;headerlink&quot; title=&quot;Hadoop介绍&quot;&gt;&lt;/a&gt;Hadoop介绍&lt;/h5&gt;&lt;h6 id=&quot;三大发行版本&quot;&gt;&lt;a href=&quot;#三大发行版本&quot;</summary>
-        
-      
+    <summary type="html">&lt;h5 id=&quot;Hadoop介绍&quot;&gt;&lt;a href=&quot;#Hadoop介绍&quot; class=&quot;headerlink&quot; title=&quot;Hadoop介绍&quot;&gt;&lt;/a&gt;Hadoop介绍&lt;/h5&gt;&lt;h6 id=&quot;三大发行版本&quot;&gt;&lt;a href=&quot;#三大发行版本&quot; class=&quot;headerlink&quot; title=&quot;三大发行版本&quot;&gt;&lt;/a&gt;三大发行版本&lt;/h6&gt;&lt;ul&gt;
+&lt;li&gt;Apache版本最原始（最基础）的版本，对于入门学习最好。&lt;/li&gt;
+&lt;li&gt;Cloudera在大型互联网企业中用的较多。&lt;/li&gt;
+&lt;li&gt;Hortonworks文档较好。&lt;/li&gt;
+&lt;/ul&gt;</summary>
     
     
     
@@ -82,7 +61,7 @@
     <link href="http://blog.dailynotes.cn/2020/10/16/python-notes-09/"/>
     <id>http://blog.dailynotes.cn/2020/10/16/python-notes-09/</id>
     <published>2020-10-16T01:28:21.000Z</published>
-    <updated>2020-10-16T01:47:35.245Z</updated>
+    <updated>2020-10-22T15:03:25.331Z</updated>
     
     
       
@@ -225,21 +204,16 @@
     <link href="http://blog.dailynotes.cn/2020/10/15/python-pandas-01/"/>
     <id>http://blog.dailynotes.cn/2020/10/15/python-pandas-01/</id>
     <published>2020-10-15T01:48:57.000Z</published>
-    <updated>2020-10-15T05:34:16.338Z</updated>
+    <updated>2020-10-22T15:03:03.086Z</updated>
     
     
-      
-      
-        
-        
     <summary type="html">&lt;blockquote&gt;
 &lt;p&gt;Series，DataFrame，索引对象&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;blockquote&gt;
 &lt;p&gt;引用规定：&lt;/p&gt;
-&lt;p&gt;from pandas import Series,DataFrame&lt;br&gt;import pandas</summary>
-        
-      
+&lt;p&gt;from pandas import Series,DataFrame&lt;br&gt;import pandas as pd&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
     
     
     
@@ -255,19 +229,21 @@
     <link href="http://blog.dailynotes.cn/2020/10/15/python-pandas-excel-01/"/>
     <id>http://blog.dailynotes.cn/2020/10/15/python-pandas-excel-01/</id>
     <published>2020-10-15T00:59:25.000Z</published>
-    <updated>2020-10-22T00:48:03.697Z</updated>
+    <updated>2020-10-22T15:02:53.529Z</updated>
     
     
-      
-      
-        
-        
     <summary type="html">&lt;blockquote&gt;
 &lt;p&gt;本程序使用python 3.7&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h5 id=&quot;运行环境&quot;&gt;&lt;a href=&quot;#运行环境&quot; class=&quot;headerlink&quot;</summary>
-        
-      
+&lt;h5 id=&quot;运行环境&quot;&gt;&lt;a href=&quot;#运行环境&quot; class=&quot;headerlink&quot; title=&quot;运行环境&quot;&gt;&lt;/a&gt;运行环境&lt;/h5&gt;&lt;blockquote&gt;
+&lt;p&gt;pandas处理Excel依赖 &lt;em&gt;xlrd&lt;/em&gt; 模块&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;pip3 install xlrd&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;使用前需要导入pandas&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;import&lt;/span&gt; pandas &lt;span class=&quot;keyword&quot;&gt;as&lt;/span&gt; pd&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
     
     
     
@@ -283,18 +259,10 @@
     <link href="http://blog.dailynotes.cn/2020/10/15/python-relate-01/"/>
     <id>http://blog.dailynotes.cn/2020/10/15/python-relate-01/</id>
     <published>2020-10-15T00:50:41.000Z</published>
-    <updated>2020-10-15T06:04:41.608Z</updated>
+    <updated>2020-10-22T15:02:38.646Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;今天安装了几个模块，在cmd测试都正常，但是在pycharm就不行，后面试了以下方法：&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;1、&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img</summary>
-        
-      
+    <summary type="html">&lt;p&gt;今天安装了几个模块，在cmd测试都正常，但是在pycharm就不行，后面试了以下方法：&lt;/p&gt;</summary>
     
     
     
@@ -396,19 +364,13 @@
     <link href="http://blog.dailynotes.cn/2020/10/13/mybatis-notes-01/"/>
     <id>http://blog.dailynotes.cn/2020/10/13/mybatis-notes-01/</id>
     <published>2020-10-13T00:50:00.000Z</published>
-    <updated>2020-10-13T01:57:09.887Z</updated>
+    <updated>2020-10-22T15:03:45.634Z</updated>
     
     
-      
-      
-        
-        
     <summary type="html">&lt;blockquote&gt;
 &lt;p&gt;本文档介绍了mybatis关于批量导入的有关内容，水平不足，能力有限，如有错误的地方，还请多多指教。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h5 id=&quot;引入&quot;&gt;&lt;a href=&quot;#引入&quot; class=&quot;headerlink&quot;</summary>
-        
-      
+&lt;h5 id=&quot;引入&quot;&gt;&lt;a href=&quot;#引入&quot; class=&quot;headerlink&quot; title=&quot;引入&quot;&gt;&lt;/a&gt;引入&lt;/h5&gt;&lt;p&gt;第一次接触到批量导入是一个批量导入商品的需求：用户下载导入模板excel，填写需要导入的商品信息，填写完毕后上传该文件，然后程序将导入的信息进行校验，将通过校验的数据保存到数据库中，一开始是使用Spring jdbcTemplate的批量导入，虽然也能实现，但是写起来比较麻烦，在java文件中写的内容比较多，为了解决这个问题，采用mybatis来实现。&lt;/p&gt;</summary>
     
     
     
@@ -452,19 +414,13 @@
     <link href="http://blog.dailynotes.cn/2020/10/12/bigdata-begin/"/>
     <id>http://blog.dailynotes.cn/2020/10/12/bigdata-begin/</id>
     <published>2020-10-12T10:18:01.000Z</published>
-    <updated>2020-10-12T10:25:12.006Z</updated>
+    <updated>2020-10-22T15:08:41.398Z</updated>
     
     
-      
-      
-        
-        
     <summary type="html">&lt;blockquote&gt;
 &lt;p&gt;2020-10-12 18:20&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h6 id=&quot;开始&quot;&gt;&lt;a href=&quot;#开始&quot; class=&quot;headerlink&quot; title=&quot;开始&quot;&gt;&lt;/a&gt;开始&lt;/h6&gt;&lt;p&gt;​       </summary>
-        
-      
+&lt;h6 id=&quot;开始&quot;&gt;&lt;a href=&quot;#开始&quot; class=&quot;headerlink&quot; title=&quot;开始&quot;&gt;&lt;/a&gt;开始&lt;/h6&gt;&lt;p&gt;​        从业三个月来都是在做java后端的工作，到目前为止需求都能够及时解决了，也可以独立做一个功能了（SSM+JSP），但是我一直想要做的是大数据相关的内容，终于在一次内部招聘中进入了数据中台，今天算是接触大数据的第0天。要学习的东西很多，python、hadoop、hive、gp、spark…都要从0开始，领导也给了我一个月时间来学习，希望自己在这段时间里能够充分利用时间，好好学习！加油！&lt;/p&gt;</summary>
     
     
     
@@ -530,19 +486,12 @@
     <link href="http://blog.dailynotes.cn/2020/10/09/awesome-tools/"/>
     <id>http://blog.dailynotes.cn/2020/10/09/awesome-tools/</id>
     <published>2020-10-09T05:07:26.000Z</published>
-    <updated>2020-10-12T03:18:59.262Z</updated>
+    <updated>2020-10-22T15:04:28.227Z</updated>
     
     
-      
-      
-        
-        
     <summary type="html">&lt;blockquote&gt;
 &lt;p&gt;从业三个月以来（笑），为了更加高效滴工作，我也用过了很多软件|网站，有一些个人感觉十分强大，在这里推荐给各位：&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h5</summary>
-        
-      
+&lt;/blockquote&gt;</summary>
     
     
     
@@ -550,6 +499,31 @@
     
     
     <category term="推荐" scheme="http://blog.dailynotes.cn/tags/%E6%8E%A8%E8%8D%90/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>markdown基础语法</title>
+    <link href="http://blog.dailynotes.cn/2020/09/30/markdown-base-grammar/"/>
+    <id>http://blog.dailynotes.cn/2020/09/30/markdown-base-grammar/</id>
+    <published>2020-09-30T02:38:16.000Z</published>
+    <updated>2020-09-30T03:07:05.990Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;markdown基础语法&quot;&gt;&lt;a href=&quot;#markdown基础语法&quot; class=&quot;headerlink&quot; title=&quot;markdown基础语法&quot;&gt;&lt;/a&gt;markdown基础语法&lt;/h1&gt;&lt;h3 id=&quot;标题&quot;&gt;&lt;a href=&quot;#标题&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="参考" scheme="http://blog.dailynotes.cn/categories/%E5%8F%82%E8%80%83/"/>
+    
+    
+    <category term="markdown" scheme="http://blog.dailynotes.cn/tags/markdown/"/>
     
   </entry>
   
