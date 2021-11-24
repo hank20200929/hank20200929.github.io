@@ -1,0 +1,474 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="机智の老何"><meta name="copyright" content="机智の老何"><meta name="generator" content="Hexo 5.2.0"><meta name="theme" content="hexo-theme-yun"><title>事实表设计 | 每日笔记</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.19/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>document.addEventListener("DOMContentLoaded", () => {
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link rel="shortcut icon" type="image/svg+xml" href="/yun.svg"><link rel="mask-icon" href="/yun.svg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="每日笔记" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"每日笔记","version":"1.0.0","say":{"api":"/data/sentences.json"},"local_search":{"path":"/search.xml"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194"]}};
+  </script><meta name="description" content="事实表基础 参考： Star Schema–The Complete Reference The Data Warehouse Toolkit-The Definitive Guide to Dimensional Modeling  事实表特性事实表围绕业务过程来设计，内容包含引用的维度和与业务过程有关的度量。事实表一条记录所表达的业务细节程度被称为粒度。通常粒度表述为：维度属性组合所表示的细节">
+<meta property="og:type" content="article">
+<meta property="og:title" content="事实表设计">
+<meta property="og:url" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/index.html">
+<meta property="og:site_name" content="每日笔记">
+<meta property="og:description" content="事实表基础 参考： Star Schema–The Complete Reference The Data Warehouse Toolkit-The Definitive Guide to Dimensional Modeling  事实表特性事实表围绕业务过程来设计，内容包含引用的维度和与业务过程有关的度量。事实表一条记录所表达的业务细节程度被称为粒度。通常粒度表述为：维度属性组合所表示的细节">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210426153556020.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210426171658295.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210426171943189.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210427104129207.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210427123816087.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210427123919363.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210427123928446.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210427150414607.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210427150552763.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210427150603996.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210427164833891.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210428125011024.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210428125730010.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210428143553428.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210428144545680.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210428144610773.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210428144710825.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210428145312341.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210428150212372.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210428151139249.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210428154831321.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210428155128210.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210428155528820.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210428163153484.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210429124126060.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210429124151375.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210429124358782.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210429124547273.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210429124923879.png">
+<meta property="og:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210429125116834.png">
+<meta property="article:published_time" content="2021-08-05T06:04:45.000Z">
+<meta property="article:modified_time" content="2021-08-05T06:14:05.746Z">
+<meta property="article:author" content="机智の老何">
+<meta property="article:tag" content="事实表">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/image-20210426153556020.png"><script src="/js/ui/mode.js"></script></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script defer src="/js/ui/fireworks.js"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="机智の老何"><img width="96" loading="lazy" src="https://i.loli.net/2020/10/15/t8p3jxRBSNYiMsq.png" alt="机智の老何"></a><div class="site-author-name"><a href="/about/">机智の老何</a></div><a class="site-name" href="/about/site.html">每日笔记</a><sub class="site-subtitle">Records of Daily Matters.</sub><div class="site-desciption">记录每天发生的事情</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">8</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">4</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">6</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://www.baidu.com" title="百度一下"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:468507720@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/35725984" title="哔哩哔哩动画" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%AE%9E%E8%A1%A8%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">事实表基础</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E5%AE%9E%E8%A1%A8%E7%89%B9%E6%80%A7"><span class="toc-number">1.1.</span> <span class="toc-text">事实表特性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E5%AE%9E%E8%A1%A8%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="toc-number">1.2.</span> <span class="toc-text">事实表设计原则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E5%AE%9E%E8%A1%A8%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.</span> <span class="toc-text">事实表设计方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E9%80%89%E6%8B%A9%E4%B8%9A%E5%8A%A1%E8%BF%87%E7%A8%8B%E5%8F%8A%E7%A1%AE%E5%AE%9A%E4%BA%8B%E5%AE%9E%E8%A1%A8%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.1.</span> <span class="toc-text">第一步：选择业务过程及确定事实表类型</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E5%A3%B0%E6%98%8E%E7%B2%92%E5%BA%A6"><span class="toc-number">1.3.2.</span> <span class="toc-text">第二步：声明粒度</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E7%A1%AE%E5%AE%9A%E7%BB%B4%E5%BA%A6"><span class="toc-number">1.3.3.</span> <span class="toc-text">第三步：确定维度</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9A%E7%A1%AE%E5%AE%9A%E4%BA%8B%E5%AE%9E"><span class="toc-number">1.3.4.</span> <span class="toc-text">第四步：确定事实</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%EF%BC%9A%E5%86%97%E4%BD%99%E7%BB%B4%E5%BA%A6"><span class="toc-number">1.3.5.</span> <span class="toc-text">第五步：冗余维度</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E4%BA%8B%E5%AE%9E%E8%A1%A8"><span class="toc-number">2.</span> <span class="toc-text">事务事实表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E8%BF%87%E7%A8%8B"><span class="toc-number">2.1.</span> <span class="toc-text">设计过程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E9%80%89%E6%8B%A9%E4%B8%9A%E5%8A%A1%E8%BF%87%E7%A8%8B"><span class="toc-number">2.1.1.</span> <span class="toc-text">1) 选择业务过程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E7%A1%AE%E5%AE%9A%E7%B2%92%E5%BA%A6"><span class="toc-number">2.1.2.</span> <span class="toc-text">2) 确定粒度</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E7%A1%AE%E5%AE%9A%E7%BB%B4%E5%BA%A6"><span class="toc-number">2.1.3.</span> <span class="toc-text">3) 确定维度</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-%E7%A1%AE%E5%AE%9A%E4%BA%8B%E5%AE%9E"><span class="toc-number">2.1.4.</span> <span class="toc-text">4) 确定事实</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-%E5%86%97%E4%BD%99%E7%BB%B4%E5%BA%A6"><span class="toc-number">2.1.5.</span> <span class="toc-text">5) 冗余维度</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%95%E4%BA%8B%E5%8A%A1%E4%BA%8B%E5%AE%9E%E8%A1%A8"><span class="toc-number">2.2.</span> <span class="toc-text">单事务事实表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E4%BA%8B%E5%8A%A1%E4%BA%8B%E5%AE%9E%E8%A1%A8"><span class="toc-number">2.3.</span> <span class="toc-text">多事务事实表</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B7%98%E5%AE%9D%E4%BA%A4%E6%98%93%E4%BA%8B%E5%8A%A1%E4%BA%8B%E5%AE%9E%E8%A1%A8"><span class="toc-number">2.3.1.</span> <span class="toc-text">淘宝交易事务事实表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B7%98%E5%AE%9D%E6%94%B6%E8%97%8F%E5%95%86%E5%93%81%E4%BA%8B%E5%8A%A1%E4%BA%8B%E5%AE%9E%E8%A1%A8"><span class="toc-number">2.3.2.</span> <span class="toc-text">淘宝收藏商品事务事实表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A4%9A%E4%BA%8B%E5%8A%A1%E4%BA%8B%E5%AE%9E%E8%A1%A8%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-number">2.3.3.</span> <span class="toc-text">多事务事实表的选择</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%A4%E7%A7%8D%E4%BA%8B%E5%AE%9E%E8%A1%A8%E5%AF%B9%E6%AF%94"><span class="toc-number">2.4.</span> <span class="toc-text">两种事实表对比</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%9A%E5%8A%A1%E8%BF%87%E7%A8%8B"><span class="toc-number">2.4.1.</span> <span class="toc-text">业务过程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%B2%92%E5%BA%A6%E5%92%8C%E7%BB%B4%E5%BA%A6"><span class="toc-number">2.4.2.</span> <span class="toc-text">粒度和维度</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%8B%E5%AE%9E"><span class="toc-number">2.4.3.</span> <span class="toc-text">事实</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%8B%E6%B8%B8%E4%B8%9A%E5%8A%A1%E4%BD%BF%E7%94%A8"><span class="toc-number">2.4.4.</span> <span class="toc-text">下游业务使用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E5%AD%98%E5%82%A8%E6%88%90%E6%9C%AC"><span class="toc-number">2.4.5.</span> <span class="toc-text">计算存储成本</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%88%B6%E5%AD%90%E4%BA%8B%E5%AE%9E%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F"><span class="toc-number">2.5.</span> <span class="toc-text">父子事实的处理方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E5%AE%9E%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%87%86%E5%88%99"><span class="toc-number">2.6.</span> <span class="toc-text">事实的设计准则</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E6%80%A7"><span class="toc-number">2.6.1.</span> <span class="toc-text">完整性</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">2.6.2.</span> <span class="toc-text">一致性</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8F%AF%E5%8A%A0%E6%80%A7"><span class="toc-number">2.6.3.</span> <span class="toc-text">可加性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%A8%E6%9C%9F%E5%BF%AB%E7%85%A7%E4%BA%8B%E5%AE%9E%E8%A1%A8"><span class="toc-number">3.</span> <span class="toc-text">周期快照事实表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E6%80%A7"><span class="toc-number">3.1.</span> <span class="toc-text">特性</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%94%A8%E5%BF%AB%E7%85%A7%E9%87%87%E6%A0%B7%E7%8A%B6%E6%80%81"><span class="toc-number">3.1.1.</span> <span class="toc-text">用快照采样状态</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%BF%AB%E7%85%A7%E7%B2%92%E5%BA%A6"><span class="toc-number">3.1.2.</span> <span class="toc-text">快照粒度</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AF%86%E5%BA%A6%E4%B8%8E%E7%A8%80%E7%96%8F%E6%80%A7"><span class="toc-number">3.1.3.</span> <span class="toc-text">密度与稀疏性</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8D%8A%E5%8F%AF%E5%8A%A0%E6%80%A7"><span class="toc-number">3.1.4.</span> <span class="toc-text">半可加性</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B"><span class="toc-number">3.2.</span> <span class="toc-text">实例</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8D%95%E7%BB%B4%E5%BA%A6%E7%9A%84%E6%AF%8F%E5%A4%A9%E5%BF%AB%E7%85%A7%E4%BA%8B%E5%AE%9E%E8%A1%A8"><span class="toc-number">3.2.1.</span> <span class="toc-text">单维度的每天快照事实表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E7%BB%B4%E5%BA%A6%E7%9A%84%E6%AF%8F%E5%A4%A9%E5%BF%AB%E7%85%A7%E4%BA%8B%E5%AE%9E%E8%A1%A8"><span class="toc-number">3.2.2.</span> <span class="toc-text">混合维度的每天快照事实表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%85%A8%E9%87%8F%E5%BF%AB%E7%85%A7%E4%BA%8B%E5%AE%9E%E8%A1%A8"><span class="toc-number">3.2.3.</span> <span class="toc-text">全量快照事实表</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">3.3.</span> <span class="toc-text">注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E4%B8%8E%E5%BF%AB%E7%85%A7%E6%88%90%E5%AF%B9%E8%AE%BE%E8%AE%A1"><span class="toc-number">3.3.1.</span> <span class="toc-text">事务与快照成对设计</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%99%84%E5%8A%A0%E4%BA%8B%E5%AE%9E"><span class="toc-number">3.3.2.</span> <span class="toc-text">附加事实</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%91%A8%E6%9C%9F%E5%88%B0%E6%97%A5%E6%9C%9F%E5%BA%A6%E9%87%8F"><span class="toc-number">3.3.3.</span> <span class="toc-text">周期到日期度量</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%AF%E7%A7%AF%E5%BF%AB%E7%85%A7%E4%BA%8B%E5%AE%9E%E8%A1%A8"><span class="toc-number">4.</span> <span class="toc-text">累积快照事实表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E8%BF%87%E7%A8%8B-1"><span class="toc-number">4.1.</span> <span class="toc-text">设计过程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E9%80%89%E6%8B%A9%E4%B8%9A%E5%8A%A1%E8%BF%87%E7%A8%8B"><span class="toc-number">4.1.1.</span> <span class="toc-text">第一步：选择业务过程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E7%A1%AE%E5%AE%9A%E7%B2%92%E5%BA%A6"><span class="toc-number">4.1.2.</span> <span class="toc-text">第二步：确定粒度</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E7%A1%AE%E5%AE%9A%E7%B2%92%E5%BA%A6-1"><span class="toc-number">4.1.3.</span> <span class="toc-text">第二步：确定粒度</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9A%E7%A1%AE%E5%AE%9A%E4%BA%8B%E5%AE%9E-1"><span class="toc-number">4.1.4.</span> <span class="toc-text">第四步：确定事实</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%EF%BC%9A%E9%80%80%E5%8C%96%E7%BB%B4%E5%BA%A6"><span class="toc-number">4.1.5.</span> <span class="toc-text">第五步：退化维度</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E7%82%B9"><span class="toc-number">4.2.</span> <span class="toc-text">特点</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E4%B8%8D%E6%96%AD%E6%9B%B4%E6%96%B0"><span class="toc-number">4.2.1.</span> <span class="toc-text">数据不断更新</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A4%9A%E4%B8%9A%E5%8A%A1%E8%BF%87%E7%A8%8B%E6%97%A5%E6%9C%9F"><span class="toc-number">4.2.2.</span> <span class="toc-text">多业务过程日期</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E6%AE%8A%E5%A4%84%E7%90%86"><span class="toc-number">4.3.</span> <span class="toc-text">特殊处理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%9D%9E%E7%BA%BF%E6%80%A7%E8%BF%87%E7%A8%8B"><span class="toc-number">4.3.1.</span> <span class="toc-text">非线性过程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A4%9A%E6%BA%90%E8%BF%87%E7%A8%8B"><span class="toc-number">4.3.2.</span> <span class="toc-text">多源过程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%9A%E5%8A%A1%E8%BF%87%E7%A8%8B%E5%8F%96%E8%88%8D"><span class="toc-number">4.3.3.</span> <span class="toc-text">业务过程取舍</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%A9%E7%90%86%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.4.</span> <span class="toc-text">物理实现</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%85%A8%E9%87%8F%E8%A1%A8%E7%9A%84%E5%BD%A2%E5%BC%8F"><span class="toc-number">4.4.1.</span> <span class="toc-text">全量表的形式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%85%A8%E9%87%8F%E8%A1%A8%E7%9A%84%E5%8F%98%E5%8C%96%E5%BD%A2%E5%BC%8F"><span class="toc-number">4.4.2.</span> <span class="toc-text">全量表的变化形式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%A5%E4%B8%9A%E5%8A%A1%E5%AE%9E%E4%BD%93%E7%9A%84%E7%BB%93%E6%9D%9F%E6%97%B6%E9%97%B4%E5%88%86%E5%8C%BA"><span class="toc-number">4.4.3.</span> <span class="toc-text">以业务实体的结束时间分区</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E7%A7%8D%E4%BA%8B%E5%AE%9E%E8%A1%A8%E7%9A%84%E6%AF%94%E8%BE%83"><span class="toc-number">5.</span> <span class="toc-text">三种事实表的比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E4%BA%8B%E5%AE%9E%E7%9A%84%E4%BA%8B%E5%AE%9E%E8%A1%A8"><span class="toc-number">6.</span> <span class="toc-text">无事实的事实表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%81%9A%E9%9B%86%E5%9E%8B%E4%BA%8B%E5%AE%9E%E8%A1%A8"><span class="toc-number">7.</span> <span class="toc-text">聚集型事实表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%81%9A%E9%9B%86%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E5%88%99"><span class="toc-number">7.1.</span> <span class="toc-text">聚集的基本原则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%81%9A%E9%9B%86%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%AD%A5%E9%AA%A4"><span class="toc-number">7.2.</span> <span class="toc-text">聚集的基本步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E7%A1%AE%E5%AE%9A%E8%81%9A%E9%9B%86%E7%BB%B4%E5%BA%A6"><span class="toc-number">7.2.1.</span> <span class="toc-text">第一步：确定聚集维度</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E7%A1%AE%E5%AE%9A%E4%B8%80%E8%87%B4%E6%80%A7%E4%B8%8A%E9%92%BB"><span class="toc-number">7.2.2.</span> <span class="toc-text">第二步：确定一致性上钻</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E7%A1%AE%E5%AE%9A%E8%81%9A%E9%9B%86%E4%BA%8B%E5%AE%9E"><span class="toc-number">7.2.3.</span> <span class="toc-text">第三步：确定聚集事实</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%AC%E5%85%B1%E6%B1%87%E6%80%BB%E5%B1%82"><span class="toc-number">7.3.</span> <span class="toc-text">公共汇总层</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E5%88%99"><span class="toc-number">7.3.1.</span> <span class="toc-text">基本原则</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%A4%E6%98%93%E6%B1%87%E6%80%BB%E8%A1%A8%E8%AE%BE%E8%AE%A1"><span class="toc-number">7.3.2.</span> <span class="toc-text">交易汇总表设计</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%81%9A%E9%9B%86%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E"><span class="toc-number">7.4.</span> <span class="toc-text">聚集补充说明</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%81%9A%E9%9B%86%E6%98%AF%E4%B8%8D%E8%B7%A8%E8%B6%8A%E4%BA%8B%E5%AE%9E%E7%9A%84"><span class="toc-number">7.4.1.</span> <span class="toc-text">聚集是不跨越事实的</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%81%9A%E9%9B%86%E5%B8%A6%E6%9D%A5%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">7.4.2.</span> <span class="toc-text">聚集带来的问题</span></a></li></ol></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="机智の老何"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="每日笔记"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">事实表设计</h1><div class="post-meta"><div class="post-time" style="display:block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2021-08-05 14:04:45" itemprop="dateCreated datePublished" datetime="2021-08-05T14:04:45+08:00">2021-08-05</time></div><span class="post-count"><span class="post-symbolcount"><span class="post-meta-item-icon" title="本文字数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-file-word-line"></use></svg></span> <span title="本文字数">15.3k</span><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读时长"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-timer-line"></use></svg></span> <span title="阅读时长">51m</span></span></span><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">数据仓库</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/%E4%BA%8B%E5%AE%9E%E8%A1%A8/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">事实表</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h3 id="事实表基础"><a href="#事实表基础" class="headerlink" title="事实表基础"></a>事实表基础</h3><blockquote>
+<p>参考：</p>
+<p>Star Schema–The Complete Reference</p>
+<p>The Data Warehouse Toolkit-The Definitive Guide to Dimensional Modeling</p>
+</blockquote>
+<h4 id="事实表特性"><a href="#事实表特性" class="headerlink" title="事实表特性"></a>事实表特性</h4><p>事实表围绕业务过程来设计，内容包含引用的<strong>维度</strong>和与业务过程有关的<strong>度量</strong>。事实表一条记录所表达的业务细节程度被称为<strong>粒度</strong>。通常粒度表述为：维度属性组合所表示的细节程度 或 所表示的具体业务含义。</p>
+<p>​    <strong>事实</strong>一般为整型或浮点型的十进制数值，有可加性、半可加性和不可加性三种类型。</p>
+<ul>
+<li><strong>可加型：</strong>事实可以按照与事实表关联的任意维度进行汇总。</li>
+<li><strong>半可加性：</strong>事实只能按照特定维度进行汇总。</li>
+<li><strong>不可加型：</strong>不可加性事实可以分解为可加的组件来实现聚集。</li>
+</ul>
+<blockquote>
+<p>相较于维度表，事实表要细长得多，行的增加速度也比维表快很多。</p>
+</blockquote>
+<p><strong>退化维度的概念：</strong>维度属性也可以存储到事实表中，这种存储到事实表中的维度列就被称为“退化维度”。与其他存储在维度表中的维度一样，<strong>退化维度也可以用来进行事实表的过滤查询、实现聚合操作等。</strong></p>
+<a id="more"></a>
+
+<h4 id="事实表设计原则"><a href="#事实表设计原则" class="headerlink" title="事实表设计原则"></a>事实表设计原则</h4><ul>
+<li>尽可能包含所有与业务过程相关的事实；</li>
+</ul>
+<blockquote>
+<p>在事实表中应该尽量包含所有与业务过程相关的事实，即使存在冗余，但是因为事实通常为数字型，带来的存储开销也不会很大。</p>
+</blockquote>
+<ul>
+<li>只选择与业务过程相关的事实</li>
+</ul>
+<blockquote>
+<p>如：在订单的下单这个业务过程的事实表设计中，不应该存在支付金额这个表示支付业务过程的事实。</p>
+</blockquote>
+<ul>
+<li>分解不可加性事实为可加的组件</li>
+</ul>
+<blockquote>
+<p>如：订单的优惠率，应该分解为订单原价金额与订单优惠金额两个事实存储在事实表中。</p>
+</blockquote>
+<ul>
+<li>在选择维度和事实之前必须先声明粒度</li>
+</ul>
+<blockquote>
+<p>粒度用于确定事实表中一行所表示业务的细节层次，决定了维度模型的扩展性，在选择维度和事实之前必须先声明粒度，且每个维度和事实必须与所定义的粒度保持一致。在设计事实表的过程中，粒度定义的越细越好，一般从原子粒度开始。在事实表中，通常通过业务描述来表述粒度，对于聚集性事实表的粒度描述，可采用维度或维度属性组合的方式。</p>
+</blockquote>
+<ul>
+<li>在同一个事实表中不能有多种不同粒度的事实</li>
+</ul>
+<blockquote>
+<p>事实表中的所有事实需要与表定义的粒度保持一致。</p>
+<p>如：机票支付成功事务事实表，粒度为票一级的，而在实际业务中，一个订单可以同时支付多张票，如ID为100901的订单包含三张机票，ID为100902的订单包含两张机票，ID为100903的订单包含一张机票。在该事实表的设计中，票支付金额和票折扣金额两个事实与表定义的粒度一致，并且支持按表的任意维度汇总，可以添加进该事实表中。而订单支付金额和订单票数作为上一层粒度的订单级事实，与该票级事实表的粒度不一致，且不能进行汇总。比如订单ID为100901的订单支付金额为3700元，订单票数为3张，如果这两个度量在该表进行汇总计算总订单金额和总票数，则会造成重复计算的问题，所以不能作为该表的度量选入。</p>
+</blockquote>
+<ul>
+<li>事实的单位要保持一致</li>
+</ul>
+<blockquote>
+<p>对于同一个事实表中事实的单位，应该保持一致。比如原订单金额、订单优惠金额、订单运费金额这三个事实，应该采用一致的计量单位，统一为元或分，以方便使用。</p>
+</blockquote>
+<ul>
+<li>对事实的null值要处理</li>
+</ul>
+<blockquote>
+<p>对于事实表中事实度量为null 值的处理，因为在数据库中null 值对常用数字型字段的sql过滤条件都不生效，比如大于、小于、等于、大于或等于、小于或等于，建议用零值填充。</p>
+</blockquote>
+<ul>
+<li>使用退化维度提高事实表的易用性</li>
+</ul>
+<blockquote>
+<p>在Kimball的维度建模中，通常按照星形模型的方式来设计，对于维度的获取采用的是通过事实表的外键关联专门的维表的方式，谨慎使用退化维度。而在大数据领域的事实表设计中，则<strong>大量采用退化维度的方式，在事实表中存储各种类型的常用维度信息。</strong>这样设计的目的主要是为了<strong>减少下游用户使用时关联多个表的操作</strong>，直接通过退化维度实现对事实表的过滤查询、控制聚合层次、排序数据以及定义主从关系等。通过增加冗余存储的方式减少计算开销，提高使用效率。</p>
+</blockquote>
+<h4 id="事实表设计方法"><a href="#事实表设计方法" class="headerlink" title="事实表设计方法"></a>事实表设计方法</h4><blockquote>
+<p>在kimball维度建模理论中，对于维度模型设计采用四步设计方法：选择业务过程、声明粒度、确定维度和确定事实。在互联网大数据环境下，为了面对复杂的业务场景，为了更有效、更准确地进行维度模型设计，对kimball维度建模方法进行了改进：</p>
+</blockquote>
+<h5 id="第一步：选择业务过程及确定事实表类型"><a href="#第一步：选择业务过程及确定事实表类型" class="headerlink" title="第一步：选择业务过程及确定事实表类型"></a>第一步：选择业务过程及确定事实表类型</h5><p>​    在明确了业务需求以后，接下来需要进行详细的需求分析，对业务的整个生命周期进行分析，明确关键的业务步骤，从而选择与需求有关的业务过程。</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210426153556020.png" alt="image-20210426153556020" loading="lazy"></p>
+<p>​    业务过程通常使用<strong>行为动词表示业务执行的活动</strong>。比如图 11.1中的淘宝订单流转的业务过程有四个:<strong>创建订单、买家付款、卖家发货、买家确认收货</strong>。在明确了流程所包含的业务过程后，需要<strong>根据具体的业务需求来选择与维度建模有关的业务过程</strong>。比如是选择买家付款这个业务过程，还是选择创建订单和买家付款这两个业务过程，具体<strong>根据业务情况来确定</strong>。<br>​    在选择了业务过程以后，相应的事实表类型也随之确定了。比如选择买家付款这个业务过程，那么事实表应为只包含买家付款这一个业务过程的<u>单事务事实表</u>；如果选择的是所有四个业务过程，并且需要分析各个业务过程之间的时间间隔，那么所建立的事实表应为包含了所有四个业务过程的<u>累积快照事实表</u>。</p>
+<h5 id="第二步：声明粒度"><a href="#第二步：声明粒度" class="headerlink" title="第二步：声明粒度"></a>第二步：声明粒度</h5><p>​    粒度的声明是事实表建模非常重要的一步，意味着精确定义事实表的每一行所表示的业务含义，粒度传递的是与事实表度量有关的细节层次。明确的粒度能确保对事实表中行的意思的理解不会产生混淆，保证所有的事实按照同样的细节层次记录。<br>​    应该尽量<strong>选择最细级别的原子粒度</strong>，以确保事实表的应用具有最大的灵活性。同时对于订单过程而言，粒度可以被定义为最细的订单级别。比如在淘宝订单中有父子订单的概念，即一个子订单对应一种商品，如果拍下了多种商品，则每种商品对应一个子订单；这些子订单一同结算的话，则会生成一个父订单。那么在这个例子中，事实表的粒度应该选择为子订单级别。</p>
+<h5 id="第三步：确定维度"><a href="#第三步：确定维度" class="headerlink" title="第三步：确定维度"></a>第三步：确定维度</h5><p>​    完成粒度声明以后，也就意味着确定了主键，对应的维度组合以及相关的维度字段就可以确定了，应该选择能够描述清楚业务过程所处的环境的维度信息。<u>比如在淘宝订单付款事务事实表中，粒度为子订单，相关的维度有买家、卖家、商品、收货人信息、业务类型、订单时间等维度。</u></p>
+<h5 id="第四步：确定事实"><a href="#第四步：确定事实" class="headerlink" title="第四步：确定事实"></a>第四步：确定事实</h5><p>​    事实可以通过回答“过程的度量是什么”来确定。应该选择<u>与业务过程有关的</u><strong>所有事实</strong>，且事实的粒度要与所声明的事实表的粒度一致。事实有可加性、半可加性、非可加性三种类型，需要将不可加性事实分解为可加的组件。<br>​    比如在淘宝订单付款事务事实表中，同粒度的事实有子订单分摊的支付金额、邮费、优惠金额等。</p>
+<h5 id="第五步：冗余维度"><a href="#第五步：冗余维度" class="headerlink" title="第五步：冗余维度"></a>第五步：冗余维度</h5><p>​    在传统的维度建模的星形模型中，对维度的处理是需要单独存放在专门的维表中的，通过事实表的外键获取维度。这样做的目的是为了减少事实表的维度冗余，从而减少存储消耗。</p>
+<p>​    而在大数据的事实表模型设计中，考虑更多的是提高下游用户的使用效率，降低数据获取的复杂性，减少关联的表数量。所以通常事实表中会冗余方便下游用户使用的常用维度，以实现对事实表的过滤查询、控制聚合层次、排序数据以及定义主从关系等操作。比如在淘宝订单付款事务事实表中，通常会冗余大量的常用维度字段，以及商品类目、卖家店铺等维度信息。</p>
+<h3 id="事务事实表"><a href="#事务事实表" class="headerlink" title="事务事实表"></a>事务事实表</h3><blockquote>
+<p>用来描述业务过程，跟踪空间或时间上某点的度量事件，保存的是原子数据。</p>
+<p>订单作为交易行为的核心载体，直观反映了交易的状况。订单的流转会产生很多业务过程，而下单、支付和成功完结三个业务过程是整个订单的关键节点。获取这三个业务过程的笔数、金额以及转化率是日常数据统计分析的重点，事务事实表设计可以很好地满足这个需求。本节将介绍三种不同事务事实表的设计方式，以及在淘宝交易订单中关于邮费和折扣分摊到子订单的算法。</p>
+</blockquote>
+<h4 id="设计过程"><a href="#设计过程" class="headerlink" title="设计过程"></a>设计过程</h4><p>​    任何类型的事件都可以被理解为一种事务。比如交易过程中的创建订单、买家付款，物流过程中的揽货、发货、签收，退款中的申请退款、申请小二介入等，都可以被理解为一种事务。事务事实表，即针对这些过程构建的一类事实表，用以跟踪定义业务过程的个体行为，提供丰富的分析能力，作为数据仓库原子的明细数据。下面以淘宝交易事务事实表为例，阐述事务事实表的一般设计过程。</p>
+<h5 id="1-选择业务过程"><a href="#1-选择业务过程" class="headerlink" title="1) 选择业务过程"></a>1) 选择业务过程</h5><p>图11.1中出现了创建订单、买家付款、卖家发货、买家确认收货四个业务过程，这四个业务过程不仅是交易过程中的重要时间点，也是统计分析的重点，因此交易事务事实表设计着重从这四个业务过程进行展开。</p>
+<blockquote>
+<p>Kimball 维度建模理论认为，为了便于进行独立的分析研究，应该为每个业务过程建立一个事实表。对于是否将不同业务过程放到同一个事实表中，将在下一节中详细介绍。</p>
+</blockquote>
+<h5 id="2-确定粒度"><a href="#2-确定粒度" class="headerlink" title="2) 确定粒度"></a>2) 确定粒度</h5><p>即确定事务事实表每一行所表达的细节层次。</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210426171658295.png" alt="image-20210426171658295" loading="lazy"></p>
+<p>​    淘宝出售商品主要分两类卖家:一类是个人性质的闲置卖家，主要出售闲置的或者二手商品；一类是拥有店铺的卖家，以出售新商品为主。接下来主要以店铺类交易订单为例进行介绍。在淘宝下单交易时，有两种方式:一种是选定商品后直接购买，这样会产生一个交易订单；一种是将多种商品加入到购物车中，然后一起结算，此时对于每一种商品都会产生一个订单，同时对于同一个店铺会额外产生一个订单，即<strong>父订单</strong>；由于是在同一个店铺购买的，所以父订单会承载订单物流、店铺优惠等信息。而对于每一种商品产生的订单就称为子订单，子订单记录了父订单的订单号，并且有子订单标志。如果在同一个店铺只购买了一种商品，则会将父子订单进行合并，只保留一条订单记录。如图11.2和图11.3所示示例。</p>
+<p>​    了解了淘宝交易订单的产生过程后，现在为淘宝交易事务事实表确定粒度。如第1步所述，在淘宝交易过程中有四个重要业务过程，需要为每个业务过程确定一个粒度。其中<strong>下单、支付和成功完结三个业务过程选择交易子订单粒度</strong>，即每个子订单为事务事实表的一行，每个子订单所表达的细节信息为:交易时间、卖家、买家、商品，即选择图11.2和图11.3中订单ID为1、4、5、6、7、8、9的子订单作为事务事实表的每一行。卖家发货这个业务过程可以选择子订单粒度，即将每个子订单作为卖家发货事实表的一个细节。然而，在实际操作中发现，<strong>卖家发货更多的是物流单粒度而非子订单粒度</strong>，同一个子订单可以拆开成多个物流单进行发货。在事务事实表设计过程中，秉承确定为最细粒度的原则，<strong>因此对于卖家发货确定为物流单粒度</strong>，和其他三个业务过程不同，这样可以更好地给下游统计分析带来灵活性。</p>
+<h5 id="3-确定维度"><a href="#3-确定维度" class="headerlink" title="3) 确定维度"></a>3) 确定维度</h5><p>​    选定好业务过程并且确定粒度后，就可以确定维度信息了。在淘宝交易事务事实表设计过程中，按照经常用于统计分析的场景，<strong>确定维度包含:买家、卖家、商品、商品类目、发货地区、收货地区、父订单维度以及杂项维度</strong>。由于订单的属性较多，比如订单的业务类型、是否无线交易、订单的attributes属性等，对于这些使用较多却又无法归属到上述买卖家或商品维度中的属性，则新建一个杂项维度进行存放，如图11.4所示。</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210426171943189.png" alt="image-20210426171943189" loading="lazy"></p>
+<p>​    选定好业务过程并且确定粒度后，就可以确定维度信息了。在淘宝交易事务事实表设计过程中，按照经常用于统计分析的场景，确定维度包含:买家、卖家、商品、商品类目、发货地区、收货地区、父订单维度以及杂项维度。由于订单的属性较多，比如订单的业务类型、是否无线交易、订单的attributes属性等，对于这些使用较多却又无法归属到上述买卖家或商品维度中的属性，则新建一个杂项维度进行存放，如图11.4所示。</p>
+<h5 id="4-确定事实"><a href="#4-确定事实" class="headerlink" title="4) 确定事实"></a>4) 确定事实</h5><p>​    事实表应该包含与其描述过程有关的所有事实。以交易事务事实表为例，选定三个业务过程——下单、支付和完成，不同的业务过程有着不同的事实。比如在下单业务过程中，需要包含下单金额、下单数量、下单分摊金额；在支付业务过程中，包含支付金额、分摊邮费、折扣金额、红包金额、积分金额；在完结业务过程中包含确认收货金额等。由于粒度是子订单，所以对于一些父订单上的金额需要分摊到子订单上，比如父订单邮费、父订单折扣等。具体的分摊算法将在“父子事实的处理方式”一节中介绍。</p>
+<p>​    出于效率和资源的考虑，将常用维度全部退化到事实表，使得下游分析使用模型更加方便。</p>
+<h5 id="5-冗余维度"><a href="#5-冗余维度" class="headerlink" title="5) 冗余维度"></a>5) 冗余维度</h5><p>​    在确定维度时，包含了买卖家维度、商品维度、类目维度、收发货维度等，Kimball建议在事实表中只保存这些维表的外键，而在淘宝交易事务表中，将买卖家星级、标签、店铺名称、商品类型、商品特征、商品属性、类目层级等维度属性都冗余到事实表中，提高对事实表进行过滤查询、统计聚合的效率，如下图所示：</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210427104129207.png" alt="image-20210427104129207" loading="lazy"></p>
+<p>​    经过以上5个步骤，完成了淘宝交易事务事实表的设计。但是还有一个遗留问题：对于单一事实表中是否包含多个业务过程，还没有给出定论。</p>
+<h4 id="单事务事实表"><a href="#单事务事实表" class="headerlink" title="单事务事实表"></a>单事务事实表</h4><blockquote>
+<p>单事务事实表，即对每个业务过程设计一个事实表，这样可以方便对每个业务过程进行独立的分析研究。</p>
+</blockquote>
+<p>​    以1688交易过程为例：其流程也是包括下单、支付、发货和完结，在这四个关键流程中选择下单和支付两个业务过程设计事务事实表：1688交易订单下单事务事实表和1688交易订单支付事务事实表。</p>
+<p>​    选定业务过程后，对每个业务过程确定粒度、维度和事实。</p>
+<p>​    对于1688交易订单下单事务事实表：</p>
+<ul>
+<li>粒度：子订单粒度</li>
+<li>维度：买家、卖家、商品、父订单、收获地区维度</li>
+<li>事实：下单分摊金额和折扣金额</li>
+</ul>
+<p>​    对于1688交易订单支付事务事实表：</p>
+<ul>
+<li>粒度：子订单粒度</li>
+<li>维度：买家、卖家、商品、父订单、收获地区维度</li>
+<li>事实：支付金额、支付调整金额和支付优惠等</li>
+</ul>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210427123816087.png" alt="image-20210427123816087" loading="lazy"></p>
+<p>​    下面以具体交易订单为例，展示单事务事实表的设计实例。如图11.8所示，order1在2016-01-01下单并且在当天完成支付；order2和order3在2016-01-01下单并且在2016-01-02完成支付。如图11.9和图11.10所示，orderl 、order2和order3写入下单事务事实表中，业务日期（下单日期）均为2016-01-01；order1、 order2和 order3也分别写入支付事务事实表中，业务日期（支付日期)分别为2016-01-01、2016-01-02和2016-01-02。(图11.10中数据不对)</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210427123919363.png" alt="image-20210427123919363" loading="lazy"><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210427123928446.png" alt="image-20210427123928446" loading="lazy"></p>
+<h4 id="多事务事实表"><a href="#多事务事实表" class="headerlink" title="多事务事实表"></a>多事务事实表</h4><blockquote>
+<p>将不同的事实放到同一个事实表中，即同一个事实表包含不同的业务过程。</p>
+</blockquote>
+<p>​    <strong>多事务事实表在设计时有两种方法进行事实的处理：</strong></p>
+<ul>
+<li>不同业务过程的事实使用不同的事实字段进行存放；</li>
+<li>不同业务过程的事实使用同一个事实字段进行存放，但增加一个业务过程标签。</li>
+</ul>
+<p>​    下面以淘宝交易事务事实表和淘宝收藏商品事务事实表分别阐述其设计方法：</p>
+<h5 id="淘宝交易事务事实表"><a href="#淘宝交易事务事实表" class="headerlink" title="淘宝交易事务事实表"></a>淘宝交易事务事实表</h5><blockquote>
+<p>这里采用将不同业务过程的事实使用不同事实字段进行存放。</p>
+</blockquote>
+<ul>
+<li>下单、支付和成功放到同一个事实表的原因：</li>
+</ul>
+<p>​    这三个业务过程都包含下单、支付和成功完结三个业务过程，都是子订单粒度，因此适合放到同一个事实表中。</p>
+<ul>
+<li>发货不放到同一个事实表的原因：</li>
+</ul>
+<p>​    发货的粒度比子订单更细，属于不同粒度上的业务过程。</p>
+<p>​    在确定好业务过程和粒度后，下一步就是确定维度和事实。对于不同的业务过程和粒度，一般而言，维度也不完全一致。但是在设计淘宝交易事务事实表时，根据分析统计，常用维度比较一致，因此在维度层面可以保证这三个业务过程放到同一个事务事实表中。这里的维度也是在交易过程中比较常见的，如包括买家、卖家、商品、类目、店铺、收发货地区等，无论在哪一个业务过程中，都需要按照这些维度进行统计分析。</p>
+<p>​    将多个业务过程放到同一个事实表中，将要面对的是如何处理多个事实。淘宝交易事务事实表中包含了下单、支付和成功完结三个业务过程，则<strong>需要包含下单度量、支付度量和成功完结度量信息</strong>，这里的解决方案是针对每个度量都使用一个字段进行保存，即不同的事实使用不同的字段进行存放；如果不是当前业务过程的度量，则采取零值处理方式。比如在下单业务过程中，对于支付度量和成功完结度量全部置为0，其他业务过程类似处理。</p>
+<p>​    同一个事实表包含了多个业务过程，在表中如何进行标记？淘宝交易事务事实表<strong>针对每个业务过程打一个标签，标记当天是否是这个业务过程</strong>。比如针对下单，则打一个是否当天下单的标签；针对支付，则打一个是否当天支付的标签；针对完成，则打一个是否当天完成的标签，标签之间互不相干。</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210427150414607.png" alt="image-20210427150414607" loading="lazy"><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210427150552763.png" alt="image-20210427150552763" loading="lazy"><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210427150603996.png" alt="image-20210427150603996" loading="lazy"></p>
+<h5 id="淘宝收藏商品事务事实表"><a href="#淘宝收藏商品事务事实表" class="headerlink" title="淘宝收藏商品事务事实表"></a>淘宝收藏商品事务事实表</h5><blockquote>
+<p>这里采用在不同业务过程中使用同一个字段保存事实，使用标签字段区分不同的业务过程。比如：收藏事务事实表使用一个“收藏事件类型”字段来区分是收藏还是删除。</p>
+</blockquote>
+<p><strong>业务介绍：</strong>用户可以收藏一个商品，也可以删除所收藏的商品，所以这个过程包含了两个业务过程：收藏商品和删除商品。</p>
+<p><strong>业务过程确定：</strong>收藏商品、删除商品</p>
+<p><strong>粒度确定：</strong>无论是收藏还是删除，都是对商品进行操作，因此确定为用户-商品的粒度</p>
+<p><strong>维度确定：</strong>由于粒度是用户商品粒度，所以主要维度就是用户维度和商品维度。为了使事实表信息更丰富，冗余了商品类目维度和商品所属卖家维度。收藏和删除业务过程所属的维度是一致的。</p>
+<blockquote>
+<p>虽然收藏和删除是两个不同的业务过程，但是有着相同的粒度和维度，所以考虑设计多事务事实表，将这两个业务过程放到同一个事实表中，只是在不同业务过程的事实上进行区分。</p>
+</blockquote>
+<p>​    收藏和删除的事实主要是商品价格，不过收藏事务事实表更多的是无事实的事实表，一般用于统计收藏或者删除的次数。</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210427164833891.png" alt="image-20210427164833891" loading="lazy"></p>
+<h5 id="多事务事实表的选择"><a href="#多事务事实表的选择" class="headerlink" title="多事务事实表的选择"></a>多事务事实表的选择</h5><ul>
+<li>当不同业务过程的度量比较相似、差异不大时，可以采用第二种多事务事实表的设计方式，使用同一个字段来表示度量数据。但这种方式存在一个问题：在同一个周期内会存在多条记录。</li>
+<li>当不同业务过程的度量差异较大时，可以选择第一种多事务事实表的设计方式，将不同业务过程的度量使用不同字段冗余到表中，非当前业务过程则置零表示。这种方式所存在的问题是度量字段零值较多。</li>
+</ul>
+<h4 id="两种事实表对比"><a href="#两种事实表对比" class="headerlink" title="两种事实表对比"></a>两种事实表对比</h4><h5 id="业务过程"><a href="#业务过程" class="headerlink" title="业务过程"></a>业务过程</h5><ul>
+<li><strong>单事务事实表：</strong>一个业务过程建立一个事实表，只反映一个业务过程的事实；</li>
+<li><strong>多事务事实表：</strong>在同一个事实表中反映多个业务过程。</li>
+</ul>
+<h5 id="粒度和维度"><a href="#粒度和维度" class="headerlink" title="粒度和维度"></a>粒度和维度</h5><ul>
+<li><strong>单事务事实表：</strong>如果粒度不同，则必定是不同的事实表。</li>
+<li><strong>多事务事实表：</strong>当不同业务过程的粒度相同时，且拥有相似的维度时，可以考研采用多事务事实表。</li>
+</ul>
+<h5 id="事实"><a href="#事实" class="headerlink" title="事实"></a>事实</h5><p>​    如果单一业务过程的事实较多，同时不同业务过程的事实又不相同，可以考虑使用单事务事实表，处理更加清晰。如果使用多事务事实表，则会导致事实表零值或空值字段较多</p>
+<h5 id="下游业务使用"><a href="#下游业务使用" class="headerlink" title="下游业务使用"></a>下游业务使用</h5><p>​    单事务事实表对于下游用户而言更容易理解，关注哪个业务过程就使用相应的事务事实表；而多事务事实表包含多个业务过程，用户使用时会增加学习成本。</p>
+<h5 id="计算存储成本"><a href="#计算存储成本" class="headerlink" title="计算存储成本"></a>计算存储成本</h5><p>​    当业务过程数据来源于同一个业务系统，具有相同的粒度和维度，不仅其加工计算成本较低，同时在存储上也相对节省，是一种较优的处理方式。</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210428125011024.png" alt="image-20210428125011024" loading="lazy"></p>
+<h4 id="父子事实的处理方式"><a href="#父子事实的处理方式" class="headerlink" title="父子事实的处理方式"></a>父子事实的处理方式</h4><p>​    在同一个店铺同时下单多种商品，不仅每种商品有一个子订单，而且这几个子订单会再单独产生一个父订单。下单和支付都是在父订单粒度上完成的，比如拍下时的订单总额、支付总额、支付邮费，淘宝交易事务事实表在粒度选择上，按照粒度最细原则，确定为子订单，因此需要将下单总额或者支付总额分摊到每个子订单上，当然只有一个子订单时是不需要进行分摊的。下面以子订单分摊的有效下单金额和支付金额为例加以说明。</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210428125730010.png" alt="image-20210428125730010" loading="lazy"></p>
+<p>​    通过分摊父订单的金额将所有业务过程的度量全部带进淘宝交易事务事实表中，包括下单数量、商品价格、子订单折扣、下单分摊比例、父订单支付金额、父订单支付邮费、父订单折扣、子订单下单金额、子订单下单有效金额、支付分摊比例、子订单支付金额等，将父子事实同时冗余到事务表中。</p>
+<h4 id="事实的设计准则"><a href="#事实的设计准则" class="headerlink" title="事实的设计准则"></a>事实的设计准则</h4><h5 id="完整性"><a href="#完整性" class="headerlink" title="完整性"></a>完整性</h5><p>​    事实表包含与其描述的过程有关的所有事实，即<strong>尽可能多地获取所有的度量</strong>。</p>
+<h5 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h5><p>​    在确定事务事实表的事实时，明确存储每一个事实以确保度量的一致性。</p>
+<p>​    以交易事务事实表为例，在下单业务过程中，有下单商品数量和商品价格两个事实，但在事实表中计算了下单金额和下单有效金额，它们可以通过商品数量乘以商品价格进行计算。虽然下游在取数时也可以通过这种方式完成计算，但是在事实表中统一计算可以保证度量的一致性，其他如支付过程中的分摊金额等也是类似的。</p>
+<h5 id="可加性"><a href="#可加性" class="headerlink" title="可加性"></a>可加性</h5><p>​    <strong>事实表确定事实时，往往会遇到非可加性度量</strong>，比如分摊比例、利润率等，虽然它们也是下游分析的关键点，但<strong>往往在事务事实表中关注更多的是可加性事实</strong>，下游用户在聚合统计时更加方便。在淘宝交易事务事实表中，存储了分摊比例这样的度量，但更多的是存储各类金额的度量。</p>
+<h3 id="周期快照事实表"><a href="#周期快照事实表" class="headerlink" title="周期快照事实表"></a>周期快照事实表</h3><blockquote>
+<p>周期快照事实表以具有规律性的、可预见的时间间隔记录事实，如：日、周、月、年等。接下来以评价数据、卖家的累积支付金额、买卖家星级等事实表的设计为例展开介绍。</p>
+</blockquote>
+<h4 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h4><blockquote>
+<p>事务事实表的粒度能以多种方式表达，但快照事实表的粒度通常以维度形式声明；事务事实表是稀疏的，但快照事实表是稠密的；事务事实表中的事实是完全可加的，但快照模型将至少包含一个用来展示半可加性的事实。</p>
+</blockquote>
+<h5 id="用快照采样状态"><a href="#用快照采样状态" class="headerlink" title="用快照采样状态"></a>用快照采样状态</h5><p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210428143553428.png" alt="image-20210428143553428" loading="lazy"></p>
+<h5 id="快照粒度"><a href="#快照粒度" class="headerlink" title="快照粒度"></a>快照粒度</h5><p>​    事务事实表的粒度可以通过业务过程中所涉及的细节程度来描述，但<strong>快照事实表的粒度通常总是被多维声明</strong>，可以简单地理解为<strong>快照需要采样的周期以及什么将被采样</strong>。在淘宝交易卖家快照事实表中，粒度可以被理解为每天针对卖家的历史截至当日的下单支付金额进行快照。<br>​    当然，快照周期不一定都按天来进行，也可以按照月或者季度来统计。比如淘宝交易有针对卖家加类目的每月汇总事实表，每月统计一次，同时维度也不仅一个，包含了卖家和类目。</p>
+<h5 id="密度与稀疏性"><a href="#密度与稀疏性" class="headerlink" title="密度与稀疏性"></a>密度与稀疏性</h5><p>​    快照事实表和事务事实表的一个关键区别在密度上。事务事实表是稀疏的，只有当天发生的业务过程，事实表才会记录该业务过程的事实，如下单、支付等；而快照事实表是稠密的，无论当天是否有业务过程发生，都会记录一行，比如针对卖家的历史至今的下单和支付金额，无论当天卖家是否有下单支付事实，都会给该卖家记录一行。稠密性是快照事实表的重要特征，如果在每个快照周期内不记录行，比如和事务事实表一样，那么确定状态将变得非常困难。</p>
+<h5 id="半可加性"><a href="#半可加性" class="headerlink" title="半可加性"></a>半可加性</h5><p>​    在快照事实表中收集到的状态度量都是半可加的。与事务事实表的可加性事实不同，半可加性事实不能根据时间维度获得有意义的汇总结果。比如对于淘宝交易事务事实表，可以对一个周期内的下单金额或者支付金额进行汇总，得到下单支付总额，但快照事实表在每个采样周期内是不能对状态度量进行汇总的。比如淘宝交易卖家快照事实表，无法对每天的历史至今的下单金额进行汇总，也没有汇总意义。虽然不能汇总，但可以计算一些平均值，比如计算每天一个下单的平均值。</p>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><blockquote>
+<p><strong>快照事实表的设计步骤：</strong></p>
+<ul>
+<li>确定快照事实表的快照粒度；</li>
+<li>确定快照事实表采样的状态度量。</li>
+</ul>
+<p>下面介绍几类常见的快照事实表</p>
+</blockquote>
+<h5 id="单维度的每天快照事实表"><a href="#单维度的每天快照事实表" class="headerlink" title="单维度的每天快照事实表"></a>单维度的每天快照事实表</h5><ul>
+<li><strong>确定粒度：</strong>采样<u>周期为每天</u>，针对卖家、买家、商品、类目、地区等维度的快照事实表，比如<u>淘宝卖家历史至今汇总事实表</u>、淘宝商品自然月至今汇总事实表等，<u>不同的采样粒度确定了不同的快照事实表</u>。</li>
+<li><strong>确定状态度量：</strong><u>确定好粒度以后，就要针对这个粒度确定需要采样的状态度量。</u>比如<u>淘宝卖家历史至今汇总事实表</u>，<u>包含了历史截至当日的下单金额、历史截至当日的支付金额等度量</u>，如图11.17所示。<u>淘宝商品历史至今快照事实表，确定了商品维度和商品状态度量</u>，如图11.18所示。</li>
+</ul>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210428144545680.png" alt="image-20210428144545680" loading="lazy"></p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210428144610773.png" alt="image-20210428144610773" loading="lazy"></p>
+<h5 id="混合维度的每天快照事实表"><a href="#混合维度的每天快照事实表" class="headerlink" title="混合维度的每天快照事实表"></a>混合维度的每天快照事实表</h5><p>​    混合维度相对于单维度，只是在每天的采样周期上<strong>针对多个维度进行采样</strong>。比如淘宝买卖家历史至今快照事实表，<u>采样周期依然是每天，维度是卖家加买家，反映的是不同买家对于不同卖家的下单支付金额</u>，如图11.19所示。</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210428144710825.png" alt="image-20210428144710825" loading="lazy"></p>
+<p>​    以上两类快照事实表都有一个特点：都可以从事务事实表进行汇总产出，这是周期快照事实表常见的一种产出模式。</p>
+<p>​    除此之外，还有一种产出模式，即直接使用操作型系统的数据作为周期快照事实表的数据源进行加工，比如淘宝卖家星级、卖家DSR事实表等。下面介绍这类事实表的设计过程。</p>
+<p>​    <strong>卖家服务评价业务介绍：</strong>在店铺交易成功后，会进行一次好中差评价以及DSR评价（包括物流服务、描述相符和服务态度），卖家信用是基于好中差评计算得出的，DSR评分会累计计算一个综合分。</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210428145312341.png" alt="image-20210428145312341" loading="lazy"></p>
+<p>​    其中卖家信用是通过好中差评的次数进行计算得到的，具体为：好评加一分、中评零分、差评扣一分，然后累积最终得分，得到卖家的信用。DSR评分是通过分项的星级综合得到最终的评分，其中描述相符、服务态度和物流服务都是1-5星的打分方式，综合每一个星级的买家数得到最终的一个平均分，具体为：（各星级评分人数*星级 求和）/（各星级人数之和）。</p>
+<p>​    前面所述的卖家信用分和 DSR评分都是在操作型系统中计算完成的，阿里巴巴数据仓库关于淘宝卖家信用分和 DSR快照事实表是直接采用操作型系统数据进行设计加工，采样周期是每天，针对卖家维度的统计，状态度量就是卖家信用分和DSR评分，如图11.22所示。</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210428150212372.png" alt="image-20210428150212372" loading="lazy"></p>
+<p><strong>总结：周期快照事实表常见的产出模式</strong></p>
+<ul>
+<li>从事务事实表进行汇总产出，如图11.18和图11.19</li>
+<li>使用操作型系统的数据作为周期快照事实表的数据源进行加工</li>
+</ul>
+<h5 id="全量快照事实表"><a href="#全量快照事实表" class="headerlink" title="全量快照事实表"></a>全量快照事实表</h5><blockquote>
+<p>下面以好中差评快照事实表为了展开叙述</p>
+</blockquote>
+<ul>
+<li><p><strong>确定粒度：</strong>好中差评每天都会发生变化，下游分析统计也是每天都在进行的，因此确定采样周期是每天。这里的采用维度比较特殊，是针对评价本身，即每天按照评价进行采样的，每一条好中差评价就是快照事实表的最细粒度。</p>
+</li>
+<li><p><strong>确定状态度量：</strong>对于好中差评的度量关注更多的是评价本身，即没有类似于金额、商品数这样的度量，因此设计为无事实的事实表，更多关注评价的状态。</p>
+<p>对于全量快照事实表，再增加一步，即冗余维度。比如好中差评快照事实表，冗余了子订单维度、商品维度、评价者维度、被评价者维度以及杂项维度，包括评价内容、是否匿名等信息，如11.23所示。</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210428151139249.png" alt="image-20210428151139249" loading="lazy"></p>
+</li>
+</ul>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><h5 id="事务与快照成对设计"><a href="#事务与快照成对设计" class="headerlink" title="事务与快照成对设计"></a>事务与快照成对设计</h5><p>​    数据仓库维度建模时，对于事务事实表和快照事实表往往都是成对设计的，互相补充，以满足更多的下游统计分析需求，特别是在事务事实表的基础上可以加工快照事实表，如前面所述的淘宝卖家历史至今快照事实表，就是在事务事实表的基础上加工得到的，既丰富了星形模型，又降低了下游分析的成本。</p>
+<h5 id="附加事实"><a href="#附加事实" class="headerlink" title="附加事实"></a>附加事实</h5><p>​    快照事实表在确定状态度量时，一般都是保存采样周期结束时的状态度量。但是也有分析需求需要关注上一个采样周期结束时的状态度量，而又不愿意多次使用快照事实表，因此一般<strong>在设计周期快照事实表时会附加一些上一个采样周期的状态度量</strong>。</p>
+<h5 id="周期到日期度量"><a href="#周期到日期度量" class="headerlink" title="周期到日期度量"></a>周期到日期度量</h5><p>​    在介绍淘宝卖家历史至今快照事实表时，指定了统计周期是卖家历史至今的一些状态度量，比如历史截至当日的下单金额、成交金额等。然而在实际应用中，也有需要关注自然年至今、季度至今、财年至今的一些状态度量，因此<strong>在确定周期快照事实表的度量时，也要考虑类似的度量值，以满足更多的统计分析需求</strong>。阿里巴巴数据仓库在设计周期快照事实表时，就<strong>针对多种周期到日期的度量设计了不同的快照事实表</strong>，比如淘宝卖家财年至今的下单金额、淘宝商品自然年至今的收藏次数等。</p>
+<h3 id="累积快照事实表"><a href="#累积快照事实表" class="headerlink" title="累积快照事实表"></a>累积快照事实表</h3><blockquote>
+<p>累积快照事实表用来表述过程开始和结束之间的关键步骤事件，覆盖过程的整个生命周期，通常具有多个日期字段来记录关键时间点，当过程随着生命周期不断变化时，记录也会随着过程的变化而被修改。</p>
+</blockquote>
+<p>​    针对淘宝交易，设计了淘宝交易下单/支付/确认收货事务事实表，用于统计下单/支付/确认收货的子订单数、GMV（Gross Merchandise Volume 商品交易总额）等。但仍然有很多需求，此事务事实表很难满足，<strong>比如统计买家下单到支付的时长、买家支付到卖家发货的时长、买家从下单到确认收货的时长等</strong>。如果使用事务事实表进行统计，则逻辑复杂且性能很差。对于类似于研究事件之间时间间隔的需求，采用累积快照事实表可以很好地解决。</p>
+<h4 id="设计过程-1"><a href="#设计过程-1" class="headerlink" title="设计过程"></a>设计过程</h4><blockquote>
+<p>其建模过程和事务事实表相同，适用于维度建模的步骤。</p>
+</blockquote>
+<h5 id="第一步：选择业务过程"><a href="#第一步：选择业务过程" class="headerlink" title="第一步：选择业务过程"></a>第一步：选择业务过程</h5><p>​    针对淘宝交易累积快照事实表，选择买家下单、买家支付、卖家发货、买家确认收货这四个业务过程。</p>
+<h5 id="第二步：确定粒度"><a href="#第二步：确定粒度" class="headerlink" title="第二步：确定粒度"></a>第二步：确定粒度</h5><p>​    选择子订单粒度。如果子订单同一周期发生多次事件，对于累计快照事实表，用于考察实体的唯一实例，所以子订单在此表中只有一行记录，事件发生时，对此实例进行更新。</p>
+<h5 id="第二步：确定粒度-1"><a href="#第二步：确定粒度-1" class="headerlink" title="第二步：确定粒度"></a>第二步：确定粒度</h5><p>​    与事务事实表相同，维度主要有买家、卖家、店铺、商品、类目、发货地区、收获地区等。</p>
+<p>​    四个业务过程对应的时间字段，格式为日期+时间，分别为下单时间、支付时间、发货时间、确认收货时间，对应于日期维表，图11.24中未标识。在实际使用时会使用视图或SQL别名的方式表示四个日期角色维度，类似于发货地区维度和收货地区维度。</p>
+<p>​    在交易订单表中，存在很多与订单相关的属性，如订单类型、子类型、支付状态、物流状态、attributes、options等。对于类似的属性字段，无法归属到已有的商品等维度中，所以新建杂项维度存放。<strong>在数据仓库建模理论中，杂项维度无自然键，一般是枚举值的组合，对于每个组合生成一个代理键。但在实际建模中，存在很多非枚举值，且对于每个订单都不相同，如订单的attributes和 options属性。所以实际中杂项维度设计时，也可以直接使用自然键标识具体的维度值</strong>，如图11.24中所示的子订单维度和父订单维度。</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210428154831321.png" alt="image-20210428154831321" loading="lazy"></p>
+<h5 id="第四步：确定事实-1"><a href="#第四步：确定事实-1" class="headerlink" title="第四步：确定事实"></a>第四步：确定事实</h5><p>​    <strong>对于累积快照事实表，需要将各业务过程对应的事实均放入事实表中。</strong>比如淘宝交易累积快照事实表，包含了各业务过程对应的事实，如下单对应的下单金额，支付对应的折扣、邮费和支付金额，确认收货对应的金额等。<strong>累积快照事实表解决的最重要的问题是统计不同业务过程之间的时间间隔，建议将每个过程的时间间隔作为事实放在事实表中。</strong>在淘宝交易累积快照事实表建模中，由于每个过程的时间间隔计算逻辑简单，因此并未加入事实表中，如图11.25所示。</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210428155128210.png" alt="image-20210428155128210" loading="lazy"></p>
+<h5 id="第五步：退化维度"><a href="#第五步：退化维度" class="headerlink" title="第五步：退化维度"></a>第五步：退化维度</h5><p>​    在大数据的事实表模型设计中，更多的是考虑提高下游用户的使用效率，降低数据获取的复杂性，减少关联的表数量。一方面，存储成本降低了，而相比之下CPU成本仍然较高；另一方面，在大数据时代，很多维表比事实表还大，如淘宝几十亿的商品、几亿的买家等，在分布式数据仓库系统中，事实表和维表关联的成本很高。所以<strong>在传统的维度模型设计完成之后，在物理实现中将各维度的常用属性退化到事实表中，以大大提高对事实表的过滤查询、统计聚合等操作的效率</strong>，具体详情不再赘述。</p>
+<h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><h5 id="数据不断更新"><a href="#数据不断更新" class="headerlink" title="数据不断更新"></a>数据不断更新</h5><p>​    事务事实表记录事务发生时的状态，对于实体的某一实例不再更新，而累计快照事实表则对实体的某一实例定期更新。下图11.3-11.5为多事务事实表的情况；11.6为累积快照事实表的情况，只有一条记录，针对此记录不断更新。</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210428155528820.png" alt="image-20210428155528820" loading="lazy"></p>
+<h5 id="多业务过程日期"><a href="#多业务过程日期" class="headerlink" title="多业务过程日期"></a>多业务过程日期</h5><p>​    累积快照事实表适用于具有较明确起止时间的短生命周期的实体，比如交易订单、物流订单等，对于实体的每一个实例，都会经历从诞生到消亡等一系列步骤。<u>对于商品、用户等具有长生命周期的实体，一般采用周期快照事实表更合适。</u></p>
+<p>​    <strong>累积快照事实表的典型特征是多业务过程日期，用于计算业务过程之间的时间间隔。</strong>但结合阿里巴巴数据仓库模型建设的经验，<strong>对于累积快照事实表，还有一个重要作用是保存全量数据。</strong></p>
+<p>​    <strong>对于淘宝交易，需要保留历史截至当前的所有交易数据，其中一种方式是在ODS层保留和源系统结构完全相同的数据；但由于使用时需要关联维度，较为麻烦，所以在公共明细层需要保留一份全量数据，淘宝交易累积快照事实表就承担了这样的作用——存放加工后的事实，并将各维度常用属性和订单杂项维度退化到此表中</strong><u>（咱们的系统就是采用的第一种方式）</u>。通常用于数据探查、统计分析、数据挖掘等。</p>
+<p><strong>总结：累积快照事实表的作用</strong></p>
+<ul>
+<li>多业务过程日期，用于计算业务过程之间的时间间隔</li>
+<li>保存全量数据</li>
+</ul>
+<h4 id="特殊处理"><a href="#特殊处理" class="headerlink" title="特殊处理"></a>特殊处理</h4><h5 id="非线性过程"><a href="#非线性过程" class="headerlink" title="非线性过程"></a>非线性过程</h5><blockquote>
+<p>买家申请退款→卖家不同意退款→买家申请退款→卖家不同意退款……一直到退款达成或关闭</p>
+</blockquote>
+<p>针对非线性过程，处理情况主要有以下几种。</p>
+<p><strong>（1）业务过程的统一</strong><br>    比如流程结束标志的统一，最开始设计交易累积快照事实表时，以交易完成作为结束标志；进一步了解业务之后，发现交易关闭也是交易结束的一个分支，所以将交易结束作为流程结束、实体消亡的标志，包括交易完成和交易结束两种情况。</p>
+<p><strong>（2）针对业务关键里程碑构建全面的流程</strong><br>    比如淘宝交易，全流程可能是下单→支付→发货→确认收货。对于没有支付或没有发货的交易订单，全流程仍然可以覆盖，相关业务过程的时间字段和事实置空。</p>
+<p><strong>（3）循环流程的处理</strong><br>    主要问题是解决一个业务过程存在多个里程碑日期的问题。使用业务过程第一次发生的日期还是最后一次发生的日期，决定权在商业用户，而不是设计或开发人员。</p>
+<h5 id="多源过程"><a href="#多源过程" class="headerlink" title="多源过程"></a>多源过程</h5><p>​    针对多业务过程建模时，业务过程可能来自于不同的系统或者来源于不同的表，其对于累积快照事实表的模型设计没有影响，但会影响ETL开发的复杂程度。对于淘宝交易累积快照事实表，除了上述提到的下单→支付→发货→确认收货流程，假设需要关注交易子订单退款业务或者物流业务，此时会涉及交易、售后、物流三个业务源系统。</p>
+<p>​    退款业务流程如下:</p>
+<p>​    下单→支付→买家申请退款→卖家同意退款→退款达成→交易关闭</p>
+<p>​    或者</p>
+<p>​    下单→支付→发货→买家申请退款→卖家同意退款→退款达成→交易关闭</p>
+<p>​    或者</p>
+<p>​    下单→支付→发货→买家申请退款→卖家不同意退款→退款取消→交易成功</p>
+<p>​    针对多源业务建模，主要考虑事实表的粒度问题。对于淘宝交易累积快照事实表，其粒度是交易子订单。对于退款，由于每个子订单可能存在多次退款，此时如果要将退款相关业务过程加入模型中，则需要和商业用户确定存在多次退款时如何取舍，确保模型粒度不变。</p>
+<h5 id="业务过程取舍"><a href="#业务过程取舍" class="headerlink" title="业务过程取舍"></a>业务过程取舍</h5><p>​    上一节提到的退款业务流程是简化的，比较完整的业务流程如下:</p>
+<p>​    申请退款→申请小二介入→小二实际介入→卖家同意退款→退款完结</p>
+<p>​    将退款相关业务流程设计进人交易累积快照事实表时，是否需要所有的业务过程？答案是否定的。当拥有大量的业务过程时，模型的实现复杂度会增加，特别是对于多源业务过程，模型的耦合度过高，此时需要根据商业用户需求，选取关键的里程碑。</p>
+<h4 id="物理实现"><a href="#物理实现" class="headerlink" title="物理实现"></a>物理实现</h4><blockquote>
+<p>针对累积快照事实表模型设计，有三种不同的实现方式。</p>
+</blockquote>
+<h5 id="全量表的形式"><a href="#全量表的形式" class="headerlink" title="全量表的形式"></a>全量表的形式</h5><p>​    此全量表一般为日期分区表，每天的分区存储昨天的全量数据和当天的增量数据合并的结果，保证每条记录的状态最新。</p>
+<p>​    此种方式适用于全量数据较少的情况，如果数据量很大，此全量表数据量不断膨胀，存储了大量永远不再更新的历史数据，对ETL和分析统计性能影响较大。</p>
+<h5 id="全量表的变化形式"><a href="#全量表的变化形式" class="headerlink" title="全量表的变化形式"></a>全量表的变化形式</h5><p>​    此种方式主要针对事实表数据量很大的情况。较短生命周期的业务实体一般从产生到消亡都有一定的时间间隔，可以测算此时间间隔，或者根据商业用户的需求确定一个相对较大的时间间隔。比如针对交易订单，我们以200天作为订单从产生到消亡的最大间隔。设计最近200天的交易订单累积快照事实表，每天的分区存储最近200天的交易订单；而200天之前的订单则按照gmt_create创建分区存储在归档表中。</p>
+<p>​    此方式存在的一个问题是200天的全量表根据商业需求需要保留多天的分区数据，而由于数据量较大，存储消耗较大。</p>
+<h5 id="以业务实体的结束时间分区"><a href="#以业务实体的结束时间分区" class="headerlink" title="以业务实体的结束时间分区"></a>以业务实体的结束时间分区</h5><p>​    每天的分区存放当天结束的数据，然后再设计一个时间非常大的分区，比如3000-12-31，存放截至当前未结束的数据。由于每天将当天结束的数据归档至当天分区中，时间非常大的分区数据量不会很大，ETL性能较好；并且无存储的浪费，对于业务实体的某具体实例，在该表的全量数据中唯一。比如对于交易订单，在交易累积快照事实表中唯一。</p>
+<p>​    <strong>针对第三种方式，可能存在极特殊情况，即业务系统无法标识业务实体的结束时间。</strong>比如业务系统调用接口很多，依赖的系统复杂，最终无法判断业务实体是否已经消亡。如菜鸟的物流订单，由于其依赖物流公司的数据，和大量的物流公司存在接口，按照约定，物流公司会向菜鸟回传运单的流转信息，但无法保证100%准确；且一般为批量回传，菜鸟订单系统根据批量数据更新物流订单的结束标志几乎无法实现。前台业务系统没有物流订单的结束时间，那么如何设计物流订单累积快照事实表呢？针对此问题，可以有两种处理方式。</p>
+<p>​    <strong>第一种方式，</strong>使用相关业务系统的业务实体的结束标志作为此业务系统的结束标志。比如针对物流订单，可以使用交易订单。理论上，交易订单完结了，则物流订单已经完结。</p>
+<p>​    <strong>第二种方式，</strong>和前端业务系统确定口径或使用前端归档策略。累积快照事实表针对业务实体一般是具有较短生命周期的，和前端业务系统确定口径，确定从业务实体的产生到消亡的最大间隔。另外，针对大量的事实数据，前端系统会定期对历史数据进行归档，避免业务库性能的下降，对于这种情况，可以使用前端系统的归档时间作为业务实体的结束日期。</p>
+<h3 id="三种事实表的比较"><a href="#三种事实表的比较" class="headerlink" title="三种事实表的比较"></a>三种事实表的比较</h3><p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210428163153484.png" alt="image-20210428163153484" loading="lazy"></p>
+<p>​    事务事实表记录的事务层面的事实，用于跟踪业务过程的行为，并支持几种描述行为的事实，保存的是最原子的数据，也称为“原子事实表”。事务事实表中的数据在事务事件发生后产生，数据的粒度通常是每个事务一条记录。一旦事务被提交，事实表数据被插入，数据就不能更改，其更新方式为增量更新。</p>
+<p>​    周期快照事实表以具有规律性的、可预见的时间间隔来记录事实，如余额、库存、层级、温度等，时间间隔为每天、每月、每年等，典型的例子如库存日快照表等。周期快照事实表的日期维度通常记录时间段的终止日，记录的事实是这个时间段内一些聚集事实值或状态度量。事实表的数据一旦插入就不能更改，其更新方式为增量更新。</p>
+<p>​    累积快照事实表被用来跟踪实体的一系列业务过程的进展情况，它通常具有多个日期字段，用于研究业务过程中的里程碑过程的时间间隔。另外，它还会有一个用于指示最后更新日期的附加日期字段。由于事实表中许多日期在首次加载时是不知道的，而且这类事实表在数据加载完成后，可以对其数据进行更新，来补充业务状态变更时的日期信息和事实。</p>
+<h3 id="无事实的事实表"><a href="#无事实的事实表" class="headerlink" title="无事实的事实表"></a>无事实的事实表</h3><p>​    在维度模型中，事实表用事实来度量业务过程，不包含事实或度量的事实表称为“无事实的事实表”。虽然没有明确的事实，但可以用来支持业务过程的度量。</p>
+<p>​    常见的无事实的事实表主要有如下两种:</p>
+<ul>
+<li><p>第一种是事件类的，记录事件的发生。在阿里巴巴数据仓库中，最常见的是日志类事实表。比如用户的浏览日志，某会员某时间点浏览了淘宝首页、某会员某时间点浏览了某卖家的店铺中的某商品详情页等。对于每次点击，其事实为1，但一般不会保存此事实。</p>
+</li>
+<li><p>第二种是条件、范围或资格类的，记录维度与维度多对多之间的关系。比如客户和销售人员的分配情况、产品的促销范围等。</p>
+</li>
+</ul>
+<h3 id="聚集型事实表"><a href="#聚集型事实表" class="headerlink" title="聚集型事实表"></a>聚集型事实表</h3><p>​    阿里巴巴将使用频繁的公用数据，通过聚集进行沉淀，比如卖家最近1天的交易汇总表、卖家最近N天的交易汇总表、卖家自然年交易汇总表等。这类聚集汇总数据，被叫作“公共汇总层”。</p>
+<p>​    在本节中，前半部分将会介绍聚集的基本原则和通用步骤，这些都是在建设聚集型事实表时必须明白的事情；后半部分将会介绍阿里巴巴建设公共汇总层的一些实践。</p>
+<h4 id="聚集的基本原则"><a href="#聚集的基本原则" class="headerlink" title="聚集的基本原则"></a>聚集的基本原则</h4><ul>
+<li><strong>一致性</strong></li>
+</ul>
+<blockquote>
+<p><strong>聚集表必须提供与查询明细粒度数据一致的查询结果。从设计角度来看，确保一致性，最简单的方法是确保聚集星形模型中的维度和度量与原始模型中的维度和度量保持一致。</strong></p>
+</blockquote>
+<ul>
+<li><strong>避免单一表设计</strong></li>
+</ul>
+<blockquote>
+<p><strong>不要在同一个表中存储不同层次的聚集数据</strong>；否则将会导致双重计算或出现更糟糕的事情。在聚集表中有些行存放按天汇总的交易额，有些行存放按月汇总的交易额，这将会让使用者产生误用导致重复计算。为了避免此类问题，<strong>通用的做法是在聚集时显式地加入数据层级列以示区别，但是这样会加大使用者的使用成本。</strong>行之有效的<strong>另一种方法是把按天与按月汇总的交易额用两列存放，但是需要在列名或者列注释上能分辨出来</strong>。</p>
+</blockquote>
+<ul>
+<li><strong>聚集粒度可不同</strong></li>
+</ul>
+<blockquote>
+<p><strong>聚集并不需要保持与原始明细粒度数据一样的粒度，聚集只关心所需要查询的维度。</strong>订单涉及的维度有商品、买家、卖家、地域等，比如可以按照商品汇总一天的交易额，可以按照卖家汇总一天的营业额(交易额)，可以按照商品与地域汇总一月的交易额。</p>
+</blockquote>
+<h4 id="聚集的基本步骤"><a href="#聚集的基本步骤" class="headerlink" title="聚集的基本步骤"></a>聚集的基本步骤</h4><h5 id="第一步：确定聚集维度"><a href="#第一步：确定聚集维度" class="headerlink" title="第一步：确定聚集维度"></a>第一步：确定聚集维度</h5><p>​    在原始明细模型中会存在多个描述事实的维度，如日期、商品类别、卖家等，这时候需要确定根据什么维度聚集，如果只关心商品的交易额情况，那么就可以根据商品维度聚集数据。</p>
+<h5 id="第二步：确定一致性上钻"><a href="#第二步：确定一致性上钻" class="headerlink" title="第二步：确定一致性上钻"></a>第二步：确定一致性上钻</h5><p>​    这时候要关心是按月汇总还是按天汇总，是按照商品汇总还是按照类目汇总，如果按照类目汇总，还需要关心是按照大类汇总还是小类汇总。当然，我们要做的只是了解用户需要什么，然后按照他们想要的进行聚集。</p>
+<h5 id="第三步：确定聚集事实"><a href="#第三步：确定聚集事实" class="headerlink" title="第三步：确定聚集事实"></a>第三步：确定聚集事实</h5><p>​    在原始明细模型中可能会有多个事实的度量，比如在交易中有交易额、交易数量等，这时候要明确是按照交易额汇总还是按照成交数量汇总。</p>
+<h4 id="公共汇总层"><a href="#公共汇总层" class="headerlink" title="公共汇总层"></a>公共汇总层</h4><h5 id="基本原则"><a href="#基本原则" class="headerlink" title="基本原则"></a>基本原则</h5><blockquote>
+<p>除了聚集的基本原则外，阿里巴巴建设公共汇总层还必须遵循以下、原则。</p>
+</blockquote>
+<ul>
+<li><p><strong>数据公用性:</strong></p>
+<p>汇总的聚集会有第三者使用吗？基于某个维度的聚集是不是经常用于数据分析中？如果答案是肯定的，那么就有必要把明细数据经过汇总沉淀到聚集表中。</p>
+</li>
+<li><p><strong>不跨数据域：</strong></p>
+<p>数据域是在较高层次上对数据进行分类聚集的抽象。阿里巴巴以业务过程进行分类，如交易统一划到交易域下，商品的新增、修改放到商品域下。</p>
+</li>
+<li><p><strong>区分统计周期：</strong></p>
+<p>在表的命名上要能说明数据的统计周期，如_1d表示最近1天，_td表示截至当天，_nd表示最近N天。</p>
+</li>
+</ul>
+<h5 id="交易汇总表设计"><a href="#交易汇总表设计" class="headerlink" title="交易汇总表设计"></a>交易汇总表设计</h5><p>​    聚集是指针对原始明细粒度的数据进行汇总。假定已有的交易订单明细模型如图11.26所示，可以看出事实和商品、卖家、买家等维度关联。</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210429124126060.png" alt="image-20210429124126060" loading="lazy"></p>
+<p>​    潜在的聚集如表11.8所示。</p>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210429124151375.png" alt="image-20210429124151375" loading="lazy"></p>
+<p>​    可以看出聚集的组合可能性为各个维度属性个数的乘积:2×2×2×2×3×5…。下面将按照聚集的基本步骤来介绍聚集表的设计流程。</p>
+<ul>
+<li><p><strong>按照商品粒度汇总：</strong></p>
+<ul>
+<li>确定聚集维度：商品</li>
+<li>确定一致性上钻：按商品（商品ID）最近一天汇总</li>
+<li>确定聚集事实：下单量、交易额</li>
+</ul>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210429124358782.png" alt="image-20210429124358782" loading="lazy"></p>
+<p>可以看出聚集的事实都是原始模型中的事实，聚集的维度也是原始模型维度中的商品维度，去掉了其他不关心的维度。</p>
+</li>
+<li><p><strong>按卖家粒度汇总：</strong></p>
+<ul>
+<li>确定聚集维度：卖家</li>
+<li>确定一致性上钻：按卖家（卖家ID）最近七天和最近三十天汇总</li>
+<li>确定聚集事实：交易额</li>
+</ul>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210429124547273.png" alt="image-20210429124547273" loading="lazy"></p>
+<p>前面在“聚集的基本原则”中说过，应该避免将不同层级的数据放在一起，为此我们选择用两列存放7天和30天的事实，但是需要在列名和字段注释上说明清楚。</p>
+</li>
+<li><p><strong>按卖家、买家、商品粒度汇总：</strong></p>
+<ul>
+<li>确定聚集维度：卖家、买家、商品</li>
+<li>确定一致性上钻：按卖家（卖家ID）、买家（买家ID）、商品（商品ID）最近一天汇总</li>
+<li>确定聚集事实：交易额</li>
+</ul>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210429124923879.png" alt="image-20210429124923879" loading="lazy"></p>
+<p>可以看出聚集的粒度越细，记录的条数越多，就会越接近原始明细模型的粒度。</p>
+</li>
+<li><p>按二级类目汇总：</p>
+<ul>
+<li>确定聚集维度：二级类目</li>
+<li>确定一致性上钻：按最近1天类目维度的二级维度属性汇总</li>
+<li>确定聚集事实：交易额</li>
+</ul>
+<p><img src="/2021/08/05/dw-dimensional-modeling-03/image-20210429125116834.png" alt="image-20210429125116834" loading="lazy"></p>
+<p>与之前的三个聚集表不同的是，这个聚集模型不是根据维度主键属性进行的聚集，而是根据类目的层次维度属性进行的上钻聚集。</p>
+</li>
+</ul>
+<h4 id="聚集补充说明"><a href="#聚集补充说明" class="headerlink" title="聚集补充说明"></a>聚集补充说明</h4><h5 id="聚集是不跨越事实的"><a href="#聚集是不跨越事实的" class="headerlink" title="聚集是不跨越事实的"></a>聚集是不跨越事实的</h5><p>​    聚集是针对原始星形模型进行的汇总,为了获取和查询与原始模型一致的结果，聚集的维度和度量必须与原始模型保持一致，因此聚集是不跨越事实的。横向钻取是针对多个事实基于一致性维度进行的分析，很多时候采用融合事实表,预先存放横向钻取的结果，从而提高查询性能。因此，融合事实表是一种导出模式而不是聚集。</p>
+<h5 id="聚集带来的问题"><a href="#聚集带来的问题" class="headerlink" title="聚集带来的问题"></a>聚集带来的问题</h5><p>​    聚集会带来查询性能的提升，但聚集也会增加ETL维护的难度。当子类目对应的一级类目发生变更时，先前存在的、已经被汇总到聚集表中的数据需要被重新调整。这一额外工作随着业务复杂性的增加，会导致多数ETL人员选择简单强力的方法，删除并重新聚集数据。</p>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">看我整理的这么好，来打赏点呗~</div><div id="qr" style="display:none;"><div style="display:inline-block"><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/20200930114156633.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQxMTM3Mw==,size_16,color_FFFFFF,t_70"><img loading="lazy" src="https://img-blog.csdnimg.cn/20200930114156633.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQxMTM3Mw==,size_16,color_FFFFFF,t_70" alt="支付宝" title="支付宝"></a><div><span style="color:#00A3EE"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-alipay-line"></use></svg></span></div></div><div style="display:inline-block"><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/20200930114243891.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQxMTM3Mw==,size_16,color_FFFFFF,t_70"><img loading="lazy" src="https://img-blog.csdnimg.cn/20200930114243891.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQxMTM3Mw==,size_16,color_FFFFFF,t_70" alt="微信支付" title="微信支付"></a><div><span style="color:#2DC100"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-pay-line"></use></svg></span></div></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>机智の老何</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/" title="事实表设计">https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2021/08/05/dw-dimensional-modeling-04/" rel="prev" title="维度建模总结"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">维度建模总结</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2021/08/05/dw-dimensional-modeling-02/" rel="next" title="维度表设计"><span class="post-nav-text">维度表设计</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>点击按钮跳转 GitHub Issues 评论。</span><br><span>若没有本文 Issue，您可以使用 Comment 模版新建。</span><br><a class="hty-button hty-button--raised" id="github-issues" target="_blank" rel="noopener" href="https://github.com/YunYouJun/yunyoujun.github.io/issues?q=is:issue+事实表设计">GitHub Issues</a></div><div id="valine-container"></div><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function initValine() {
+  const valineConfig = {"enable":true,"appId":"R6zMhu6tVOtUxK8fQk5mfgQt-gzGzoHsz","appKey":"4jG3KwGXwMS6EQwc0hDKiUSp","placeholder":"Just go go","avatar":null,"pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"serverURLs":"https://r6zmhu6t.lc-cn-n1-shared.com","enableQQ":true,"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = window.location.pathname
+  new Valine(valineConfig)
+}
+setTimeout(initValine, 1000)</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2019 – 2021 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 机智の老何</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(๑•̀ㅂ•́)و✧</span><script>function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2020-09-29T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div id="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv" title="总访客量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user-line"></use></svg></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg></span><span id="busuanzi_value_site_pv"></span></span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script></body></html>

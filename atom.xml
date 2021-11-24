@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>每日笔记</title>
+  <icon>https://hank20200929.github.io/icon.png</icon>
+  <subtitle>Records of Daily Matters.</subtitle>
+  <link href="https://hank20200929.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://hank20200929.github.io/"/>
+  <updated>2021-11-24T13:16:34.363Z</updated>
+  <id>https://hank20200929.github.io/</id>
+  
+  <author>
+    <name>机智の老何</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>设计模式的七大原则及创建型模式</title>
+    <link href="https://hank20200929.github.io/2021/11/24/design-pattern-01/"/>
+    <id>https://hank20200929.github.io/2021/11/24/design-pattern-01/</id>
+    <published>2021-11-24T13:09:55.000Z</published>
+    <updated>2021-11-24T13:16:34.363Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="设计模式" scheme="https://hank20200929.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+    
+    <category term="创建型模式" scheme="https://hank20200929.github.io/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>java反射机制</title>
+    <link href="https://hank20200929.github.io/2021/11/24/java-reflaction/"/>
+    <id>https://hank20200929.github.io/2021/11/24/java-reflaction/</id>
+    <published>2021-11-24T13:06:58.000Z</published>
+    <updated>2021-11-24T13:09:23.410Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="java" scheme="https://hank20200929.github.io/categories/java/"/>
+    
+    
+    <category term="java反射" scheme="https://hank20200929.github.io/tags/java%E5%8F%8D%E5%B0%84/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>拉链表技术及实现原理</title>
+    <link href="https://hank20200929.github.io/2021/08/05/dw-zipping-table/"/>
+    <id>https://hank20200929.github.io/2021/08/05/dw-zipping-table/</id>
+    <published>2021-08-05T06:29:25.000Z</published>
+    <updated>2021-08-05T06:32:23.696Z</updated>
+    
+    
+    <summary type="html">&lt;h4 id=&quot;什么是拉链表&quot;&gt;&lt;a href=&quot;#什么是拉链表&quot; class=&quot;headerlink&quot; title=&quot;什么是拉链表&quot;&gt;&lt;/a&gt;什么是拉链表&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;所谓拉链，就是记录历史。记录一个事物从开始，一直到当前状态的所有变化的信息。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="数据仓库" scheme="https://hank20200929.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+    
+    
+    <category term="维度表" scheme="https://hank20200929.github.io/tags/%E7%BB%B4%E5%BA%A6%E8%A1%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>维度建模总结</title>
+    <link href="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-04/"/>
+    <id>https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-04/</id>
+    <published>2021-08-05T06:10:18.000Z</published>
+    <updated>2021-08-05T06:13:20.856Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="数据仓库" scheme="https://hank20200929.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+    
+    
+    <category term="维度建模" scheme="https://hank20200929.github.io/tags/%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>事实表设计</title>
+    <link href="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/"/>
+    <id>https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-03/</id>
+    <published>2021-08-05T06:04:45.000Z</published>
+    <updated>2021-08-05T06:14:05.746Z</updated>
+    
+    
+    <summary type="html">&lt;h3 id=&quot;事实表基础&quot;&gt;&lt;a href=&quot;#事实表基础&quot; class=&quot;headerlink&quot; title=&quot;事实表基础&quot;&gt;&lt;/a&gt;事实表基础&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;p&gt;Star Schema–The Complete Reference&lt;/p&gt;
+&lt;p&gt;The Data Warehouse Toolkit-The Definitive Guide to Dimensional Modeling&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&quot;事实表特性&quot;&gt;&lt;a href=&quot;#事实表特性&quot; class=&quot;headerlink&quot; title=&quot;事实表特性&quot;&gt;&lt;/a&gt;事实表特性&lt;/h4&gt;&lt;p&gt;事实表围绕业务过程来设计，内容包含引用的&lt;strong&gt;维度&lt;/strong&gt;和与业务过程有关的&lt;strong&gt;度量&lt;/strong&gt;。事实表一条记录所表达的业务细节程度被称为&lt;strong&gt;粒度&lt;/strong&gt;。通常粒度表述为：维度属性组合所表示的细节程度 或 所表示的具体业务含义。&lt;/p&gt;
+&lt;p&gt;​    &lt;strong&gt;事实&lt;/strong&gt;一般为整型或浮点型的十进制数值，有可加性、半可加性和不可加性三种类型。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;可加型：&lt;/strong&gt;事实可以按照与事实表关联的任意维度进行汇总。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;半可加性：&lt;/strong&gt;事实只能按照特定维度进行汇总。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;不可加型：&lt;/strong&gt;不可加性事实可以分解为可加的组件来实现聚集。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;相较于维度表，事实表要细长得多，行的增加速度也比维表快很多。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;退化维度的概念：&lt;/strong&gt;维度属性也可以存储到事实表中，这种存储到事实表中的维度列就被称为“退化维度”。与其他存储在维度表中的维度一样，&lt;strong&gt;退化维度也可以用来进行事实表的过滤查询、实现聚合操作等。&lt;/strong&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="数据仓库" scheme="https://hank20200929.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+    
+    
+    <category term="事实表" scheme="https://hank20200929.github.io/tags/%E4%BA%8B%E5%AE%9E%E8%A1%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>维度表设计</title>
+    <link href="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-02/"/>
+    <id>https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-02/</id>
+    <published>2021-08-05T05:53:15.000Z</published>
+    <updated>2021-08-05T06:13:51.269Z</updated>
+    
+    
+    <summary type="html">&lt;h3 id=&quot;维度设计基础&quot;&gt;&lt;a href=&quot;#维度设计基础&quot; class=&quot;headerlink&quot; title=&quot;维度设计基础&quot;&gt;&lt;/a&gt;维度设计基础&lt;/h3&gt;&lt;h4 id=&quot;维度的基本概念&quot;&gt;&lt;a href=&quot;#维度的基本概念&quot; class=&quot;headerlink&quot; title=&quot;维度的基本概念&quot;&gt;&lt;/a&gt;维度的基本概念&lt;/h4&gt;&lt;p&gt;维度所包含的表示维度的列，称为维度属性。维度属性是查询约束条件、分组和报表标签生成的基本来源，是数据易用性的关键。维度的作用一般是查询约束、分类汇总以及排序等。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="数据仓库" scheme="https://hank20200929.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+    
+    
+    <category term="维度表" scheme="https://hank20200929.github.io/tags/%E7%BB%B4%E5%BA%A6%E8%A1%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>维度建模的整体过程</title>
+    <link href="https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-01/"/>
+    <id>https://hank20200929.github.io/2021/08/05/dw-dimensional-modeling-01/</id>
+    <published>2021-08-05T05:51:58.000Z</published>
+    <updated>2021-08-05T05:54:42.175Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;维度建模&lt;strong&gt;从分析决策的需求&lt;/strong&gt;出发构建模型，为分析需求服务。代表的是&lt;strong&gt;星形模型&lt;/strong&gt;，以及在一些特殊场景下使用的&lt;strong&gt;雪花模型&lt;/strong&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="数据仓库" scheme="https://hank20200929.github.io/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"/>
+    
+    
+    <category term="维度建模" scheme="https://hank20200929.github.io/tags/%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>record</title>
+    <link href="https://hank20200929.github.io/2021/08/05/record/"/>
+    <id>https://hank20200929.github.io/2021/08/05/record/</id>
+    <published>2021-08-05T04:47:45.000Z</published>
+    <updated>2021-08-05T05:10:38.105Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;20210805 操作记录&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;针对所有文章进行重新归档&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;对于文章图片缺失的部分进行补充&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="记录" scheme="https://hank20200929.github.io/categories/%E8%AE%B0%E5%BD%95/"/>
+    
+    
+    <category term="记录" scheme="https://hank20200929.github.io/tags/%E8%AE%B0%E5%BD%95/"/>
+    
+  </entry>
+  
+</feed>
