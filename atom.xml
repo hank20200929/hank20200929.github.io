@@ -6,7 +6,7 @@
   <link href="https://hank20200929.github.io/atom.xml" rel="self"/>
   
   <link href="https://hank20200929.github.io/"/>
-  <updated>2021-11-24T13:16:34.363Z</updated>
+  <updated>2024-07-18T06:51:08.508Z</updated>
   <id>https://hank20200929.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>产品经理基本功系列笔记 01-如何做竞品分析</title>
+    <link href="https://hank20200929.github.io/2024/07/17/Product-Manager-Basic-Skills-Series-Notes-01-How-to-do-competitive-product-analysis/"/>
+    <id>https://hank20200929.github.io/2024/07/17/Product-Manager-Basic-Skills-Series-Notes-01-How-to-do-competitive-product-analysis/</id>
+    <published>2024-07-17T03:24:25.000Z</published>
+    <updated>2024-07-18T06:51:08.508Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;“如果你所做的一切都与你的竞争对手本质上是一样的，那么你就不太可能成功。“—— 迈克尔.波特&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;WHAT 竞品分析是什么？竞品分析的定义&lt;/strong&gt;&lt;br&gt;竞品分析（Competitive Analysis）一词最早源于经济学领域，是指对现有的或潜在的竞争产品的优势和劣势进行分析。通过找寻市场上存在竞争关系，高品质的产品，把他们进行分类和对比，输出结论为下一步决策提供正确的方向。&lt;br&gt;广泛意义上说，竞品分析就是根据分析目的，找到切入角度，对竞争对手或市场进行客观分析，找到竞品或自己的优势与不足，为下一步决策提供科学依据。&lt;br&gt;竞品分析是一个长时间定期持续积累，不断挖掘和分析的一个过程。&lt;strong&gt;设计产品最终目标就是追溯用户需求本身，解决用户痛点&lt;/strong&gt;，而竞品分析就是解决用户痛点这道大题的思路方法，就好比要解开一道复杂的数学题，需要用到很多公式，而竞品分析就是一个环节中的一种公式而已。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;竞品分析与市场分析的区别&lt;/strong&gt;&lt;br&gt;市场分析、竞品分析分析在&lt;em&gt;分析目的、产品数量和分析维度&lt;/em&gt;三个方面有所区别。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;市场分析以&lt;strong&gt;寻找市场机会，帮助产品定位为目标&lt;/strong&gt;，&lt;strong&gt;较宏观&lt;/strong&gt;，对具体的产品没有深入分析，产品&lt;strong&gt;数量较多&lt;/strong&gt;。分析维度有市场规模、增长趋势、市场份额、竞争状况、市场机会、市场细分、用户画像、产品分析等；&lt;/li&gt;
+&lt;li&gt;竞品分析以&lt;strong&gt;竞争、借鉴、了解市场为目的&lt;/strong&gt;，产品数量多在&lt;strong&gt;5个以内&lt;/strong&gt;。分析维度包括功能、设计、技术、团队、运营、用户等；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;WHY 为什么要做竞品分析？竞品分析有什么价值？&lt;/strong&gt;&lt;br&gt;竞品分析可以帮助我们更好地了解竞争环境，找准自身产品定位，制定竞争战略，同时发现竞品的发展情况和本品的优劣势，取长补短，通过对比，去糟存精，推动产品的优化迭代。深层次地挖掘产品背后的逻辑，不仅有助于产品迭代，同时也能帮助团队人员实现能力提升。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="产品经理" scheme="https://hank20200929.github.io/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/"/>
+    
+    
+    <category term="竞品分析" scheme="https://hank20200929.github.io/tags/%E7%AB%9E%E5%93%81%E5%88%86%E6%9E%90/"/>
+    
+  </entry>
   
   <entry>
     <title>设计模式的七大原则及创建型模式</title>
