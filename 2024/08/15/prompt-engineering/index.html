@@ -1,0 +1,399 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="机智の老何"><meta name="copyright" content="机智の老何"><meta name="generator" content="Hexo 5.2.0"><meta name="theme" content="hexo-theme-yun"><title>一文掌握Prompt：万能框架+优化技巧+常用指标 | 每日笔记</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.19/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>document.addEventListener("DOMContentLoaded", () => {
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link rel="shortcut icon" type="image/svg+xml" href="/yun.svg"><link rel="mask-icon" href="/yun.svg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="每日笔记" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"每日笔记","version":"1.0.0","say":{"api":"/data/sentences.json"},"local_search":{"path":"/search.xml"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194"]}};
+  </script><meta name="description" content="随着大模型在2023年横空出世，“Prompt 工程” 应运而生，作为用好大模型最重要的武器，Prompt 的好坏对模型效果有着决定性的影响。然而，网络上大量相关文章多是罗列“Prompt 工程” 中的若干技巧，少有体系化的总结，让人看完依然不知道该如何入手。 本文希望结合我们在 “Prompt 工程” 中的实践经验，更加体系化地对 “Prompt 工程” 进行梳理，希望可以一步步地帮助大家用好大">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一文掌握Prompt：万能框架+优化技巧+常用指标">
+<meta property="og:url" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/index.html">
+<meta property="og:site_name" content="每日笔记">
+<meta property="og:description" content="随着大模型在2023年横空出世，“Prompt 工程” 应运而生，作为用好大模型最重要的武器，Prompt 的好坏对模型效果有着决定性的影响。然而，网络上大量相关文章多是罗列“Prompt 工程” 中的若干技巧，少有体系化的总结，让人看完依然不知道该如何入手。 本文希望结合我们在 “Prompt 工程” 中的实践经验，更加体系化地对 “Prompt 工程” 进行梳理，希望可以一步步地帮助大家用好大">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/b732f76a30b22a2cee8776a6a327b0b3.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/2674a173e081f2ef37feb7ad7ace589c.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/1087d32c334467bba03c07ad8d90c66b.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/de37d4480e2da244e20c7d7d0e5c97e3.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/6245da5f644b6a50e3164015de838d68.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/43ea3f66e808dbfa61cc5d8077c869ee.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/229df7e7786dfb66e4d794b7f6b8296c.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/5b2dffd775e246e0958b502553ce5f01.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/a0f3e6ab9c5d23dda817a73fce581231.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/df5472e8de75f5eb55b24786278bf75c.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/7ce1b828fe0d5ce0d6a9c29c1e1b9198.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/95d775f97b247004730d2f3ff799171a.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/20240730-5ac2bad4.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/5ae11b418502d20e795ceb495a3546dc.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/373c78620c005dbe8e4da20c0fae8e14.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/20240730-6ba8fb24.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/c4182cbdf8b67c3dced91e76d98e1a47-172369308945520.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/4df89c00818c8ca8517807d5285a6e6a.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/d677c868df307a6fd1ba97ccf74ed40b.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/20240730-0bf85d87.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/20240730-5a758070.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/1003cf821b7453e8455a51ffa1c5af07.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/76b17aca038cd54ebb6ae3cb75940449-172369522783228.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/7a40c4ccb1582de110ae8cbe113f2f9a.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/a8a24d0c38aaa4430f61e5a9be9a2c2b.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/20240730-2427c13c.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/938f3595f871470b33fca4c692b43e12.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/89b57678a343c7b46b0ca352eb9e7cfc.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/acab3c3c77caad1a862aaa0b64380781.png">
+<meta property="article:published_time" content="2024-08-15T02:50:50.000Z">
+<meta property="article:modified_time" content="2024-08-15T04:32:50.126Z">
+<meta property="article:author" content="机智の老何">
+<meta property="article:tag" content="prompt工程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hank20200929.github.io/2024/08/15/prompt-engineering/b732f76a30b22a2cee8776a6a327b0b3.png"><script src="/js/ui/mode.js"></script></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script defer src="/js/ui/fireworks.js"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="机智の老何"><img width="96" loading="lazy" src="https://i.loli.net/2020/10/15/t8p3jxRBSNYiMsq.png" alt="机智の老何"></a><div class="site-author-name"><a href="/about/">机智の老何</a></div><a class="site-name" href="/about/site.html">每日笔记</a><sub class="site-subtitle">Records of Daily Matters.</sub><div class="site-desciption">记录每天发生的事情</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">5</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">3</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">4</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://www.baidu.com" title="百度一下"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:468507720@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/35725984" title="哔哩哔哩动画" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="toc-number">1.</span> <span class="toc-text">写在前面</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Prompt-%E4%B8%8E-GPT-%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F"><span class="toc-number">1.1.</span> <span class="toc-text">Prompt 与 GPT 的前世今生</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Prompt-%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">Prompt 到底是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E4%BE%9D%E8%B5%96%E8%AE%AD%E7%BB%83%EF%BC%9F%E5%BE%AE%E8%B0%83%E6%9C%89%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">为什么不能依赖训练？微调有什么问题？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%86%99%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%EF%BC%9F"><span class="toc-number">1.4.</span> <span class="toc-text">为什么要写这篇文章？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Prompt-%E4%B8%87%E8%83%BD%E6%A1%86%E6%9E%B6"><span class="toc-number">2.</span> <span class="toc-text">Prompt 万能框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%86%E6%9E%B6%E7%9A%84%E7%BB%86%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text">框架的细化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AB%8B%E8%A7%92%E8%89%B2"><span class="toc-number">3.1.</span> <span class="toc-text">立角色</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%B0%E9%97%AE%E9%A2%98-amp-%E5%AE%9A%E7%9B%AE%E6%A0%87"><span class="toc-number">3.2.</span> <span class="toc-text">述问题 &amp; 定目标</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A5%E8%A6%81%E6%B1%82"><span class="toc-number">3.3.</span> <span class="toc-text">补要求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%88%E8%A1%A5%E5%85%85%EF%BC%89%E6%A0%BC%E5%BC%8F%E5%BE%88%E9%87%8D%E8%A6%81"><span class="toc-number">3.4.</span> <span class="toc-text">（补充）格式很重要</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%88%E6%A1%86%E6%9E%B6%EF%BC%89"><span class="toc-number">3.5.</span> <span class="toc-text">总结（框架）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%A1%86%E6%9E%B6%E4%B8%8A%E5%A2%9E%E5%8A%A0%E6%9B%B4%E5%A4%9A%E4%BF%A1%E6%81%AF%EF%BC%88RAG%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">在框架上增加更多信息（RAG）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RAG"><span class="toc-number">4.1.</span> <span class="toc-text">RAG</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%EF%BC%88Few-shot%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">示例（Few-shot）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%B0%E5%BF%86%EF%BC%88Memory%EF%BC%89"><span class="toc-number">4.3.</span> <span class="toc-text">记忆（Memory）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E5%AF%B9%E4%B8%93%E4%B8%9A%E9%A2%86%E5%9F%9F"><span class="toc-number">4.4.</span> <span class="toc-text">应对专业领域</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%88%E5%A2%9E%E5%8A%A0%E6%9B%B4%E5%A4%9A%E4%BF%A1%E6%81%AF%EF%BC%89"><span class="toc-number">4.5.</span> <span class="toc-text">总结（增加更多信息）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A9%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9B%B4%E5%A5%BD%E7%9A%84%E6%80%9D%E8%80%83%EF%BC%88CoT%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">让大模型更好的思考（CoT）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-CoT"><span class="toc-number">5.1.</span> <span class="toc-text">什么是 CoT</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CoT-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.2.</span> <span class="toc-text">CoT 的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CoT-%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">5.3.</span> <span class="toc-text">CoT 的应用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%84%E5%8A%A0%E6%8A%80%E5%B7%A7"><span class="toc-number">6.</span> <span class="toc-text">附加技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E5%8F%82%E6%95%B0%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9E%8B%E7%A1%AE%E5%AE%9A%E6%80%A7"><span class="toc-number">6.1.</span> <span class="toc-text">用参数控制模型确定性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%A9%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%B8%AE%E4%BD%A0%E4%BC%98%E5%8C%96-Prompt"><span class="toc-number">6.2.</span> <span class="toc-text">让大模型帮你优化 Prompt</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9B%B4%E5%A4%9A%E6%8A%80%E5%B7%A7"><span class="toc-number">6.3.</span> <span class="toc-text">更多技巧</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E6%96%B9%E5%BC%8F%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%8C%87%E6%A0%87"><span class="toc-number">7.</span> <span class="toc-text">优化方式及常用指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="toc-number">8.</span> <span class="toc-text">写在最后</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">8.1.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8E%E7%BB%AD%E8%A7%84%E5%88%92"><span class="toc-number">8.2.</span> <span class="toc-text">后续规划</span></a></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://hank20200929.github.io/2024/08/15/prompt-engineering/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="机智の老何"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="每日笔记"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">一文掌握Prompt：万能框架+优化技巧+常用指标</h1><div class="post-meta"><div class="post-time" style="display:block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2024-08-15 10:50:50" itemprop="dateCreated datePublished" datetime="2024-08-15T10:50:50+08:00">2024-08-15</time></div><span class="post-count"><span class="post-symbolcount"><span class="post-meta-item-icon" title="本文字数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-file-word-line"></use></svg></span> <span title="本文字数">19.2k</span><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读时长"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-timer-line"></use></svg></span> <span title="阅读时长">66m</span></span></span><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">大模型</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/prompt%E5%B7%A5%E7%A8%8B/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">prompt工程</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><p>随着大模型在2023年横空出世，“Prompt 工程” 应运而生，作为用好大模型最重要的武器，Prompt 的好坏对模型效果有着决定性的影响。然而，网络上大量相关文章多是罗列“Prompt 工程” 中的若干技巧，少有体系化的总结，让人看完依然不知道该如何入手。</p>
+<p>本文希望结合我们在 “Prompt 工程” 中的实践经验，更加体系化地对 “Prompt 工程” 进行梳理，希望可以一步步地帮助大家用好大模型，人人都是 Prompt 工程师。</p>
+<a id="more"></a>
+
+<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><h4 id="Prompt-与-GPT-的前世今生"><a href="#Prompt-与-GPT-的前世今生" class="headerlink" title="Prompt 与 GPT 的前世今生"></a>Prompt 与 GPT 的前世今生</h4><p>如今我们所讨论的大语言模型，大多专指2023年 “ChatGPT” 爆发以来出现的众多模型，而非广义的 Transformer 架构下的所有模型。而 Prompt 的概念也正是伴随 “GPT” 模型的发展应运而生的。我们要明白 Prompt 是什么，就要知道 Prompt 的前世今生，这就要从 GPT 的发展开始谈起。</p>
+<p><img src="/2024/08/15/prompt-engineering/b732f76a30b22a2cee8776a6a327b0b3.png" alt="img" loading="lazy"></p>
+<p>如上图所示，自 2017 年 Transformer 诞生以来，在这个架构的基础上，以 BERT 为代表的模型和以 GPT 为代表的模型便以极快的速度向前发展。在 2018 年 BERT 诞生后，语言模型便开始重塑 NLP 领域，快速在市场中得到广泛应用，时至今日这些语言模型依然是 NLP 领域中最被广泛应用的模型，我们今天看到以 GPT 为代表的各类大模型也是其中之一。</p>
+<p>从 GPT 的发展来看，我们可以大致划分为4个阶段，**” GPT1 - GPT2 - GPT3 - ChatGPT “**，我们可以从这个发展过程中了解到 Prompt 是如何诞生的，以此更好的了解 Prompt。</p>
+<p><strong>阶段1：GPT-1 诞生在 Transformer 初期，</strong>是最早期基于 Transformer 架构打造的模型之一，其采用了和 BERT 相同的范式，<strong>通过 “pretrain + finetune” 的方式，</strong>首先让模型在大量未标注的数据上自监督的进行学习，完成预训练，随后在应用时再使用有监督数据进行微调，以此让模型可以适用于各种任务。在这种范式下 BERT 作为双向模型，可以充分的获取上下文信息，这让他在各类任务中都展现出了更精准更稳定的效果，而 GPT 作为单向模型，更擅长生成任务，而由于在这个阶段还处于大模型发展的早期，模型规模和效果还没有成长起来，因此生成的不稳定性使得 GPT 并没有被大规模应用。时至今日，即便 GPT 已经展现出了令人惊艳的效果，但目前 BERT 类的模型依然是各个业务使用更多的模型。</p>
+<p><strong>阶段2：相比 GPT-1，GPT-2 第一次提出了全新的范式，</strong>当我们扩大模型规模增加训练数据，让模型在一个称为 WebText 的由数百万个网页组成的数据集上完成预训练后，模型不再需要任何监督数据，就可以完成各类任务。在 OpenAI 的 Blog 中我们可以看到，团队在研究过程中发现，<strong>提升模型规模及训练数据的体量，可以让模型在 zero-shot 任务中的效果明显提升，</strong>这也在今天被认为是对 scaling law 的第一次发现，虽然当时还没有诞生智能涌现的现象。也有人解读，由于 BERT 在各个领域展现出的优异效果，GPT 被迫找到了新的发展方向，也为如今的智能涌现奠定了基础。由此，GPT 开启了与 BERT 截然不同的范式，并在新的范式下进行研发，专注模型在 zero-shot 中的效果。</p>
+<p><strong>阶段3：沿着 GPT-2 增大模型体量和训练数据规模的思路，</strong>GPT-3 使用了 570G 的训练数据，达到了 GPT-2 的15倍，参数量更是达到了惊人的 1750B，是 GPT-2 的 116 倍。<strong>参数量的提升让 scaling law 大显神威，让模型在各个领域中都展现出了令人惊艳的效果，尤其是在 zero-shot 方面，</strong>发布会上通过手绘 UI 图生成前端代码的例子至今让人印象深刻。GPT-3 在 2020 年底发布，当时 Transformer 已经经过了4年的发展，BERT 类模型已经在各类应用中被广泛使用，成为了绝对的主流。然而在这种情况下，GPT-3 的发布也依然成为了领域中最瞩目的事件，即便还是有很多问题，但其远超预期的效果依然令人震撼。</p>
+<p><strong>阶段4：</strong>之后的故事大家都非常熟悉了，<strong>OpenAI 在 GPT-3 的基础上针对不同场景进行了优化，在“多轮对话”的优化中诞生了“ChatGPT”，</strong>随后成为了世界上最火热的话题，也被认为是 AI 市场化的起点。GPT-3 后的模型不再开源，也没有论文公开发表，我们只能在 Blog 中获取一些信息，此处不再进行展开。</p>
+<p>最后我们来做个总结，从领域发展的角度我们可以看到 3 种不同的研发范式：</p>
+<ol>
+<li>Transformer 之前：有监督训练（train）</li>
+<li>GPT1 &amp; BERT：无监督预训练（pre-train） + 有监督微调（finetune）</li>
+<li>GPT2 &amp; GPT3：无监督预训练（pre-train） + 提示词（Prompt）</li>
+</ol>
+<p>我们可以清晰的看到其中的不同，模型能力的研发越来越不依赖 “训练” 的过程，而是更大程度的依赖 “预训练”，依赖 “模型” 本身的能力。在 BERT 所代表的范式下，我们还可以通过 “微调” 在参数层面影响模型。而到了以 “GPT3” 为代表的范式下，也就是我们现在用的大模型，我们不再借助 “微调” 的方式调试模型，而是通过 “输入” 直接影响 “输出” 的质量，而如何在应用中得到一个好的 “输入” 就是 “Prompt 工程” 需要做的事。</p>
+<p>以上，我从发展的角度谈论了 Prompt 的前世今生，Prompt 是从何而来，为什么我们需要 “Prompt 工程”，希望可以更好的帮助大家了解 Prompt，下面我就来具体谈谈 Prompt 是什么。</p>
+<h4 id="Prompt-到底是什么？"><a href="#Prompt-到底是什么？" class="headerlink" title="Prompt 到底是什么？"></a>Prompt 到底是什么？</h4><p>Prompt 译为 “提示”，与 “zero-shot” 的概念相辅相成，“zero-shot”  就是不通过训练直接向模型提问的应用方式，而 Prompt 就是指提问的方式。从这个概念上看 “模版” 可能是更合适的称呼，为什么要用 “提示” 这个单词呢？</p>
+<p>实际上，在刚刚出现这个概念时并没有 “Prompt” 这样的称呼，在早期的论文中其往往会被称为 “输入形式（format）” 或 “输入模版（template）”，但随着领域的发展，尤其是在 GPT-3 之后，Prompt 的叫法才被逐步确定，大家认同 “提示” 的概念与其作用更加贴切，尤其是在大语言模型的语境下尤为合适，因此逐渐成为了公认的称呼。</p>
+<p>那 Prompt 到底在提示什么呢？从前文中对范式的解读来看，模型能力的应用越来越向 “预训练” 的部分倾斜，绝大多数能力应当是在 “预训练” 阶段就构成的，而非通过进一步的训练构建。<strong>而在这种思想的基础上，Prompt 则像一把解锁模型能力的钥匙，让这些 “预训练” 阶段构成的能力唯我所用。因此，Prompt 就是在提示模型回忆起自己在预训练时学习到的能力。</strong></p>
+<p><strong>我们可以把 “知识” 和 “能力” 进行更进一步的分解，我们更多的是希望使用大模型的能力（理解，总结，生成，推理，e.t.c.），而非知识。</strong>与现在越来越火热的 RAG 技术一样，我们更倾向于将知识通过外部注入的方式让模型试用，而能力则完全需要依赖预训练阶段。我们要做的是通过 Prompt 调用大模型的能力去解决问题，让这些能力表现的更精准，而并非把他当成一个知识库。如果与人做对比也一样能得到这个结论，人可以从外部收集信息，并利用自身的智能进行决策，而不是把知识都装到自己脑子里。Sam Altman 在早期采访中也提到，把大模型当成搜索引擎的应用方式是错误的，智能的体现才是大模型的关键。</p>
+<p>总结而言，Prompt 就是在提示大模型 “回忆” 起自己的某些能力，在合适的场景下为我们解决问题，这也是 Prompt 工程最核心的理念之一。</p>
+<h4 id="为什么不能依赖训练？微调有什么问题？"><a href="#为什么不能依赖训练？微调有什么问题？" class="headerlink" title="为什么不能依赖训练？微调有什么问题？"></a>为什么不能依赖训练？微调有什么问题？</h4><p>除了闭源大模型外，现在小型的开源模型也是应用的主流，也随之诞生了 LoRa 这样的训练技术，可以在较小的成本下完成训练，那是否就意味着我们可以不再依赖 Prompt，而是像以前一样通过 “微调” 的范式调试模型呢？</p>
+<p><strong>首先是成本问题，</strong>Prompt 这种新范式的诞生是由于大模型超大的体量，导致我们无法在较小的成本下对参数产生足够的影响，即便是开源的较小的模型我们也大多采用 LoRa 这类 “附加参数” 的方式进行微调。因此，对于大模型应用而言，考虑到成本，我们实际上根本无法完成 “训练” 的过程。</p>
+<p><strong>其次是效果问题，</strong>如果我们利用 LoRa 这样的技术进行微调，对于模型参数的影响是很有限的，目前更倾向认为这是一种“对齐”的过程，且还很有可能引发“遗忘”的问题。而如果你希望通过微调让模型掌握 “知识”，这也不是一个好的思路，这意味着你需要不断的通过训练来保持知识的更新，且需要针对不同领域训练多个不同的模型，同时训练也并不是一个可靠的过程，相比之下现在“超长上下文的模型” 加 “RAG” 被认为是更可靠的方式。</p>
+<p><strong>最后，这也不是一个长期可靠的研发思路，</strong>大模型现在惊艳的效果是基于 “scaling law” 的智能涌现，本质还是在应用大模型预训练阶段的能力。无论是“开源”还是“闭源”模型，一定是通过参数量的增加或其他方式，让模型本身的能力不断提升，且目前看依然保持指数级的增长。在这种情况下，过于依赖基于任务的训练是不长久的，因为大模型的本质不是通过训练构建能力，而是通过输入调度能力，并在任务维度进行对齐。即便是开源模型的应用，长期来看也不会是以任务维度进行训练。</p>
+<p><strong>因此，训练与微调并不能取代 Prompt 的作用，</strong>且这种范式在众多方面都展现出了弊端，这也证明了 Prompt 工程的重要性，Prompt 是新范式下应用模型能力的关键。</p>
+<h4 id="为什么要写这篇文章？"><a href="#为什么要写这篇文章？" class="headerlink" title="为什么要写这篇文章？"></a>为什么要写这篇文章？</h4><p>自大模型横空出世依赖变成为了世界最大的热点，而 “Prompt 工程” 一直是其中最为火热的方向之一，早在大模型发展之初很多人便开始呼吁设立 “Prompt 工程师” 的职位，似乎在新的时代下写好 Prompt，用好大模型，是各个领域最重要的事情之一。在这样的背景下，Prompt 相关的研究已经积累的十分充足，无论是公司内外都积累了众多的文章和课程，其中最火的 《Prompt Engineering Guide》，和吴恩达老师的《ChatGPT Prompt Engineering for Developers》，都对 “Prompt 工程” 作出了详细的介绍，是非常重要的学习资料。那为什么我还要写这篇文章呢？</p>
+<p><img src="/2024/08/15/prompt-engineering/2674a173e081f2ef37feb7ad7ace589c.png" alt="img" loading="lazy"></p>
+<p>这些文章和教程都有一个共通的问题，他们大多是对技巧的罗列，例如《Prompt Engineering Guide》中就罗列了大量技巧，告诉你可以在 Prompt 中 “增加示例”，“增加角色” 等等。但并没有一个体系化的结构，一个标准化的工作流，告诉大家如何一步步的完成一个 “Prompt”，如何从0开始完成 “Prompt 工程” 的工作。</p>
+<p>因此本文尝试结合我们的研发经验，体系化的对 “Prompt 工程” 的工作进行总结，得到一些标准化的工作流程，并通过这样结构化的整理，可以更好的对 “Prompt” 进行管理，让“Prompt”作为大模型应用的基石，更加可靠有效可扩展。具体而言，我们把从0到1完成一个 Prompt 的过程拆分为了5个步骤。我们利用一套统一的模版，解决最困难的初始 Prompt 书写的问题，并结合实际应用一步步的进行优化，从而体系化的完成 “Prompt 工程” 的工作。</p>
+<p><img src="/2024/08/15/prompt-engineering/1087d32c334467bba03c07ad8d90c66b.png" alt="img" loading="lazy"></p>
+<p>我们希望通过我们的方法，可以提升 Prompt 工程的工作效率，降低 Prompt 技术的应用成本，并解决 Prompt 难以管理的问题。让大家都可以从0到1的完成大模型的调试，并让大模型在各个领域中被更好的应用。</p>
+<h3 id="Prompt-万能框架"><a href="#Prompt-万能框架" class="headerlink" title="Prompt 万能框架"></a>Prompt 万能框架</h3><p><img src="/2024/08/15/prompt-engineering/de37d4480e2da244e20c7d7d0e5c97e3.png" alt="img" loading="lazy"></p>
+<p>在编写 Prompt 时，从0到1的编写出第一版 Prompt 往往是最难的，而基于已有 Prompt 利用各种技巧进行优化则相对简单。善于解决 “数理问题” 的我们在面对这样一个偏 “文理问题” 的任务时，就像小时候写作文一样难以提笔。如上图所示，为了解决这个问题，我们使用了一套 “万能模版”，把一个 Prompt 拆分成了 “立角色 + 述问题 + 定目标 + 补要求” 这四个部分，希望通过结构化的拆分完成这最困难的一步，无论面对什么任务，利用这个模版都可以得到一个“及格”的 Prompt。下面我就具体和大家阐述一下这个模版是如何得到的，为什么他是有效的。</p>
+<p>对与 Prompt 的作用和定位已经在第一章中进行了详细的讨论，Prompt 的作用就是根据我们的问题调用模型的能力，我们要通过提问的方式，明确的让模型知道我们想要什么，我们的目标是什么，从这个基本思想出发，Prompt 应该包含以下几点：</p>
+<p><img src="/2024/08/15/prompt-engineering/6245da5f644b6a50e3164015de838d68.png" alt="img" loading="lazy"></p>
+<ol>
+<li><strong>问题是什么：</strong>首先你要告诉模型你的问题是什么，你的任务是什么，要尽量描述清楚你的需求。</li>
+<li><strong>你要做什么：</strong>下面你需要告诉大模型具体要做什么，比如做一份攻略，写一段代码，对文章进行优化，等等。</li>
+<li><strong>有什么要求：</strong>最后我们往往还需求对任务补充一些要求，比如按特定格式输出，规定长度限制，只输出某些内容，等等。</li>
+</ol>
+<p>通这 3 部分的描述我们就把 “要大模型做什么” 描述清楚了，这个想法十分自然，即便不是大模型，而是希望其他人为你完成某项任务，往往也需要通过这 3 部分把问题描述清楚。由于这仅仅是第一版 Prompt，你不需要描述的过于详细，也不需要使用技巧，只需要用简练的语言把这几部分描述清晰即可。以下是几个示例：</p>
+<p><strong>例1：生成产品摘要</strong> 问题是什么：你的任务是帮我生成一个产品的简短摘要。 你要做什么：我会给你产品的需求文档，及用户对产品的评价，请结合这些信息概括产品的功能及现状，为我生成一份产品摘要。 有什么要求：请尽量概括产品的特点，并用轻松幽默的语言风格进行编写，摘要的字数不要超过50个字。</p>
+<p><strong>例2：生成代码注释</strong> 问题是什么：你的任务是帮我的代码生成注释。 你要做什么：我有一段 python 代码，需要你对代码的内容进行分析，并为代码添加注释。 有什么要求：请结合代码内容，尽量详细的补充注释，不要遗漏，每条注释请以 “comment:” 作为前缀。</p>
+<p><strong>例3：生成测试用例</strong> 问题是什么：你的任务是帮我设计一款产品的测试用例。</p>
+<p>你要做什么：我会提供给你产品的需求文档，需要你结合需求的功能描述进行测试用例的编写。</p>
+<p>有什么要求：请结合需求中功能的结构，对测试点进行梳理，并有层级的输出测试用例，请保证每一个功能的测试点没有遗漏。</p>
+<p>以上是3个简单的示例，让大家更直观的感受这 3 部分的含义，在实际应用中这 3 部分的内容会比例子中复杂的多，此处仅仅为了说明框架的结构，实际内容没有参考价值，各部分内容的细化会在第三章中详细展开。</p>
+<p><strong>在描述清楚任务后，我们就需要调度模型的能力去完成我们的任务，</strong>不同的任务需要用到不同的能力，这往往依赖认为的拆分。我们可以想像，当我们让一个小白帮我们完成一项任务时，我们需要对任务进行分解，并告诉他每一步需要怎么做，以此来让他完成一项复杂的任务。对于大模型而言，这当然也是适用的，甚至十分好用，这在第5章的 “CoT” 中还会再次提到。</p>
+<p>你当然可以人为的完成这种拆分，再一条条的解释给大模型，但这种做法并不通用，每个领域都有自己独特的专项能力，每个任务都有自己的工作流程，因此这种方案并不适合放到一个通用的框架当中。<strong>好在大模型能力的调用还存在一条捷径，那就是“角色”，他就像大模型里自带一个“能力包”，可以很容易的对模型能力进行调用。</strong>每一个角色，都对应着该角色包含的若干能力，我们可以通过设定角色，“提示”大模型使用该角色对应的能力，这与前文“Prompt 到底是什么” 中介绍的想法极其匹配，充分说明是“Prompt” 提示的作用，通过简单的“提示”调用出大模型预先训练的能力，这也就是“角色”如此有用的原因。</p>
+<p><img src="/2024/08/15/prompt-engineering/43ea3f66e808dbfa61cc5d8077c869ee.png" alt="img" loading="lazy"></p>
+<p>由此我们就最终得到了我们的 “Prompt 模版”，通过这个统一的框架我们可以完成绝大多数 Prompt 初版的编写，让大家在面对各类任务时可以高效的完成从0到1的尝试，而不必陷入无从下笔的困境。</p>
+<p>除了效果之外，对 Prompt 结构化的拆分也对 Prompt 管理提供了很大帮助，我们的 Prompt 库不再是大段的文本，而是拆分成了4张表“角色表”，“问题表”，“目标表”，“要求表”。通过这种方式我们可以很大的提升 Prompt 的灵活性，并通过动态组合4个元素的方式完成各类任务，这在面对复杂任务，或通过多模型解决问题时，会提供稳定有效的支撑。</p>
+<h3 id="框架的细化"><a href="#框架的细化" class="headerlink" title="框架的细化"></a>框架的细化</h3><p><img src="/2024/08/15/prompt-engineering/229df7e7786dfb66e4d794b7f6b8296c.png" alt="img" loading="lazy"></p>
+<p>在第二章中我们已经明确了 “Prompt 工程” 的第一步，通过我们的框架，在任何任务中我们都可以完成 Prompt 从 0 到 1 的编写，而这个初版的 Prompt 还只是一个雏形，由于各部分信息还不完整，往往不能达到我们的预期，框架提供了 Prompt 的骨架，还需要我们进一步补充血肉，下面我会对框架的每一部分进行更详细的分解，通过内容的补全一步步的提升模型的效果。</p>
+<h4 id="立角色"><a href="#立角色" class="headerlink" title="立角色"></a>立角色</h4><p>与第二章中对 “角色” 的理解一致，<strong>“角色” 可以被当作大模型的“能力包”或“语法糖”，</strong>我们不再需要对每一项能力进行详细的描述，对任务进行更细节的分解，而是可以通过 import “角色” 的方式，使用这个 “角色” 背后对应的各项能力。那我们该如何设立角色，才是这个“能力包”的正确使用方式呢？</p>
+<p>大家都有招聘的经历，我们可以想象，大模型就是我们要招的人，我们需要设定一个能力模型，来完成我们指定的工作。我们在招聘时通常都会有明确的要求，在JD中要有清晰的描述，这样才能找到最合适的人选。<strong>这与大模型的角色设置一样，我们要清晰明确的描述这个角色，才能充分 “提示” 大模型，让大模型知道该调用哪些能力。</strong></p>
+<p>我们不妨试想一下在招聘 JD 中，我们会要求哪些内容。通常会包含：工作年份，教育水平，项目经历，工作技能，荣誉奖项等等。<strong>我们完全可以按照这个思路，创建一个语言模版，帮助我们创立角色。</strong></p>
+<p>以下是我在使用的角色模版，当然 Prompt 的构造十分灵活，展示的示例仅供参考：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">**角色模版：**</span><br><span class="line"></span><br><span class="line">现在你是一位优秀的&#123;&#123;你想要的身份&#125;&#125;，拥有&#123;&#123;你想要的教育水平&#125;&#125;，并且具备&#123;&#123;你想要的工作年份及工作经历&#125;&#125;，你的工作内容是&#123;&#123;与问题相关的工作内容&#125;&#125;，同时你具备以下能力&#123;&#123;你需要的能力&#125;&#125;</span><br><span class="line"></span><br><span class="line">**例：心理咨询师**</span><br><span class="line"></span><br><span class="line">现在你是一位优秀的 &#123;&#123;心理咨询师&#125;&#125;，拥有 &#123;&#123;心理咨询、临床心理学等专业的硕士或博士学位&#125;&#125;，并且具备 &#123;&#123;多年的心理咨询工作经验，在不同类型的心理咨询机构、诊所或医院积累了丰富的临床实践经验&#125;&#125;，你的工作内容是 &#123;&#123;为咨询者处理各种心理问题，并帮助你的咨询者找到合适的解决方案&#125;&#125;，同时你具备以下能力：</span><br><span class="line"></span><br><span class="line">&#123;&#123;</span><br><span class="line"></span><br><span class="line">1. 专业知识：你应该拥有心理学领域的扎实知识，包括理论体系、治疗方法、心理测量等，可以为你的咨询者提供专业、有针对性的建议。</span><br><span class="line">2. 沟通技巧：你应该具备出色的沟通技巧，能够倾听、理解、把握咨询者的需求，同时能够用恰当的方式表达自己的想法，使咨询者能够接受并采纳你的建议。</span><br><span class="line">3. 同理心：你应该具备强烈的同理心，能够站在咨询者的角度去理解他们的痛苦和困惑，从而给予他们真诚的关怀和支持。</span><br><span class="line">4. 持续学习：你应该有持续学习的意愿，跟进心理学领域的最新研究和发展，不断更新自己的知识和技能，以便更好地服务于你的咨询者。</span><br><span class="line">5. 良好的职业道德：你应该具备良好的职业道德，尊重咨询者的隐私，遵循专业规范，确保咨询过程的安全和有效性。</span><br><span class="line"></span><br><span class="line">&#125;&#125;</span><br><span class="line"></span><br><span class="line">以上是一个简单的示例，角色的设置往往需要编写者对角色有一定的了解，这可以更好的帮助你补全你的模版，但如果你不了解你要设置的角色，不知道这些信息该如何填写，我们如何可以获取到这部分信息呢？</span><br><span class="line"></span><br><span class="line">**其实，我们可以沿着 “招聘 JD” 的思路，通过招聘网站上的招聘信息补全我们的数据。**例如，我要让大模型帮我完成一个 “财务分析” 相关的任务，而我此前对这个领域毫无了解，此时就可以通过招聘网站的职位信息，完成角色的设置：</span><br><span class="line"></span><br><span class="line">![img](prompt-engineering&#x2F;e56e3408fddab9657fbcd3d09f50e0bb.png)</span><br><span class="line"></span><br><span class="line">**例：财务分析**</span><br><span class="line"></span><br><span class="line">现在你是一位优秀的&#123;&#123;财务分析顾问&#125;&#125;，拥有&#123;&#123;财务学、经济学等专业的硕士或博士学位&#125;&#125;，并且具备&#123;&#123;八年以上的财务分析工作经验，在不同类型的公司进行过一线基金财务分析，财务报告产出等工作，积累了丰富的实践经验&#125;&#125;，你的工作内容是&#123;&#123;对投融资数据进行分析，从管理层的视角设计数据分析框架和汇报体系&#125;&#125;，同时你具备以下能力：</span><br><span class="line"></span><br><span class="line">&#123;&#123;</span><br><span class="line"></span><br><span class="line">1. 专业知识：你拥有较强的数据分析能力和丰富的财务分析与报告能力。</span><br><span class="line">2. 较强的分析问题解决问题能力和框架性思维能力。</span><br><span class="line">3. 具有很强的学习能力，以及很强的自我驱动力。</span><br><span class="line">4. 有好奇心，愿意挑战自己，不断开拓新的领域。</span><br><span class="line">5. 中英文流利，优秀的中英文书写能力，良好的沟通能力。</span><br><span class="line"></span><br><span class="line">&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上，就是借助 “招聘 JD” 完成一个完全陌生领域角色的示例，而通常而言角色与任务的关联性很大，我们对角色的了解越深入，就越能设定出符合预期的角色，即便我们可以采用这种方案进行兜底，但在 “Prompt 工程” 中人的先验经验依然十分重要。</p>
+<h4 id="述问题-amp-定目标"><a href="#述问题-amp-定目标" class="headerlink" title="述问题 &amp; 定目标"></a>述问题 &amp; 定目标</h4><p>对问题的描述由 “述问题” 和 “定目标” 两部分组成，是 Prompt 中信息含量最大的部分，也是和任务最相关的部分，我们要<strong>明确的描述我们希望大模型做的工作，</strong>才能让大模型输出最符合预期的结果。</p>
+<p>除了要描述的清晰明确外，此部分值得强调的就是对<strong>任务的分解，</strong>这在复杂任务上尤为重要。如果我们需要大模型完成的任务过于复杂，我们则需要先人工对任务进行拆分，并尽量详细的描述任务中包含的各个部分，这与常用的  “CoT” 的优化方式类似，通过把复杂任务拆分成若干个子部分的方式提升模型的效果。</p>
+<p><strong>我们也可以把这种拆分当作一个任务维度的对齐，</strong>当我们用概括的语言描述一项任务时，隐含了大量的背景知识和预期。例如，当我们希望大模型帮我们 “制作一份旅游攻略” 时，我们希望他能帮我们 “规划行程”，“收集信息”，“预定酒店” 等等，而这些信息往往都被包含在 “旅游攻略” 当中。<strong>如果我们不明确的对任务进行拆分，大模型就不知道我们的任务具体需要包含哪些部分，因此这个任务维度的对齐十分重要。</strong>下面我举几个例子：</p>
+<p><strong>例1：请帮我制作一份深圳的旅游攻略</strong> 请帮我制作一份深圳的旅游攻略，以下是一些基本步骤和思考方式：</p>
+<ol>
+<li>研究和收集信息：查找关于深圳的旅游信息，包括主要的旅游景点，当地的文化和历史，美食，交通，住宿等。</li>
+<li>规划行程：根据你收集的信息，规划你的行程。考虑你想要去的地方，你有多少时间，你的预算等。确保你的行程是实际和可行的。</li>
+<li>预订交通和住宿：一旦你确定了你的行程，你可以开始预订你的交通和住宿。比较不同的选项，找到最适合你的。</li>
+<li>准备必要的物品：根据你的行程和新疆的天气，准备你需要的物品，比如衣服，鞋子，相机，地图等。</li>
+</ol>
+<p><strong>例2：请根据需求帮我设计测试用例</strong></p>
+<p>请根据需求帮助我设计测试用例，测试用例的设计是一个系统化的过程，以下是一些基本步骤和思考方式：</p>
+<ol>
+<li>理解需求：首先，你需要深入理解软件的需求和功能。这包括阅读需求文档，理解用户故事，或者与项目经理和开发人员进行讨论。</li>
+<li>确定测试范围：确定你需要测试哪些功能和特性。这可能包括正常操作，边缘情况，错误处理等。</li>
+<li>设计测试策略：确定你将如何测试这些功能。这可能包括单元测试，集成测试，系统测试，性能测试等。</li>
+<li>编写测试用例：对于每个测试，编写一个详细的测试用例。这应该包括预期的输入，预期的输出，以及如何执行测试。</li>
+<li>评审测试用例：对测试用例进行评审，以确保它们完整，准确，并且易于理解。</li>
+</ol>
+<p>复杂任务的拆解往往十分有效，不仅可以提升大模型的推理能力，也可以让大模型的输出更加贴合你的要求（对齐），但这需要你对当前任务有一定的理解，才可以完成这样的拆分。但如果你并不熟悉你要处理的任务，如何完成这一步呢。正如前文中表达的观念，我们希望得出一套通用的方法，让每个人在面对每个任务时都可以完成 Prompt 的编写，因此一定需要找到更加通用的方法。</p>
+<p><strong>其实，这个步骤你完全可以让大模型帮助你完成，</strong>这类似 Agent 中的 Planning 的思想，让大模型帮助你拆分一项复杂任务。你可以使用这样简单的 Prompt 完成这个任务：</p>
+<p><strong>任务拆分 Prompt：</strong> <code>&#123;&#123;你要做的任务&#125;&#125;</code>，需要哪些步骤，该如何思考？</p>
+<p><strong>例：希望大模型帮我写一份基金财务分析报告</strong> <strong>输入：</strong> 制作一份基金财务分析报告，需要哪些步骤，该如何思考？ <strong>输出：</strong> 制作一份基金财务分析报告是一个涉及多个步骤的过程，需要对基金的财务状况、投资策略、市场环境等进行深入的研究和理解。以下是一些主要步骤和思考方式：</p>
+<ol>
+<li>收集数据：首先，你需要收集基金的财务数据，包括但不限于基金的净值、收益率、投资组合、费用比率等。这些数据通常可以从基金公司的年度报告或季度报告中获取。</li>
+<li>数据分析：对收集到的数据进行分析，包括对基金的收益率、风险、投资组合分布等进行计算和比较。你可以使用一些财务分析工具，如 Excel，或者专门的财务分析软件来进行这些计算。</li>
+<li>基金比较：将基金的表现与其同类基金或者基准指数进行比较，看看基金的表现是否超过市场平均水平。这可以帮助你理解基金的相对表现。</li>
+<li>市场环境分析：考虑基金的投资环境，包括经济状况、行业趋势、政策变化等。这些因素可能会影响基金的表现。</li>
+<li>基金经理分析：研究基金经理的投资策略和历史表现，看看他们是否有能力在不同的市场环境下取得良好的回报。</li>
+<li>撰写报告：将你的分析结果整理成一份报告，包括你的主要发现、基金的优点和缺点、以及你对基金未来表现的预测。</li>
+</ol>
+<p>在进行这些步骤时，你需要保持客观和批判性的思考。不要只看基金的过去表现，而要尝试理解基金的表现背后的原因。此外，你还需要考虑到市场的不确定性，因此在做出预测时要谨慎。</p>
+<h4 id="补要求"><a href="#补要求" class="headerlink" title="补要求"></a>补要求</h4><p>以上我们已经通过 “述问题&amp;定目标” 描述清楚了我们的任务，下面我们往往还需要对我们的任务提出一些要求，告诉大模型希望他做什么以及不做什么，这往往与模型在应用中的准确率息息相关。我们常用的要求可能有如下几种：</p>
+<ol>
+<li>字数限制。</li>
+<li>输出结构（结构化输出，Json 输出）。</li>
+<li>在输出中排除 xxx。</li>
+<li>在输出中仅包含 xxx。</li>
+</ol>
+<p>让大模型遵循我们的要求，尤其是在“格式”层面让大模型的输出符合我们的规定，对大模型的工业应用十分重要。如何让大模型更听话，让其遵循我们的要求呢？</p>
+<p><strong>首先，我们可以把要求放在 Prompt 的最后。</strong>大语言模型的本质是在做文本补全，后文的输出会更倾向于依据距离更近的语境，如果利用 <strong>“LIME”</strong> 这样的模型解释算法分析，距离更近的文本间权重往往更大，这在 Transofrmer 中的 Attention 权重 上也可以清晰的看到。同时，这与大模型在预训练阶段中完成的任务也更加匹配，虽然现在的大模型在 SFT 阶段会进行多种任务的训练，但其本质上还是建立在自监督“文本补全”任务上被训练出来的，因此其天然的更加遵从离得更近的文本。因此，把要求放在 Prompt 的最后可以很有效的帮助大模型变得更“听话”。</p>
+<p><strong>其次，我们还可以利用大模型的“编程”能力巧妙的让他更“听话”。</strong>在“立角色”的部分中，我们说“角色”时大模型的能力包，我们可以通过设定角色调用大模型的能力，那有什么能力可以让大模型更“听话”呢？我们都知道“大模型”在“编程”方面也展现出了惊人的能力，而这个能力恰好可以将“模糊的文理问题”变成“准确的数理问题”，以此让大模型更加遵守我们的要求。</p>
+<p>具体而言，就是把我们的要求转换为一个 “编码” 任务，例如：</p>
+<p><strong>请列出10个国家，并以列表形式返回</strong></p>
+<p>请列出10个国家，并以列表形式返回。我需要将这个列表引入到 python 代码中，请严格遵守 python 列表的格式进行输出。</p>
+<p><strong>例2：请输出10个国家，并包含这10个国家的“名称”，“人口”，“位置”。</strong></p>
+<p>请列出10个国家，并包含这10个国家的“名称”，“人口”，“位置”。我需要将这份数据引入到 python 代码中，因此请以 Json 格式进行输出，Json 格式如下：</p>
+<p>‘’’</p>
+<p><code>&#123;&quot;name&quot;: 名称, &quot;population&quot;: 人口, &quot;position&quot;: 位置, &#125;</code></p>
+<p>‘’’</p>
+<p><strong>例3：请为我输出一份产品摘要，字数不要超过50个字。</strong></p>
+<p>请为我输出一份产品摘要。我需要将这个摘要引入到 python 代码中，该变量的大小为50，因此摘要内容不要超过50个字符通过这样引入大模型“编程”能力的方式，我们可以对模型提出更加精准的要求，并通过将我们的任务转换为更加准确的编程问题的方式，让大模型更 “听话”。</p>
+<h4 id="（补充）格式很重要"><a href="#（补充）格式很重要" class="headerlink" title="（补充）格式很重要"></a>（补充）格式很重要</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">除了输入的内容外，输入的格式也很重要，清晰的结构对大模型的效果有很大的影响。除了增加合适的 “空行” 让结构变的清晰外，我们还可以增加一些“标识符”来区分各个部分，例如：#,&lt;&gt;,&#96;&#96;&#96;,[],-。同时大模型也具备 MarkDown 解析的能力，我们也可以借助 MarkDown 语法进行 Prompt 结构的整理。</span><br><span class="line"></span><br><span class="line">由于“格式”对模型效果的影响，越来越多研究聚焦在了这个方向上，其中 “LangGPT” 得到了广泛的应用。LangGPT 提出了一种结构化的 Prompt 模式，可以通过一套结构化的模版构造出格式清晰的 Prompt。</span><br><span class="line"></span><br><span class="line">例：LangGPT 示例</span><br><span class="line"></span><br><span class="line"># Role: 设置角色名称，一级标题，作用范围为全局</span><br><span class="line"></span><br><span class="line">## Profile: 设置角色简介，二级标题，作用范围为段落</span><br><span class="line"></span><br><span class="line">- Author: yzfly 设置 Prompt 作者名，保护 Prompt 原作权益 </span><br><span class="line"></span><br><span class="line">- Version: 1.0 设置 Prompt 版本号，记录迭代版本 </span><br><span class="line"></span><br><span class="line">- Language: 中文 设置语言，中文还是 English </span><br><span class="line"></span><br><span class="line">- Description: 一两句话简要描述角色设定，背景，技能等</span><br><span class="line"></span><br><span class="line">### Skill: 设置技能，下面分点仔细描述</span><br><span class="line"></span><br><span class="line">1. xxx </span><br><span class="line"></span><br><span class="line">2. xxx</span><br><span class="line"></span><br><span class="line">## Rules 设置规则，下面分点描述细节</span><br><span class="line"></span><br><span class="line">1. xxx </span><br><span class="line"></span><br><span class="line">2. xxx</span><br><span class="line"></span><br><span class="line">##Workflow 设置工作流程，如何和用户交流，交互</span><br><span class="line"></span><br><span class="line">1. 让用户以 &quot;形式：[], 主题：[]&quot; 的方式指定诗歌形式，主题。 </span><br><span class="line"></span><br><span class="line">2. 针对用户给定的主题，创作诗歌，包括题目和诗句。</span><br><span class="line"></span><br><span class="line">##Initialization 设置初始化步骤，强调 prompt 各内容之间的作用和联系，定义初始化行为。 </span><br><span class="line"></span><br><span class="line">作为角色 &lt;Role&gt;, 严格遵守 &lt;Rules&gt;, 使用默认 &lt;Language&gt; 与用户对话。然后介绍自己，并告诉用户 &lt;Workflow&gt;。</span><br><span class="line"></span><br><span class="line">我们从 “LangGPT” 的示例中可以看到，他用各种分隔符对 Prompt 内容进行了整理，可以很清晰的看到每部分的作用与区分。我们可以借鉴 “LangGPT” 对分隔符的使用，通过对格式的整理让同样的 Prompt 展现出更好的效果。</span><br></pre></td></tr></table></figure>
+
+<h4 id="总结（框架）"><a href="#总结（框架）" class="headerlink" title="总结（框架）"></a>总结（框架）</h4><p><strong>我们把 “框架细化” 分成了4步，并在每一步中都提出了通用的实践方法：</strong></p>
+<ol>
+<li>角色：通过角色模版和招聘 JD 补全角色。</li>
+<li>问题&amp;目标：在大模型的辅助下拆分任务。</li>
+<li>要求：借助编码能力，让大模型更好的遵守要求。</li>
+<li>格式整理：结合 LangGPT 的思想合理应用分隔符，让 Prompt 结构清晰。</li>
+</ol>
+<p><strong>至此，我们已经完成了 Prompt 主体部分的编写，</strong>面对任何一个任务都可以通过这套统一的方法完成一个还不错的 Prompt，并且通过我们对 Prompt 结构化的拆分，我们现在也可以更好的管理我们的 Prompt，并为上层应用提供更好的支撑。</p>
+<h3 id="在框架上增加更多信息（RAG）"><a href="#在框架上增加更多信息（RAG）" class="headerlink" title="在框架上增加更多信息（RAG）"></a>在框架上增加更多信息（RAG）</h3><p><img src="/2024/08/15/prompt-engineering/5b2dffd775e246e0958b502553ce5f01.png" alt="img" loading="lazy"></p>
+<p>上文中我们已经通过 “Prompt 框架” 和 “框架的细化” 完成了 Prompt 主体部分的编写，如果我们要在这基础上进一步优化我们的 Prompt，我们还能怎么做呢？</p>
+<p>大模型的推理，根本上还是基于用户输入的信息进行推理，我们提供的信息越充分，大模型就能越好的完成推进。<strong>因此，要想让模型的效果更好，我们就需要提供更多的输入信息。</strong>前两章介绍的“框架”，仅仅包含了 Prompt 中“静态”的信息，再进一步扩充这部分信息的同时，我们还需要增加因任务而异的“动态”信息，这两部分信息的补充就是进一步优化 Prompt 的核心思想。</p>
+<p>“增加更多信息，让效果变得更好” 这个想法十分自然，但我们要增加什么信息？如何增加这些信息呢？</p>
+<p>为了能在合适的场景下增加合适的信息，势必要包含 “检索” 的工作，来根据需要找到合适的信息，而说到 “检索” 就不得不提名声大噪的 “RAG” 了。</p>
+<h4 id="RAG"><a href="#RAG" class="headerlink" title="RAG"></a>RAG</h4><p>RAG 技术在近期得到了大量的关注，也渐渐的在各种实际场景中得到了应用。早在 ChatGPT 爆发之初，RAG 就已经得到了不少的关注，大家很早就意识到，<strong>想要依赖模型参数注入知识不是可行的做法，要让模型拥有动态获取知识的能力，</strong>不光对大模型在专业领域中的应用十分重要，对知识的扩展性和时效性在通用领域中也同样重要。</p>
+<p>与人类智能类比，人脑也并不需要把所有知识都放在大脑中，而是可以通过检索的方式获取知识，再利用自身的智能进行推理，最终得到结论。当你使用各大厂商的大模型时，你都会发现其包含检索的步骤，<strong>通过检索获取的知识对大模型效果十分重要。</strong></p>
+<p><img src="/2024/08/15/prompt-engineering/a0f3e6ab9c5d23dda817a73fce581231.png" alt="img" loading="lazy"></p>
+<p><strong>而这个检索背后的技术就是 “RAG”，</strong>他可以利用大模型能力通过语义相似度的方式，高效的在文本数据上完成检索，并把其增加到大模型的输入当中。</p>
+<p><img src="/2024/08/15/prompt-engineering/df5472e8de75f5eb55b24786278bf75c.png" alt="img" loading="lazy"></p>
+<p>从技术角度看，上图是 RAG 最原始的结构，也是 RAG 最核心的部分，通过 “Embedding+<a target="_blank" rel="noopener" href="https://cloud.tencent.com/product/vdb?from_column=20065&from=20065">向量数据库</a>” 的方式，RAG 可以无监督的对文本数据进行语义维度的匹配，这个思想早在 Word2Vec 时代就已经得到了应用，词向量就已经可以进行“词”维度的匹配，而如今大模型则是把这个维度提升到了所有文本数据。</p>
+<p>现在已经有了许多可以直接使用的RAG框架，如：LangChain, Milvus, LlamaIndex, Pincone 都提供了开箱即用的方案。而真的要让 RAG 变得准确好用，还是有很多值得优化的地方，RAG 框架也已经有了多种优化版本。</p>
+<p><img src="/2024/08/15/prompt-engineering/7ce1b828fe0d5ce0d6a9c29c1e1b9198.png" alt="img" loading="lazy"></p>
+<p>如今的 RAG 技术已经得到了充分的发展，已经不仅仅局限于语义匹配本身，而诞生出了多种优化版本，也增加了例如 “Rewrite”,  “Memory” 这样的模块，对于 RAG 技术感兴趣的同学可以阅读此篇survey：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2312.10997">https://arxiv.org/pdf/2312.10997</a></p>
+<p><strong>如果我们从应用角度重新看看 RAG ，不难发现其本质就是检索技术，</strong>只是 RAG 利用大模型能力实现了更强的语义维度的检索。而如果我们不知道怎么做 Embedding，也没有向量<a target="_blank" rel="noopener" href="https://cloud.tencent.com/solution/database?from_column=20065&from=20065">数据库</a>，不会使用 RAG，我们还可以完成检索吗？</p>
+<p>答案显然是肯定的 ，检索依然是十分成熟的技术模块了，即便利用最传统的 “关键词匹配” 也可以计算文本间的相似度，实现检索的效果。<strong>因此，RAG 并不是唯一的技术方案，我们不必困在此处，在条件不足的情况下，我们可以结合场景找到最合适的检索模式，践行 RAG 的思想，在输入中增加更多信息才是最核心的思想。</strong></p>
+<p>以上，我结合 RAG 介绍了 “如何增加信息？”，下面我就具体展开 “我们要增加什么信息？”。</p>
+<h4 id="示例（Few-shot）"><a href="#示例（Few-shot）" class="headerlink" title="示例（Few-shot）"></a>示例（Few-shot）</h4><p><img src="/2024/08/15/prompt-engineering/95d775f97b247004730d2f3ff799171a.png" alt="img" loading="lazy"></p>
+<p>Few-shot 是无监督学习的一种基本范式，相较于直接提问的方式，One-shot 会提供一条示例，Few-shot 会提供多条量示例再进行提问，以此提升模型的效果。这种提供示例的方法，在不进行专项训练的情况下可以很好的提升模型的准确性和稳定性，在各类大模型的论文中也可以看到这样的对比，在各类任务中均可以表现出更好的效果。</p>
+<blockquote>
+<p>注：Zero-shot、one-shot、few-shot是机器学习和人工智能领域中用来描述模型在面对未见过的任务或数据时的泛化能力的概念。它们通常用于分类任务，尤其是在自然语言处理（NLP）领域。以下是每个术语的定义和区别：</p>
+<ol>
+<li><strong>Zero-shot Learning (零样本学习)</strong>:<ul>
+<li>在零样本学习场景中，模型在没有看到任何特定类别的样本的情况下，尝试对新的类别进行分类或识别。这通常依赖于模型在训练阶段获得的丰富知识，以及在测试时对类别的描述或标签的理解。</li>
+<li>例如，如果一个模型在训练时学习了多种动物的特征，而在测试时遇到了一个全新的动物类别，零样本学习的目标是让模型能够识别并分类这个新类别，即使它从未见过这个类别的样本。</li>
+</ul>
+</li>
+<li><strong>One-shot Learning (单样本学习)</strong>:<ul>
+<li>单样本学习是指模型在给定一个类别的一个样本后，能够对该类别的新样本进行分类或识别。这要求模型能够从极少的样本中快速学习并泛化到新情况。</li>
+<li>例如，如果模型在训练时学习了多种动物的特征，而在测试时每个新类别只给定了一个样本，单样本学习的目标是让模型能够识别这个新类别的其他样本。</li>
+</ul>
+</li>
+<li><strong>Few-shot Learning (少样本学习)</strong>:<ul>
+<li>少样本学习介于零样本学习和单样本学习之间，模型在给定一个类别的少量样本（通常大于1但远小于传统训练所需的样本数量）后，尝试对新样本进行分类或识别。</li>
+<li>例如，如果一个新类别给定了5个样本，少样本学习的目标是让模型能够利用这5个样本来识别和分类这个类别的其他新样本。</li>
+</ul>
+</li>
+</ol>
+<p><strong>区别</strong>:</p>
+<ul>
+<li><strong>样本数量</strong>：这是三者最直观的区别。零样本学习不需要任何特定类别的样本，单样本学习需要一个样本，而少样本学习需要多个样本，但数量有限。</li>
+<li><strong>泛化能力</strong>：零样本学习要求模型具有极高的泛化能力，因为它没有任何特定类别的样本。单样本学习和少样本学习的泛化能力通常介于传统学习（大量样本）和零样本学习之间。</li>
+<li><strong>应用场景</strong>：零样本学习适用于类别非常广泛且模型需要在没有额外训练数据的情况下进行分类的情况。单样本学习和少样本学习适用于数据稀缺的情况，或者在需要快速适应新类别的场景。</li>
+</ul>
+</blockquote>
+<p><img src="/2024/08/15/prompt-engineering/20240730-5ac2bad4.png" alt="img" loading="lazy"></p>
+<p>对于 Few-shot 而言，最为人诟病的一点就是，当你提供示例后，<strong>模型会更多的参照示例回答，而在某种程度上降低了模型本身的思考能力。</strong>Few-shot中的示例很大程度提升了模型结果的确定性，而确定性会影响模型展现出的智能水平，特别是对于基于表征学习的大语言模型（Certainty or Intelligence: Pick One!，Yann Le Cun）。</p>
+<p>我们应该如何缓解这个弊端呢？除了通过Prompt对模型进行引导外，<strong>让示例变得 “少而有效” 也是很好的方式，</strong>通过提供更具参考性的示例，提升每条示例的价值，同时降低示例的数量，可以有效的减少大模型的确定性，并通过这种方式尽量减少示例带来的负面影响。</p>
+<p><strong>为了达到 “少而有效” 的效果就需要借助 “RAG” 的方式完成。</strong>通过提升检索的效果，我们可以更精准的找到与当前任务最相近的示例（或反例），相比静态的示例而言，这可以很大的增强模型对当前任务的理解，以此提升模型在专项任务中的效果。</p>
+<h4 id="记忆（Memory）"><a href="#记忆（Memory）" class="headerlink" title="记忆（Memory）"></a>记忆（Memory）</h4><p>除了在输入中增加 “示例” 外，<strong>我们还可以增加“历史记录”，为大模型增加 “记忆（memory）” 。</strong>“记忆” 可以弥补大模型在知识整合和长期记忆方面存在的明显短板，而这恰恰是人脑的强项。人脑能持续不断地整合知识，形成强大的长期记忆，为我们的思考和决策提供支持。</p>
+<p><strong>在一次对话内的上下为可以被称作“短期记忆”，而对于历史的对话内容则可以被称为“长期记忆”，</strong>在适当的场景调用这些记忆，可以为当前的对话补充必要的上下文，让模型了解更多必要的背景信息，已在当前任务中表现的更好。这种打破 “上下文长度限制” 的方式，不光在专项任务中发挥效果，在更长的生命周期上，让模型可以调度历史的“对话内容”也被认为是模型不断进化的方式之一。</p>
+<p><img src="/2024/08/15/prompt-engineering/5ae11b418502d20e795ceb495a3546dc.png" alt="img" loading="lazy"></p>
+<p>例如，在上图的例子中，当大模型进行电影推荐任务时，会调取历史记忆，确定用户倾向的电影类型和看电影的时间，这些信息会在模型推理的过程中被加入到输入中，以此推荐出更符合预期的结果。</p>
+<p><img src="/2024/08/15/prompt-engineering/373c78620c005dbe8e4da20c0fae8e14.png" alt="img" loading="lazy"></p>
+<p><strong>我们可以根据每一轮对话的输入，利用“RAG”技术，动态的从记忆库中获取合适的内容加入到输入中，让大模型可以跨任务，跨周期的进行历史数据的获取。</strong>这在通用领域可以进行知识的打通，建立知识间的关联，在专业领域中面对 “专业概念/专业词汇” 时，除了依赖人工对专业知识的整理，历史数据中沉淀的专业知识也是十分有效的信息，通过历史数据的引入排除对人工的依赖，在使用过程中不断提升模型对专业知识的理解，这也是很多论文中提到的“通过长期记忆让模型自我进化”的思想。</p>
+<p><strong>“记忆” 是十分重要的大模型推理模块之一，在 Agent 建设中也扮演了重要的角色，</strong>相关的研究还在不断发展，记忆管理框架（MemGPT）也在工业中得到了越来越广泛的应用，诞生了许多令人印象深刻的记忆框架。</p>
+<p>例如，来自俄亥俄州立大学和斯坦福大学的科学家们给出了一项有趣的研究，希望让人工智能拥有一个类似人类海马体的”记忆大脑”。从神经科学的角度出发，模仿人脑海马体在长期记忆中的作用，设计出一个名为 HippoRAG 的模型，能够像人脑一样高效地整合和搜索知识。</p>
+<p><img src="/2024/08/15/prompt-engineering/20240730-6ba8fb24.png" alt="img" loading="lazy"></p>
+<p>他们利用大语言模型处理信息，并用一个知识图谱来充当“记忆索引”，引入了检索模型来连接语言模型和知识图谱。当模型接收到一个新的查询时，它先从查询中提取关键概念,然后在知识图谱上应用 “Personalized PageRank” 算法进行概念扩展和检索，模拟海马体的联想记忆能力。最后，模型根据节点的重要性对 passage 进行排序和检索，进行“模式补全”。实验表明，这个“记忆大脑”能够在多跳问答等需要 “知识整合” 的任务上取得大幅提升。</p>
+<p><img src="/2024/08/15/prompt-engineering/c4182cbdf8b67c3dced91e76d98e1a47-172369308945520.png" alt="img" loading="lazy"></p>
+<h4 id="应对专业领域"><a href="#应对专业领域" class="headerlink" title="应对专业领域"></a>应对专业领域</h4><p><strong>大模型擅长回答通用的知识，但对于专业领域内的知识就显得没那么擅长，</strong>而对于大模型的工业应用而言，我们往往要处理某个专业领域内的专项任务，这需要大模型理解必要的专业知识和专业方法，并在合适的时候调度它们，以此在工业应用中取得稳定的效果，这也成为了大模型应用最大的问题之一。</p>
+<p><strong>专业领域知识的增加对大模型在专业领域上的应用效果至关重要，</strong>以我们近一年应用大模型在“测试领域”的实践为例，我们希望大模型帮助测试同学完成测试工作，例如 “编写/检查” 测试用例。</p>
+<p>要完成这样一个相对专业的领域任务，就需要大模型了解足够的领域知识，例如测试用例的检查标准，常用的测试方法，各类用例设计方法，以及必要的业务背景知识。为了能让大模型具备这些支持，我们首先需要与领域专家协作，<strong>对测试域相关的知识进行整理，管理好这些知识是大模型应用的基础。</strong></p>
+<p><img src="/2024/08/15/prompt-engineering/4df89c00818c8ca8517807d5285a6e6a.png" alt="img" loading="lazy"></p>
+<p>同时，专业领域的知识与具体任务息息相关。例如，对 “用例检查” 任务而言，我们的目的是通过用例检查发现用例中存在的问题，以此减少用例原因导致的漏测问题。因此，我们从目的出发，对漏测问题进行分析，在确定检查点的同时，结合用例现状和专业知识进行了问题定义的梳理，<strong>通过明确问题定义让大模型更好的贴合我们的专业领域。</strong></p>
+<p>除了上述这些对专业知识的整理，我们还希望动态的增加这些信息，<strong>利用 RAG 的方法，结合具体任务动态的从知识库中引入必要的知识。</strong>例如，当用户的输入中包含某些专业词汇或业务概念时，我们需要动态的识别到他们，并对他们进行解释和补充，这可能需要利用 “插件” 完成，关于“插件”的相关内容我会在“Agent”相关的文章中具体展开，此处不再赘。</p>
+<p>无论是 “静态知识” 还是 “动态知识”，都是通过对专业知识的整理，弥补大模型在专业领域上的不足，<strong>我们要将”专业知识“翻译成”通用知识“ 告诉模型大模型，让大模型更好的应对专业领域。</strong>这一步往往需要领域专家的介入以及对知识的人工整理，这往往是决定大模型效果上限最重要的因素之一。</p>
+<h4 id="总结（增加更多信息）"><a href="#总结（增加更多信息）" class="headerlink" title="总结（增加更多信息）"></a>总结（增加更多信息）</h4><p><img src="/2024/08/15/prompt-engineering/d677c868df307a6fd1ba97ccf74ed40b.png" alt="img" loading="lazy"></p>
+<p>本章，我们通过进一步增加信息的方式提升模型的效果，并通过两个问题分析了增加信息的方式：</p>
+<ol>
+<li>如何增加信息：RAG，或其他检索方式。</li>
+<li>增加什么信息：<ul>
+<li>示例（Few-Shot）</li>
+<li>历史记录（记忆）</li>
+<li>专业知识，领域知识，业务知识</li>
+</ul>
+</li>
+</ol>
+<p>我们通过框架和额外信息的增加，在输入层面上完成了 Prompt 的调试，接下来就需要让模型根据我们的输入进行推理，而推理本身的效果也是影响模型效果很重要的因此，下面就来展开谈谈，如何在输入的基础上提升模型的推理能力。</p>
+<h3 id="让大模型更好的思考（CoT）"><a href="#让大模型更好的思考（CoT）" class="headerlink" title="让大模型更好的思考（CoT）"></a>让大模型更好的思考（CoT）</h3><h4 id="什么是-CoT"><a href="#什么是-CoT" class="headerlink" title="什么是 CoT"></a>什么是 CoT</h4><p>2022 年，在 Google 发布的论文《Chain-of-Thought Prompting Elicits Reasoning in Large Language Models》中首次提出，通过让大模型逐步推理，<strong>将一个复杂问题分解为若干个子问题，并一步一步的进行推理，</strong>通过这种方式可以显著提升大模型的性能。这种推理方法就被称为思维链（Chain of Thought）。</p>
+<p><img src="/2024/08/15/prompt-engineering/20240730-0bf85d87.png" alt="img" loading="lazy"></p>
+<p>区别于传统 Prompt 通过控制输入直接端到端的得到输出，即<code>input ——&gt; output</code> 的方式，<strong>CoT 完成了从输入到思维链再到输出的映射，</strong>即<code>input——&gt; reasoning chain ——&gt; output</code>。</p>
+<p>自 CoT 问世以来，CoT 的能力已经被无数工作所验证，如下图所示，可以看到，相较于直接 Prompt， CoT 对所有的推理任务都带来了显著的提升</p>
+<h4 id="CoT-的实现"><a href="#CoT-的实现" class="headerlink" title="CoT 的实现"></a>CoT 的实现</h4><p><img src="/2024/08/15/prompt-engineering/20240730-5a758070.png" alt="img" loading="lazy"></p>
+<p>上图展示了几种不同范式下对CoT的实现。<strong>对于 Zero-Shot 而言</strong>只需要简单的一句 “Let’s think step by step” 就可以让模型一步步思考；<strong>对于 Few-Shot 而言，</strong>除了在提问时引入分步的思想，还提供了逐步思考的示例，不仅可以让大模型分步思考，还可以通过示例告诉大模型应该如何分步；<strong>对于 Agent 而言，</strong>我们不光通过修改输入的方式实现 CoT，而是人为的对任务进行拆分，并通过多轮对话的方式将 CoT 引入到建模过程当中，实现整体任务维度的 CoT。</p>
+<p>如上图所示，CoT 的构造主要以线性为主，对任务进行线性拆分，并按先后顺序以此执行。而随着 CoT 相关研究的不断发展，<strong>思维链的形式不仅仅局限在线性的形式，而是衍生出了树状，表状，图状等多种类型，</strong>其中代表工作有 PoT，Tab-CoT，ToT，GoT-Rationale 等等，下图清晰的展示了这几种方法的异同：</p>
+<p><img src="/2024/08/15/prompt-engineering/1003cf821b7453e8455a51ffa1c5af07.png" alt="img" loading="lazy"></p>
+<h4 id="CoT-的应用"><a href="#CoT-的应用" class="headerlink" title="CoT 的应用"></a>CoT 的应用</h4><p>CoT 的本质是将一个高度不确定的复杂任务，拆分成若干个确定性较高的子任务，以此提升整个系统的效果和确定性。从 “zero-shot”  和  “few-shot” 范式中，CoT 这是一种推理技巧，而从 “Agent” 范式看，CoT 则更像一种建模思路，这也是 CoT 更核心的思想。当我们面对一个复杂任务时，仅对输入进行改造是不够的，我们还需要进行任务维度的分解，用 CoT 的方式进行建模。</p>
+<p>例如，如果我需要大模型帮我完成一篇文章，我有两种做法：</p>
+<ol>
+<li>输入信息 - 输出文章。</li>
+<li>输入信息 - 输出大纲 - 完善大纲内容 - 依据要求进行调整 - 输出文章。</li>
+</ol>
+<p>这个例子只是一个简单的拆分，但也能在效果上得到很大提升。下面举一个我们实际工作中的例子，我们希望大模型帮助测试同学编写“测试用例”，对于这个任务而言，最直观的做法就是把 “需求” 做为输入，让大模型根据需求进行测试设计，生成“测试用例”，而需求的复杂程度和不确定性对任务造成了极大的阻碍，因此我们引入 CoT 的思想对任务进行了拆分。</p>
+<p><img src="/2024/08/15/prompt-engineering/76b17aca038cd54ebb6ae3cb75940449-172369522783228.png" alt="img" loading="lazy"></p>
+<p><strong>如上图所示，我们将这个复杂任务拆分成了3个阶段</strong>（实际上每一阶段又会拆分正若干个子步骤）。<strong>首先对需求进行分析，</strong>整理需求内容，并从需求中抽取功能点及测试对象；<strong>然后基于这些功能点进行用例设计，</strong>编写用例集的整体结构，以及每条用例的测试点，即用例标题；<strong>最后对用例进行补全，</strong>根据需求和用例标题编写用例的步骤和预期结果。我们通过这种方式，将任务分为了3个阶段，无论是从“研发”还是从“应用”角度都为我们的任务带来了极大的帮助。</p>
+<p><strong>从“研发”角度看，</strong>当我们把一个任务分解为多个阶段后，我们很容易的可以找到其中 “最简单” 的阶段。例如，在上图的链路中，对需求的分析相对困难，而 “根据标题生成步骤” 则相对简单，<strong>以此做为切入点可以在前期为我们避免最复杂的“需求”数据，让我们可以快速达到可应用的效果。</strong>这种研发思路并非仅对这个任务有效，对于前文中提到的 “文章编写” 的例子，“输出大纲” 和 “依据要求进行调整” 显然是更简单的子任务，率先在从这些点切入，也可以帮我们更快的取得成效。</p>
+<p><strong>从“应用”角度看，</strong>即便大模型展现出了极为惊艳的效果，但在应用中的短板也十分明显，大家也逐渐看到了大模型能力的限制。基于对现有模型能力的判断，“人机协同（copilot）” 被越来越多人认为是更好的方式。而 “人机协同” 是一个共同生产的过程，如果大模型仅仅是端到端的完成一个任务，人很难介入的，而当我们进行了任务维度的拆分后，每一个子任务都可以与人协同。例如，在“用例生成”中，人可以先对需求进行分析，再让大模型进行用例设计，<strong>通过这种人机协同的应用模式，我们可以让大模型在应用中更快速的落地。</strong></p>
+<h3 id="附加技巧"><a href="#附加技巧" class="headerlink" title="附加技巧"></a>附加技巧</h3><p>前文中，我们已经介绍了 Prompt 调试的主要步骤，也是一条标准的工作流，可以帮助我们从 0 到 1 的完成 Prompt 的编写和调试：**<code>“Prompt 框架” - “细化框架” - “增加更多信息” - “CoT”</code>。**而正如开篇时提到的，Prompt 相关的技巧已多如牛毛，并且一直随着模型的迭代而不断更新，我们前文中讲的是 “Prompt 工程” 的主要步骤和思想，而在其之上，还是有不少技巧可以进行进一步的优化，下面我选择其中最重要的几点展开聊聊。</p>
+<h4 id="用参数控制模型确定性"><a href="#用参数控制模型确定性" class="headerlink" title="用参数控制模型确定性"></a>用参数控制模型确定性</h4><p>除了调整模型的输入外，大家一定注意到了大模型还有2个参数可以调节：**<code>温度（Temperature)</code><strong>,</strong><code>Top-P</code><strong>。</strong>这两个参数也与大模型效果息息相关，**控制着大模型输出的确定性。大模型的本质是在 Token 的概率空间中进行选择，依据概率选择接下来要输出的 Token，而这 2 个参数就是在控制这个过程。</p>
+<p><strong>Temperature（温度）</strong>是一个正实数，用于控制生成文本的随机性和多样性。在生成过程中，模型会为每个可能的下一个词分配一个概率，而调整温度，<strong>则可以影响这些概率分布的形状。当温度接近 0 时，</strong>输出文本会变得更加确定，模型更倾向于选择具有较高概率的词，这可能导致生成的文本质量较高，但多样性较低。<strong>当温度接近 1 时，</strong>输出文本的随机性增加，模型会更平衡地从概率分布中选择词汇，这可能使生成的文本具有更高的多样性，但质量可能不如较低温度时的输出。温度大于 1 时，输出文本的随机性会进一步增加，模型更可能选择具有较低概率的词。</p>
+<p><img src="/2024/08/15/prompt-engineering/7a40c4ccb1582de110ae8cbe113f2f9a.png" alt="img" loading="lazy"></p>
+<p><strong>Top-p</strong> 是一个 0 到 1 之间的实数，表示另一种生成策略，它根据概率分布的累积概率来选择候选词。具体来说，模型将根据词汇的概率对其进行排序，然后选择一个子集，<strong>使得这个子集的累积概率至少为 p。当 p 接近 1 时，</strong>生成的文本将包含几乎所有可能的词汇，导致较高的随机性和多样性。<strong>当 p 较小时，</strong>生成的文本将仅包含具有较高概率的词汇，降低随机性并提高输出质量。然而，过低的 p 值可能导致模型过于保守，生成的文本过于重复或单调。</p>
+<p>为了了便于理解，我们可以举一个抽象的例子，帮助大家理解。假设我们有一个语言模型，它正在预测句子中的下一个单词。我们输入的句子是**<code>我喜欢吃苹果和____</code><strong>，那么模型可能会为</strong><code>香蕉</code><strong>分配 0.4 的概率，为</strong><code>橙子</code><strong>分配 0.2 的概率，为</strong><code>鸭梨</code><strong>分配 0.2 的概率，为</strong><code>白菜</code><strong>分配 0.1 的概率，为</strong><code>萝卜</code>**分配 0.1 的概率。</p>
+<p><img src="/2024/08/15/prompt-engineering/a8a24d0c38aaa4430f61e5a9be9a2c2b.png" alt="img" loading="lazy"></p>
+<p>假如我们设定**<code>Top-P = 0.8</code>**，则我们会按照概率大小选择尽可能多的词，并让概率的总和小于0.8。因此我们会选择 “香蕉”，“橙子”，“鸭梨”，而如果再加上 “白菜” 则累计概率会超过阈值 0.8。</p>
+<p>最后模型会在 “香蕉”，“橙子”，“鸭梨” 中随机选择一个单词。在这个例子中，我们有 50% 的几率会选择 “香蕉”，25% 的几率选择 “橙子”，25% 的几率选择 “鸭梨”。这一步中的概率还会被 “Temperature（温度）” 所影响。</p>
+<p><strong>总结而言，温度（Temperature）和 Top-p 是对模型输出确定性的控制，</strong>我们可以根据具体的应用场景进行调试，当我们需要模型确定稳定的产出结果是，我们可以设置更高的确定性，以提升模型应用的稳定性。但当我们需要模型提供多种结果，或希望让模型更具想象力时，我们则需要设置更高的多样性。</p>
+<h4 id="让大模型帮你优化-Prompt"><a href="#让大模型帮你优化-Prompt" class="headerlink" title="让大模型帮你优化 Prompt"></a>让大模型帮你优化 Prompt</h4><p>我们可以使用各种技巧优化我们的 Prompt，<strong>那大模型可不可以帮我们自动优化我们的 Prompt 呢？</strong>这个研究方向自 ChatGPT 以来就一直得到大量关注，且在大模型时代得到了越来越多的应用，<strong>他不光可以对已有的 Prompt 进行优化，还可以自动找到一些 Prompt 语句，</strong>神奇的产生通用的效果。例如，在 “Zero-Shot COT” 里的那句 “Let’s think step by step”，谷歌就曾通过这种方式找到了更好的一句：“Take a deep breath and work on this problem step-by-step”，让GSM8K的结果直接从 71.8% 上升到了 80.2%。这个研究方向还在快速的发展当中，已经诞生了多种算法，下文将挑选其中最经典的几个算法，希望可以让大家更好的了解这个领域。</p>
+<p><strong>APE 是其中最经典的算法，</strong>核心思路是：从候选集中选出若干较好的 Prompt，再在这些 Prompt 附近进行 “试探性搜索”。其过程为，先通过大模型生成若干 Prompt，再在训练集上打分，保留较好若干条的 Prompt，最后在这些高分 Prompt 附近进行采样，模拟 “Monte-Carlo Search” 的过程，优化得到最理想的 Prompt。</p>
+<p><img src="/2024/08/15/prompt-engineering/20240730-2427c13c.png" alt="img" loading="lazy"></p>
+<p>APO 算法则是引入了 “梯度下降” 的方法，通过训练集得到当前 Prompt 的梯度，在应用“梯度下降”的方式得到新的 Prompt，最后与 APE 一样进行采样，得到最终的 Prompt。</p>
+<p><img src="/2024/08/15/prompt-engineering/938f3595f871470b33fca4c692b43e12.png" alt="img" loading="lazy"></p>
+<p>OPRO 算法则是更复杂的利用 LLMs 作为优化器。与传统的迭代优化技术不同，OPRO 采用自然语言描述和指引优化任务，通过 LLMs 的指导，结合先前找到的解决方案，不断生成更新的策略。</p>
+<p><img src="/2024/08/15/prompt-engineering/89b57678a343c7b46b0ca352eb9e7cfc.png" alt="img" loading="lazy"></p>
+<h4 id="更多技巧"><a href="#更多技巧" class="headerlink" title="更多技巧"></a>更多技巧</h4><p>如本文开篇提到的，本文尝试结合我们的研发经验，体系化的梳理 “Prompt” 相关工作，尝试用一套通用的框架，对 Prompt 工程的相关工作进行梳理和总结。但也正如本章的用意，<strong>在统一的框架之外还有各种技巧，可以起到锦上添花的作用，</strong>这部分技巧无论是公司内外都积累了很多文章，且由于技巧过多，因此在本文没有展开讨论，此处总结其中的 3 个重要方法，在我们的实践中起到了不小的作用：</p>
+<ol>
+<li><strong>自我一致性：</strong>多让模型输出多个回答，然后在 LLM 的多次回答中选择出现多次的答案。</li>
+<li><strong>反思：</strong>通过让大模型评估自己的输出进行调整，得到更优的输出。</li>
+<li><strong>知识生成：</strong>让大模型生成问题相关的知识，再提出问题，提高大模型回答的准确率。</li>
+</ol>
+<p>对于这部分技巧，如果有机会将用一篇单独的文章介绍，本篇文章不再展开，如果大家对这些方法感兴趣可以学习传播最广的 Prompt 知识库，Prompt Engineering Guid。</p>
+<h3 id="优化方式及常用指标"><a href="#优化方式及常用指标" class="headerlink" title="优化方式及常用指标"></a>优化方式及常用指标</h3><p>本文一直在是希望向大家介绍 “Prompt” 调试的方法，而 “Prompt 调试” 本质上是为了让模型在任务中有更好的效果，而这就涉及到效果的评估，当我们对 “Prompt” 进行了一次更新，我如何判断模型效果是不是变好了呢？对 AI 技术有所了解的同学想必对这部分十分熟悉，但对于没有接触过 AI 技术的同学，还是有必要补充一些和模型调试相关的基本知识，辅助大家更好的完成模型调试的工作。</p>
+<p>要判断大模型的效果，首先需要有数据作为支撑，其次还需要确定衡量效果的指标。计算大模型在测试数据上的指标是判断大模型效果的依据，这里我提供一些常用的指标，用来衡量大模型在各类任务中的效果。</p>
+<p><strong>分类问题</strong></p>
+<ol>
+<li><strong>准确率：</strong>分类正确的样本占总样本个数的比例。</li>
+<li><strong>精确率（Precision）：</strong>又称为查准率，分类正确的正样本占判定为正样本个数的比例。</li>
+<li><strong>召回率（Recall）：</strong>又称为查全率，分类正确的正样本占真正的正样本个数的比例。</li>
+<li><strong>F1 Score：</strong>是精确率和召回率的平衡，最常用的评价指标。</li>
+</ol>
+<p><strong>生成问题</strong></p>
+<ol>
+<li><strong>BLEU：</strong>比较生成数据和标注数据中 n-gram 的重合程度。</li>
+<li><strong>METEOR：</strong>与 BLEU 相比不仅考虑了精确度和召回率，还考虑了生成结果的词序。</li>
+<li><strong>困惑度（Perplexity）：</strong>所有测试样本的交叉熵损失求平均后取指数，用于衡量模型对测试数据的预测能力。困惑度越低，说明模型的预测能力越好。</li>
+<li><strong>采纳率：</strong>对于生成任务而言，往往没有明确的预期结果，更多采用人工采纳比例作为评价指标，更细的可以分为“直接可用率”和“修改后可用率”。</li>
+</ol>
+<p>对于专项任务而言，每个任务在调试前都需要准备自己独立的数据集，包含与每一个输入对应的预期结果，<strong>不同的指标代表用不同方式评估 “预期结果” 和 “实际结果” 的相似度。</strong>而对于一些通用的 NLP 能力而言，<strong>业内也有一些开源数据集，被用于衡量模型各项通用能力的效果（文本摘要，语义理解，对话，e.t.c.）</strong>，如果你正在调试一项通用能力，或没有足够的任务数据，就可以利用这些数据集，我在这里也挑选其中一部分做一个简单的介绍：</p>
+<p><strong>英文数据集</strong></p>
+<ol>
+<li><strong>GLUE Benchmark:</strong> 一个集成了九个独立任务的评估工具，用于测量模型对英文句子的理解能力。它包括语义角色标注(SRL)、自然语言推理(NLI)、语义文本相似性(STS)等任务。</li>
+<li><strong>SuperGLUE Benchmark:</strong> GLUE 的后继者，SuperGLUE 包括更复杂的语言理解任务，如多源自然语言推理、词汇互推任务等。</li>
+<li><strong>SQuAD：</strong>一个用于机器阅读理解的数据集，包含由维基百科文章生成的问题和答案。</li>
+<li><strong>CoQA：</strong>一个对话型问答数据集，用于测试模型在对话环境中的理解能力。</li>
+<li><strong>MNLI：</strong>一个用于自然语言推理(NLI)任务的大规模数据集，包含在多种不同领域和类型的文本中进行推理的任务。</li>
+<li><strong>CommonsenseQA：</strong>一个问题回答数据集，主要测试模型的常识理解能力。</li>
+<li><strong>RACE：</strong>一个阅读理解数据集，包含了从英语考试中提取的大量文章和问题。</li>
+<li><strong>Winograd Schema Challenge：</strong>一个用于测试模型在处理需要常识和推理能力的句子解析问题上的表现。</li>
+<li><strong>GSM8K：</strong>一个小学数学文字题的数据集。该数据集被创建出来，是为了支持回答那些需要多步推理的基本数学问题的任务。</li>
+<li><strong>MAWPS：</strong>一个在线的数学词问题仓库，旨在为评估不同的算法提供一个统一的测试平台。它允许自动构建具有特定特征的数据集，提供了调整数据集的词汇和模板重叠以及过滤来自网上语料库的不合语法问题的工具。</li>
+<li><strong>SVAMP：</strong>一个面向小学级别的数学词问题（MWP）的挑战集。每个 MWP 都包含一个简短的自然语言叙述，描述了世界的状态并提出了一些未知数量的问题。SVAMP 中的例子在解决 MWP 的不同方面测试一个模型，比如问题敏感性和强大的推理能力。</li>
+</ol>
+<p>中文数据集</p>
+<ol>
+<li><strong>ChineseGLUE:</strong> 一个与英文 GLUE 类似的中文 NLP 评估工具，包含了多种中文语言理解任务。</li>
+<li><strong>LCQMC:</strong> 一个大规模的中文问题匹配数据集，主要用于研究和改进中文的问答系统。</li>
+<li><strong>DuConv:</strong> 一个中文<a target="_blank" rel="noopener" href="https://cloud.tencent.com/product/tbp?from_column=20065&from=20065">对话系统</a>数据集，用于构建对话系统的中文数据集，其特点是能够产生多轮对话。</li>
+<li><strong>WebQA:</strong>  一个大规模的中文问答数据集，主要包括以自然语言形式提出的问题和对应的答案。</li>
+<li><strong>CMRC 2018:</strong> 一个大规模的中文机器阅读理解数据集，类似于英文的SQuAD。</li>
+</ol>
+<h3 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h3><h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p><img src="/2024/08/15/prompt-engineering/acab3c3c77caad1a862aaa0b64380781.png" alt="img" loading="lazy"></p>
+<p>本文尝试结合我们的研发经验，体系化的对 “Prompt 工程” 的相关工作进行了梳理，得到了一个标准化的工作流，<strong>帮助大家可以从0到1的完成一个 Prompt 的书写和调试，并通过这样结构化的拆分，增强对 Prompt 的管理。</strong>我们的工作流可以分为 5 步，对应于文章 “第2节-第6节” 的 5 个章节：</p>
+<ol>
+<li>通过 <strong>Prompt 模版</strong>写出第一版 Prompt。</li>
+<li><strong>细化模版</strong>各部分内容，整理 Prompt <strong>格式</strong>。</li>
+<li>使用 RAG <strong>增加更多信息</strong>（few-shot，记忆，专业知识）。</li>
+<li>利用 <strong>CoT</strong> 增强模型推理能力。</li>
+<li>利用<strong>更多技巧</strong>不断优化。</li>
+</ol>
+<p>我们认为在一个大模型工程中，“Prompt”应该起到基石般的作用，有效稳定可扩展。对于一个大模型工程师而言，“Prompt” 也是必备的基础技能，希望可以通过这篇文章帮助大家更简单的上手 Prompt 的相关工作，<strong>让每个人都能编写 Prompt，人人都能成为 Prompt 工程师。</strong></p>
+<h4 id="后续规划"><a href="#后续规划" class="headerlink" title="后续规划"></a>后续规划</h4><p>本文通过对 “Prompt” 工作的拆分和总结，体系化的介绍了 “Prompt 工程” 的工作方法，提出了一套通用的框架和工作流，帮助大家完成 “Prompt” 的编写和调试工作，这套方法也已经在我们的实际工作中应用落地。</p>
+<p><strong>从技术角度讲，</strong>大模型相关的研发工作可以大体分为3部分 “输入” - “推理” - “训练”，本文聚焦在单模型的 “输入” 部分，对 “Prompt 工程” 相关的技巧进行了探讨。但仅仅在输入层面进行调试是远远不够的，推理部分也是影响大模型效果的关键一环，“Agent 技术”，“多模型协作”，“模型调度”  等等话题对大模型效果有着至关重要的影响。</p>
+<p>因此，后续我会聚焦在模型推理的部分，<strong>以 “Agent 技术”  作为重点，</strong>展开讨论“模型推理”，“模型调度” 相关的话题，对“LangChain”，“Dify” 等推理框架，以及 “Agent” 常用框架进行探讨，依然从应用角度出发，探讨我对这些技术的思考，以及如何在应用中快速落地。</p>
+<p>-End-</p>
+<p>原创作者｜刘琮玮</p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2440609">https://cloud.tencent.com/developer/article/2440609</a></p>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">看我整理的这么好，来打赏点呗~</div><div id="qr" style="display:none;"><div style="display:inline-block"><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/20200930114156633.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQxMTM3Mw==,size_16,color_FFFFFF,t_70"><img loading="lazy" src="https://img-blog.csdnimg.cn/20200930114156633.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQxMTM3Mw==,size_16,color_FFFFFF,t_70" alt="支付宝" title="支付宝"></a><div><span style="color:#00A3EE"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-alipay-line"></use></svg></span></div></div><div style="display:inline-block"><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/20200930114243891.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQxMTM3Mw==,size_16,color_FFFFFF,t_70"><img loading="lazy" src="https://img-blog.csdnimg.cn/20200930114243891.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQxMTM3Mw==,size_16,color_FFFFFF,t_70" alt="微信支付" title="微信支付"></a><div><span style="color:#2DC100"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-pay-line"></use></svg></span></div></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>机智の老何</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://hank20200929.github.io/2024/08/15/prompt-engineering/" title="一文掌握Prompt：万能框架+优化技巧+常用指标">https://hank20200929.github.io/2024/08/15/prompt-engineering/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"></div><div class="post-nav-item"><a class="post-nav-next" href="/2024/07/23/byrtsoftlink/" rel="next" title="博雅软通"><span class="post-nav-text">博雅软通</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>点击按钮跳转 GitHub Issues 评论。</span><br><span>若没有本文 Issue，您可以使用 Comment 模版新建。</span><br><a class="hty-button hty-button--raised" id="github-issues" target="_blank" rel="noopener" href="https://github.com/YunYouJun/yunyoujun.github.io/issues?q=is:issue+一文掌握Prompt：万能框架+优化技巧+常用指标">GitHub Issues</a></div><div id="valine-container"></div><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function initValine() {
+  const valineConfig = {"enable":true,"appId":"R6zMhu6tVOtUxK8fQk5mfgQt-gzGzoHsz","appKey":"4jG3KwGXwMS6EQwc0hDKiUSp","placeholder":"Just go go","avatar":null,"pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"serverURLs":"https://r6zmhu6t.lc-cn-n1-shared.com","enableQQ":true,"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = window.location.pathname
+  new Valine(valineConfig)
+}
+setTimeout(initValine, 1000)</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2019 – 2024 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 机智の老何</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(๑•̀ㅂ•́)و✧</span><script>function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2020-09-29T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div id="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv" title="总访客量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user-line"></use></svg></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg></span><span id="busuanzi_value_site_pv"></span></span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script></body></html>

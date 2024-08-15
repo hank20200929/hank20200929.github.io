@@ -1,0 +1,235 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="机智の老何"><meta name="copyright" content="机智の老何"><meta name="generator" content="Hexo 5.2.0"><meta name="theme" content="hexo-theme-yun"><title>【阅读笔记】产品心经——精益方法和产品开发 | 每日笔记</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.19/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>document.addEventListener("DOMContentLoaded", () => {
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link rel="shortcut icon" type="image/svg+xml" href="/yun.svg"><link rel="mask-icon" href="/yun.svg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="每日笔记" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"每日笔记","version":"1.0.0","say":{"api":"/data/sentences.json"},"local_search":{"path":"/search.xml"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194"]}};
+  </script><meta name="description" content="O.S. 从这章开始，就进入到产品心经比较难的地方了。  创新型产品失败的概率如此之高，到底有没有什么方法能降低概率？答案就是精益（Lean）。精益代表了一种不断形成创新的新方法，它源于“精益生产”的理念，提倡企业进行“验证性学习”，先向市场推出极简的原型产品，然后在不断地试验和学习中，以最小的成本和有效的方式验证产品是否符合用户需求，并迭代优化产品，灵活调整方向。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【阅读笔记】产品心经——精益方法和产品开发">
+<meta property="og:url" content="https://hank20200929.github.io/2024/07/19/Lean-Methods-and-Product-Development/index.html">
+<meta property="og:site_name" content="每日笔记">
+<meta property="og:description" content="O.S. 从这章开始，就进入到产品心经比较难的地方了。  创新型产品失败的概率如此之高，到底有没有什么方法能降低概率？答案就是精益（Lean）。精益代表了一种不断形成创新的新方法，它源于“精益生产”的理念，提倡企业进行“验证性学习”，先向市场推出极简的原型产品，然后在不断地试验和学习中，以最小的成本和有效的方式验证产品是否符合用户需求，并迭代优化产品，灵活调整方向。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://hank20200929.github.io/2024/07/19/Lean-Methods-and-Product-Development/image-20240722123332552.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/07/19/Lean-Methods-and-Product-Development/whatispest03.png">
+<meta property="og:image" content="https://hank20200929.github.io/2024/07/19/Lean-Methods-and-Product-Development/v2-a18a40df65fd27be09bd1a32c451b837_720w.jpg">
+<meta property="og:image" content="https://hank20200929.github.io/2024/07/19/Lean-Methods-and-Product-Development/v2-900f88d2d5ec67e7a53e73e5adee8c0f_720w.jpg">
+<meta property="article:published_time" content="2024-07-19T09:11:03.000Z">
+<meta property="article:modified_time" content="2024-07-23T08:47:05.484Z">
+<meta property="article:author" content="机智の老何">
+<meta property="article:tag" content="阅读笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hank20200929.github.io/2024/07/19/Lean-Methods-and-Product-Development/image-20240722123332552.png"><script src="/js/ui/mode.js"></script></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script defer src="/js/ui/fireworks.js"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="机智の老何"><img width="96" loading="lazy" src="https://i.loli.net/2020/10/15/t8p3jxRBSNYiMsq.png" alt="机智の老何"></a><div class="site-author-name"><a href="/about/">机智の老何</a></div><a class="site-name" href="/about/site.html">每日笔记</a><sub class="site-subtitle">Records of Daily Matters.</sub><div class="site-desciption">记录每天发生的事情</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">5</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">3</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">4</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://www.baidu.com" title="百度一下"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:468507720@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/35725984" title="哔哩哔哩动画" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%84%E4%BC%B0%E4%BA%A7%E5%93%81-%E9%A1%B9%E7%9B%AE%E6%98%AF%E5%90%A6%E9%9D%A0%E8%B0%B1%E7%9A%847%E4%B8%AA%E6%A0%87%E5%87%86"><span class="toc-number">1.</span> <span class="toc-text">评估产品&#x2F;项目是否靠谱的7个标准</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%81%9A%E4%BA%A7%E5%93%81%E7%9A%84%E7%BC%98%E7%94%B1"><span class="toc-number">1.1.</span> <span class="toc-text">做产品的缘由</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%A2%E9%98%9F"><span class="toc-number">1.2.</span> <span class="toc-text">团队</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%92%92%E6%89%8B%E9%94%8F"><span class="toc-number">1.3.</span> <span class="toc-text">撒手锏</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9A%E9%9C%80%E5%92%8C%E5%B8%82%E5%9C%BA%E5%AE%B9%E9%87%8F"><span class="toc-number">1.4.</span> <span class="toc-text">刚需和市场容量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A1%BA%E5%8A%BF%E8%80%8C%E4%B8%BA"><span class="toc-number">1.5.</span> <span class="toc-text">顺势而为</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8E%86%E5%8F%B2%E6%8E%A8%E6%96%AD%E6%B3%95"><span class="toc-number">1.5.1.</span> <span class="toc-text">历史推断法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%80%86%E5%90%91%E6%80%9D%E7%BB%B4%E6%B3%95"><span class="toc-number">1.5.2.</span> <span class="toc-text">逆向思维法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#PEST%E5%88%86%E6%9E%90%E6%B3%95"><span class="toc-number">1.5.3.</span> <span class="toc-text">PEST分析法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%B7%E5%80%BC%E9%93%BE%E6%B3%95"><span class="toc-number">1.5.4.</span> <span class="toc-text">价值链法</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A3%8E%E9%99%A9"><span class="toc-number">1.6.</span> <span class="toc-text">风险</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A2%9E%E9%95%BF%E5%8A%A8%E5%8A%9B%E5%BC%95%E6%93%8E"><span class="toc-number">1.7.</span> <span class="toc-text">增长动力引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E7%94%A8%E6%88%B7%E6%96%B0%E5%A2%9E%E7%8E%87%EF%BC%9E%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E7%8E%87"><span class="toc-number">1.7.1.</span> <span class="toc-text">（1）用户新增率＞用户流失率</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E6%8E%A8%E8%8D%90%E7%B3%BB%E6%95%B0%EF%BC%9E1"><span class="toc-number">1.7.2.</span> <span class="toc-text">（2）推荐系数＞1</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E7%94%A8%E6%88%B7%E7%95%99%E5%AD%98%E7%8E%87%EF%BC%9E40"><span class="toc-number">1.7.3.</span> <span class="toc-text">（3）用户留存率＞40%</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%884%EF%BC%89LTV%EF%BC%9E3CPA"><span class="toc-number">1.7.4.</span> <span class="toc-text">（4）LTV＞3CPA</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B2%BE%E7%9B%8A%E5%88%9B%E4%B8%9A%E7%9A%843%E4%B8%AA%E6%96%B9%E9%9D%A2"><span class="toc-number">2.</span> <span class="toc-text">精益创业的3个方面</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B2%BE%E7%9B%8A%E5%88%9B%E4%B8%9A%E7%AE%80%E4%BB%8B"><span class="toc-number">2.1.</span> <span class="toc-text">精益创业简介</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%B2%BE%E7%9B%8A%E5%88%9B%E4%B8%9A%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E5%88%99"><span class="toc-number">2.1.1.</span> <span class="toc-text">精益创业的基本原则</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%B2%BE%E7%9B%8A%E5%88%9B%E4%B8%9A%E7%9A%84%E7%89%B9%E5%BE%81"><span class="toc-number">2.1.2.</span> <span class="toc-text">精益创业的特征</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B2%BE%E7%9B%8A%E7%94%BB%E5%B8%83%E7%9A%849%E4%B8%AA%E7%A9%BA%E6%A0%BC"><span class="toc-number">3.</span> <span class="toc-text">精益画布的9个空格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B2%BE%E7%9B%8A%E5%88%9B%E4%B8%9A%E7%9A%84%E8%AE%BF%E8%B0%88"><span class="toc-number">4.</span> <span class="toc-text">精益创业的访谈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8E%E4%B8%BABLM%E5%B7%A5%E5%85%B7"><span class="toc-number">5.</span> <span class="toc-text">华为BLM工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%82%E5%9C%BA%E6%B4%9E%E5%AF%9F%E7%9A%845%E4%B8%AA%E7%9C%8B"><span class="toc-number">6.</span> <span class="toc-text">市场洞察的5个看</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BLM%E6%88%98%E7%95%A5%E6%84%8F%E5%9B%BE%E7%9A%843%E4%B8%AA%E6%96%B9%E9%9D%A2"><span class="toc-number">7.</span> <span class="toc-text">BLM战略意图的3个方面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BLM%E5%88%9B%E6%96%B0%E7%84%A6%E7%82%B9%E7%9A%844%E7%A7%8D%E7%AD%96%E7%95%A5"><span class="toc-number">8.</span> <span class="toc-text">BLM创新焦点的4种策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BLM%E4%B8%9A%E5%8A%A1%E8%AE%BE%E8%AE%A1%E7%9A%846%E4%B8%AA%E8%A6%81%E7%B4%A0"><span class="toc-number">9.</span> <span class="toc-text">BLM业务设计的6个要素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BLM%E6%88%98%E7%95%A5%E6%89%A7%E8%A1%8C%E7%9A%844%E4%B8%AA%E6%96%B9%E9%9D%A2"><span class="toc-number">10.</span> <span class="toc-text">BLM战略执行的4个方面</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://hank20200929.github.io/2024/07/19/Lean-Methods-and-Product-Development/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="机智の老何"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="每日笔记"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">【阅读笔记】产品心经——精益方法和产品开发</h1><div class="post-meta"><div class="post-time" style="display:block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2024-07-19 17:11:03" itemprop="dateCreated datePublished" datetime="2024-07-19T17:11:03+08:00">2024-07-19</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-2-line"></use></svg></span> <time title="修改时间：2024-07-23 16:47:05" itemprop="dateModified" datetime="2024-07-23T16:47:05+08:00">2024-07-23</time></div><span class="post-count"><span class="post-symbolcount"><span class="post-meta-item-icon" title="本文字数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-file-word-line"></use></svg></span> <span title="本文字数">5.8k</span><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读时长"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-timer-line"></use></svg></span> <span title="阅读时长">19m</span></span></span><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">产品经理</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">阅读笔记</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><blockquote>
+<p>O.S. 从这章开始，就进入到<code>产品心经</code>比较难的地方了。</p>
+</blockquote>
+<p>创新型产品失败的概率如此之高，到底有没有什么方法能降低概率？答案就是<strong>精益（Lean）</strong>。精益代表了一种不断形成创新的新方法，它源于“精益生产”的理念，提倡企业进行<strong>“验证性学习”</strong>，先向市场推出极简的原型产品，然后在不断地试验和学习中，以最小的成本和有效的方式验证产品是否符合用户需求，并迭代优化产品，灵活调整方向。</p>
+<a id="more"></a>
+
+<h3 id="评估产品-项目是否靠谱的7个标准"><a href="#评估产品-项目是否靠谱的7个标准" class="headerlink" title="评估产品/项目是否靠谱的7个标准"></a>评估产品/项目是否靠谱的7个标准</h3><blockquote>
+<p><strong>本章概述：</strong>评估产品或项目是否靠谱是产品经理必须具备的一种能力。学会从做产品缘由、团队、撒手锏、刚需和市场容量、顺势而为、风险和增长动力引擎7个方面进行评估。当然并不是说按照这7个方面进行评估后的产品就一定能成功，因为定性判断和评估或多或少会存在一定的误差，而且很多产品的成功带有一定的偶然性。但是总的来说，有评估标准总比没有好。</p>
+</blockquote>
+<p>评估一个产品或项目是否靠谱，基本上可以从<strong>定性和定量</strong>两个角度进行。定性主要包括原因、团队、撒手锏、刚需市场容量、顺势和风险；定量主要包括增长动力引擎。</p>
+<h4 id="做产品的缘由"><a href="#做产品的缘由" class="headerlink" title="做产品的缘由"></a>做产品的缘由</h4><p>为什么要做这个产品？这是第一个要评估的问题。大多数人都知道做什么，怎么做，但是很少有人知道为什么做。<strong>做产品的缘由主要有以下4个方面。</strong></p>
+<ul>
+<li>增加收入，提高市场占有率，创造盈收。<strong>适用于收入型的产品</strong>，<strong>赚钱</strong>是第一目标。</li>
+<li>提高用户基数和黏度。<strong>适用于做用户量级的产品，在没到达赚钱的最佳时机之前</strong>，<strong>提高用户活跃度和留存率</strong>是第一目标。</li>
+<li><strong>市场造势</strong>，提升品牌价值。<strong>适用于增长型的产品</strong>，找到目标用户群在哪，将其转化成自己的用户，扩大产品的影响力，也就是提高品牌价值是第一目标。</li>
+<li><strong>产品差异化</strong>，抑制并击败竞争对手。<strong>适用于战略级的产品，不一定要求赚钱</strong>，哪怕是流血烧钱，也要牵制竞争对手，也就是击败竞争对手是第一目标。</li>
+</ul>
+<p>有的时候，只是创始人头脑一热，偶得一想法，是否有必要实现这个想法，创始人可能自己都没有主意。被人质疑的时候，根本回答不上来。</p>
+<h4 id="团队"><a href="#团队" class="headerlink" title="团队"></a>团队</h4><p>这方面主要是指<strong>评估团队成员</strong>，看团队成员在自己的专业能力方面是否是顶级的。圈里有个<strong>“铁三角”</strong>说法，老大要懂<strong>产品</strong>，老二要懂<strong>技术</strong>，老三要懂<strong>运营和市场</strong>，这对于一个移动互联网的创业型团队来讲是较为优秀的组合。</p>
+<blockquote>
+<p>人才和团队是企业的核心价值。有时候想法确实非常好，但是缺乏一流的人才来执行和实现，产品或项目往往死得比较快。好多风险投资机构主要是看人，只要团队优秀，就算产品或项目看起来不怎么靠谱，或者有一定的缺陷，投资机构还是会选择投资。</p>
+</blockquote>
+<h4 id="撒手锏"><a href="#撒手锏" class="headerlink" title="撒手锏"></a>撒手锏</h4><p>产品的撒手锏或者杀招在哪？这个需要重点评估，撒手锏用现在比较时髦的话来说就是<strong>“颠覆式创新”</strong>。这种颠覆式创新主要体现在4个方面。</p>
+<ul>
+<li><p><strong>技术创新：</strong>以前实现不了，现在通过技术手段能实现；或者以前能实现，但是离用户预期较远，现在能够更好地超出用户预期。一般而言，技术创新所构建的竞争壁垒比较坚固。</p>
+<blockquote>
+<p>比如以Google Glass为代表的穿戴式设备。</p>
+</blockquote>
+</li>
+<li><p><strong>产品或服务创新：</strong>针对用户的核心诉求，在解决方案方面满足甚至超出用户预期的创新。</p>
+<blockquote>
+<p>这也是我们常说的<strong>平庸的产品或服务满足用户需求，优秀的产品或服务引导用户需求，卓越的产品或服务创造用户需求。</strong>比如同样是做餐饮，雕爷牛腩独辟蹊径，通过互联网玩法使自身估值提升，成就中国第一家“轻奢餐”餐饮品牌。轻奢餐能提供介于快餐和正餐之间的用餐感受，比低价位的快餐要美味和优雅，又比豪华正餐节省时间和金钱。雕爷牛腩餐厅有一个独特岗位——CTO（首席体验官）。好的餐厅有三要素：口味、环境、服务——前两者，改进的空间是有限的，而服务的改进空间是无限的。鉴于此，餐厅CTO会以顾客的角度去感知餐厅服务，不断根据反馈的意见改进服务，并有权为顾客喜爱的甜点和小菜免单。</p>
+</blockquote>
+</li>
+<li><p><strong>流程创新：</strong>技术活动或生产活动中的操作程序、工作流程、方式方法和规则体系的创新。</p>
+<blockquote>
+<p>比如生鲜电商一般会经历生产、加工、流通、销售等环节。比如CSA（社区支持农业）模式使得从田间地头到餐桌直供，减少了中间环节。</p>
+</blockquote>
+</li>
+<li><p><strong>商业模式创新：</strong>指为企业价值创造提供的基本逻辑的创新，即把新的商业模式引入社会的生产体系，并为客户和自身创造价值。</p>
+<blockquote>
+<p>通俗地说，商业模式创新就是指企业以新的有效方式赚钱。新引入的商业模式既可能在构成要素方面不同于已有的商业模式，也可能在要素间关系或者动力机制方面不同于已有的商业模式。比如社群经济的兴起，草根到粉丝到社群的发展路径。小米和罗辑思维就是典型案例。如果产品或项目有颠覆式创新，一般而言是比较靠谱的。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="刚需和市场容量"><a href="#刚需和市场容量" class="headerlink" title="刚需和市场容量"></a>刚需和市场容量</h4><p>决定开发一款产品之前，需要搞明白如下问题：<strong>用户需求的痛点是什么？用户的需求紧迫吗？用户需求的频次如何？有着类似需求的用户量到底有多大？需求是否是刚需？</strong>要想弄明白这些问题，可以从如下几个方面入手。</p>
+<ul>
+<li><p>用户期望得到的与现实提供的产品之间存在着巨大的鸿沟，<strong>鸿沟</strong>是刚需。</p>
+<blockquote>
+<p>比如着急去某地办事，就是打不到出租车。</p>
+</blockquote>
+</li>
+<li><p>马斯洛需要层次越底层越是刚需。</p>
+<blockquote>
+<p>比如生理需求比安全、社交和尊重需求更加重要。</p>
+</blockquote>
+</li>
+<li><p>用户离不开、必不可少的需求。</p>
+<blockquote>
+<p>如果用户得不到满足，生理或心理就会遭受重大打击的需求是刚需。</p>
+</blockquote>
+</li>
+<li><p>用户愿意为之付费的需求是刚需。</p>
+</li>
+<li><p>受国家政策、法规、文化、习惯、重大事件的影响而产生的需求是刚需。</p>
+</li>
+<li><p>用户场景动态变化产生的需求是刚需。</p>
+<blockquote>
+<p>比如十年前能买到一部能打电话和发短信的功能手机就很不错了，十年后，用户不再把打电话和发短信看得那么重，现在看中的是智能手机大不大，好看不好看，酷不酷，拿出去有没有面子。例如，时代在变迁，不同圈层用户的喜好也在变化。也许“70后”“80后”比较关注的是功能，但是“90后”“00后”对情感的诉求远胜于对功能的诉求。他们关注自我实现和精神引领，关注自己的“存在感”。也就是说，情感和精神引领方面的诉求成为“90后”“00后”的刚需。这个现象也很好解释，过去相当长的一段时间内，马斯洛需要层次里面的底层需要是刚需，自我实现是兴奋性的诉求。但是，发展到现在，兴奋性的核心诉求变成了“90后”“00后”的刚需，这恰好印证了刚需是一个动态变化的过程。</p>
+</blockquote>
+<p>评估刚需的时候，还需要<strong>评估其市场容量</strong>。一般而言，市场<strong>容量较大的产品或项目一般是比较靠谱的</strong>。</p>
+</li>
+</ul>
+<h4 id="顺势而为"><a href="#顺势而为" class="headerlink" title="顺势而为"></a>顺势而为</h4><blockquote>
+<p>就像雷军说的，<strong>只要站在风口，猪也能飞起来。</strong>顺应行业发展趋势的产品或项目一般是比较靠谱的。</p>
+</blockquote>
+<p>顺势而为指的是做产品的时机是否合适，也可以指是否顺应行业的发展趋势。预测行业发展趋势一般有如下方法：</p>
+<h5 id="历史推断法"><a href="#历史推断法" class="headerlink" title="历史推断法"></a>历史推断法</h5><blockquote>
+<p>总结过去的发展历程，预测未来的发展趋势。</p>
+</blockquote>
+<p>比如互联网产品走的是<code>工具→社区→娱乐→商务→平台</code>的路线，进而可以预测出移动互联网产品的发展趋势，走的路线和互联网产品的路线的差不多，也走的是<code>工具→社区→娱乐→商务→平台</code>的路线。</p>
+<h5 id="逆向思维法"><a href="#逆向思维法" class="headerlink" title="逆向思维法"></a>逆向思维法</h5><blockquote>
+<p>按照和目前相反或相对的方向推断行业发展趋势。</p>
+</blockquote>
+<p>以社区产品为例，社区有三大要素，即<strong>关系、内容和互动</strong>。按照侧重点不同，社区产品分为内容型社区和关系型社区。</p>
+<p>国内社区的发展是从内容型社区起步的，比如豆瓣和大众点评网，后来发展到以人人网和开心网为代表的关系型社区；</p>
+<p>基于关系这个要素，先是以人人网和开心网为代表的强关系社区，后来发展到以新浪微博和腾讯微博为代表的弱关系社区；</p>
+<p>之后兴起一种概念叫弹性社交网络，即基于陌生人的社交网络，发展到以陌陌、友加为代表的零关系社区。</p>
+<p>关系型社区走的是强关系→弱关系→零关系的路线（这是一个循环的过程）。</p>
+<p>再比如，基于内容这个要素，先是以博客、微博为代表的文字社交，后来发展到以Instagram为代表的图片社交，之后发展到以微信为代表的语音社交，再之后是以抖音、快手为代表的视频社交。</p>
+<h5 id="PEST分析法"><a href="#PEST分析法" class="headerlink" title="PEST分析法"></a>PEST分析法</h5><blockquote>
+<p>PEST分析是企业对外部的大环境进行战略分析时常用的一种方法，P是政治(politics)，E是经济(economy)，S是社会(society)，T是技术(technology)。通过分析以上四个因素，可以了解到企业现下所面临的宏观环境，根据分析结果，来考虑企业下一步的战略计划。</p>
+</blockquote>
+<p>比如参与式体验农庄的兴起，对于在高压下忙碌生活的城市人来说，无疑是一种释放心灵与身体的短暂之旅——只闻花香，不谈悲喜。而这样的农事活动项目，让平日里看厌了车水马龙，吸够了雾霾、浑浊空气的城市人参与进来，享受大自然给予的一切。结合农业民俗开展种植体验、动物喂养、豆制品制作等项目，既活跃了身心又增强了情侣、爱人、亲子、朋友之间的情谊；还能感受自然风光，体验别样的农耕文化，让顾客在这样的环境里获得欢乐、知识和刺激，增进感情。</p>
+<p>PEST 分析是一种重要的市场研究工具，可以提供有用的洞察，了解哪些策略可能最适合企业发展。常见的PEST图如下所示：</p>
+<p><img src="/2024/07/19/Lean-Methods-and-Product-Development/image-20240722123332552.png" alt="image-20240722123332552" loading="lazy"></p>
+<p><strong>PEST分析应该在什么时候使用呢？</strong>最直接的答案是企业需要有关外部环境的更多信息的时候，这可能是<strong>企业最初建立新业务的时候，或者企业正在考虑改变当前业务的方向。</strong></p>
+<p>PEST分析可能构成年度战略规划过程的一部分，但如果管理者了解宏观环境即将发生的变化并希望重新评估市场，就可以进行临时分析。如果管理者正在考虑发展业务或潜在的合作、合并或收购机会，也可以选择进行 PEST 分析。</p>
+<p><img src="/2024/07/19/Lean-Methods-and-Product-Development/whatispest03.png" alt="img" loading="lazy"></p>
+<h5 id="价值链法"><a href="#价值链法" class="headerlink" title="价值链法"></a>价值链法</h5><p>根据<code>供应商—制造商—经销商—用户终端</code>这条价值链来预测行业发展趋势。分析为什么互联网及移动互联网呈现平台开放的趋势，其实开放平台的目的还是通过第三方开发者给网站带来丰富的内容资源，包括各种形式的App应用，如工具类、娱乐类和商务类的应用，说到底还是解决产业链的上游（内容来源）的问题。</p>
+<h4 id="风险"><a href="#风险" class="headerlink" title="风险"></a>风险</h4><blockquote>
+<p>这方面主要评估产品或项目面临的风险，评估这些风险对产品是否是致命的。</p>
+</blockquote>
+<p>产品或项目可能面临的外部和内部风险包括政策风险、市场风险、技术风险、决策风险、法律风险、资本风险等。如果产品或项目的风险等级为高，且没有强有力的应对方案，这样的产品或项目一般而言比较危险。如果产品或项目的风险等级为中或低，且有相应的应对方案，这样的产品或项目就可以继续推进。</p>
+<h4 id="增长动力引擎"><a href="#增长动力引擎" class="headerlink" title="增长动力引擎"></a>增长动力引擎</h4><p>增长动力引擎主要<strong>从定量角度</strong>进行评估。哪些数据指标可以用来衡量一个产品或项目具备增长动力引擎？也就是说，符合哪些数据指标就可以扩大规模？主要数据指标如下。</p>
+<h5 id="（1）用户新增率＞用户流失率"><a href="#（1）用户新增率＞用户流失率" class="headerlink" title="（1）用户新增率＞用户流失率"></a>（1）用户新增率＞用户流失率</h5><blockquote>
+<p>用户新增率指的是在特定时间段内，新增的用户数所占用户总数的比例。比如，用户基数是100人，在特定的时间段内增长到110人，那么新增率就是（110–100）/100=10%。用户流失率指的是在特定的时间段内，用户的流失数量与全部用户数量的比例。比如，用户基数是100人，在特定的时间段内减少到90人，那么流失率就是（100–90）/100=10%。</p>
+</blockquote>
+<p>如何理解用户新增率大于用户流失率？这个很容易理解，就好像是一个蓄水池，有一根进水管和一根出水管，进水管代表新增率，出水管代表流失率，一旦进水量小于出水量，这个蓄水池的水终将有一天流尽。也就是说，这样的产品或项目不太靠谱。</p>
+<p>一般而言，用户新增率大于用户流失率的产品或项目比较靠谱。</p>
+<h5 id="（2）推荐系数＞1"><a href="#（2）推荐系数＞1" class="headerlink" title="（2）推荐系数＞1"></a>（2）推荐系数＞1</h5><blockquote>
+<p>推荐系数也叫K因子，指的是每个用户推荐带来的平均用户数要大于1。</p>
+</blockquote>
+<p>其实，这也是衡量产品或项目口碑的一种方法。</p>
+<p>推荐系数大于1的产品或项目一般比较靠谱。</p>
+<h5 id="（3）用户留存率＞40"><a href="#（3）用户留存率＞40" class="headerlink" title="（3）用户留存率＞40%"></a>（3）用户留存率＞40%</h5><blockquote>
+<p>用户在某段时间开始使用应用，经过一段时间后，仍然继续使用应用，被称作留存。</p>
+</blockquote>
+<p>顾名思义，留存指的就是“有多少用户留下来了”。留存用户占当时新增用户的比例是留存率，按照每隔1单位时间（例如，日、周、月）进行统计。留存用户和留存率体现了应用的质量和保留用户的能力。</p>
+<p>留存率公式为 （一般统计周期为天） ：</p>
+<p>留存率=登录用户数/新增用户数×100%</p>
+<p>其中，新增用户数指在当前时间段新注册登录应用的用户数。登录用户数指在当前时间段至少登录过一次的用户数。</p>
+<p>留存率还可分为以下几种。</p>
+<p>次日留存率=（当天新增的用户数且在第2天还登录的用户数）/当天新增的用户数</p>
+<p>第7日留存率=（当天新增的用户数且在往后的第7天还有登录的用户数）/当天新增的用户数</p>
+<p>第30日留存率=（当天新增的用户数且在往后的第30天还有登录的用户数）/当天新增的用户数</p>
+<blockquote>
+<p>为什么说用户留存率＞40%，就可以认为产品或项目是比较靠谱的？</p>
+</blockquote>
+<p>根据一些统计专家的数据统计，比较优质的产品或项目的留存率都在40%左右。如果应用型产品的留存率接近游戏型产品的留存率（顶级手游产品的留存率约为40%），这无疑说明产品是靠谱的。</p>
+<h5 id="（4）LTV＞3CPA"><a href="#（4）LTV＞3CPA" class="headerlink" title="（4）LTV＞3CPA"></a>（4）LTV＞3CPA</h5><blockquote>
+<p>LTV（life time value）指的是用户终生价值，CPA (Cost Per Action)指的是每获取一个付费用户的成本。</p>
+</blockquote>
+<p>比如，某个产品的盈利模式是会员制度，假设每个账号的平均寿命是2年，每年支付会员费约40元，那么粗略计算LTV=2×40=80元。假设每获取一个付费用户的成本是20元，即CPA=20元，也就是说，2年过后，每开发一个付费用户就可以赚取80-20=60元。</p>
+<p>假设LTV=20元，CPA=80元，也就是说，2年过后，每开发一个付费用户就要亏损60元，因为20–80=–60。</p>
+<p>LTV＞CPA的时候，可以说这个产品或项目可能有点靠谱，但是如果要说比较靠谱，需要LTV＞3CPA。</p>
+<p>在项目启动之前就找出那些失败概率较高的项目，并将这些项目归类为不应该启动的项目，这样也会减少一些资源的浪费。</p>
+<h3 id="精益创业的3个方面"><a href="#精益创业的3个方面" class="headerlink" title="精益创业的3个方面"></a>精益创业的3个方面</h3><blockquote>
+<p>本章概述：精益创业模式虽然强调快速假设、快速学习、快速调整，但<strong>不等于可以盲目试错</strong>。精益开发模式不能确保产品或项目孵化一定成功，<strong>只是一个帮助提高成功概率的框架</strong>。精益创业强调走出办公室多与用户互动，目的在于了解产品是不是用户想要的，用户愿不愿意为之付费。</p>
+</blockquote>
+<h4 id="精益创业简介"><a href="#精益创业简介" class="headerlink" title="精益创业简介"></a>精益创业简介</h4><p><strong>瀑布式开发</strong>的基本流程是需求 → 设计 → 开发 → 测试 ， 是一个更倾向于严格控制的管理模式 。 要求有明确的需求，大家按照需求一步步做好规划，每一阶段工作的完成是下一阶段工作开始的前提，每一阶段都要进行严格的评审，保证各阶段的工作做得足够好时才允许进入下一阶段。<strong>这种模式一般适用于需求比较明确、to B 端的项目。</strong></p>
+<p><img src="/2024/07/19/Lean-Methods-and-Product-Development/v2-a18a40df65fd27be09bd1a32c451b837_720w.jpg" alt="img" loading="lazy"></p>
+<p>瀑布项目失败率会比较高，因为它有一个很大的缺陷， 就是受各种条件的制约。当产品研发完成后，到了产品测试阶段 万一发现问题 ，或者发现其无法满足市场需求，那么就需要重新开发，甚至需要重新规划产品，这间接导致了产品延期发布的高发性 与不确定性。</p>
+<blockquote>
+<p>微软 的瀑布式开发模式就是个很好的例子。随着用户对软件的需求越来越苛刻，微软的软件产品曾经遭受了大家的不满，原因并非是产品的使用问题，而是其更新周期太过漫长 。比如微软Office 、 Windows 等主打产品的更新周期长达 3 年左右，软件延期发布实属家常便饭，此时微软的瀑布式开发模式已经难以满足新型软件的开发要求，不得不改变产品的研发策略。</p>
+</blockquote>
+<p><strong>敏捷开发</strong>是一种以用户需求进化为核心、迭代、循序渐进的开发方法。首先把 用户（客户 ）最关注的软件原型做出来，交付或上线，在实际场景中去 快速 修改弥补需求中的不足，再次发布版本。通过一些敏捷实践方式，细化story ，提供更小的迭代。如此循环，直到用户（客户）满意。<strong>适用于需求不明确、创新性或者需要抢占市场的项目。（问题已知但解决方案未知）</strong></p>
+<blockquote>
+<p>国产开源的<a href="https://link.zhihu.com/?target=https://www.zentao.net/?from=upluzhihu">禅道项目管理软件</a>，2009 年开始遵循Scrum （ 敏捷式开发中比较流行的一种方式）的管理思想，发布了第一个产品版本 。自发布以来，禅道曾数次打败JIRA 及其他强有力的竞品，连续四年荣膺国内外软件测试行业最常用测试管理工具第一名 ，也算是国产软件 的骄傲了。在产品开发过程中， 禅道研发团队认为Scrum方法虽然注重实效，操作性强，非常适合软件研发项目的快速迭代开发 ，但它只规定了核心的管理框架，还有很多细节流程没有完善。于是禅道团队结合国内研发现状，整合了Bug管理、测试用例管理、发布管理、文档管理等功能，完整的覆盖了软件研发项目的整个流程。在禅道软件中，明确将产品、项目、测试三者概念区分开，产品人员、开发团队、测试人员，三者分立，互相配合，又互相制约，通过需求、任务、Bug来进行交相互动，终通过项目拿到合格的产品，是敏捷式开发的优秀案例。</p>
+</blockquote>
+<p><img src="/2024/07/19/Lean-Methods-and-Product-Development/v2-900f88d2d5ec67e7a53e73e5adee8c0f_720w.jpg" alt="img" loading="lazy"></p>
+<p><strong>精益开发模式</strong>提倡企业进行“验证性学习”，先向市场推出极简的原型产品，然后在不断试验和学习中，以最小的成本和有效的方式验证产品是否符合用户需求，并迭代产品，灵活调整方向。<strong>这种模式适用于问题未知、解决方案也未知的情境。</strong></p>
+<h5 id="精益创业的基本原则"><a href="#精益创业的基本原则" class="headerlink" title="精益创业的基本原则"></a>精益创业的基本原则</h5><ul>
+<li>减少浪费，低成本（无收入不扩增）</li>
+<li>一种开发、测量、学习的文化</li>
+<li>快速假设，快速学习，失败后快速调整</li>
+<li>敏捷技术开发。</li>
+</ul>
+<h5 id="精益创业的特征"><a href="#精益创业的特征" class="headerlink" title="精益创业的特征"></a>精益创业的特征</h5><ul>
+<li>非资本推动型，主动自发，关注用户价值，拒绝华而不实</li>
+<li>持续的用户互动</li>
+<li>从第一天开始，以收入为目标</li>
+<li>如果没有收入，就限制规模编制</li>
+<li>假设用户和未来都是未知的</li>
+<li>资源的低燃烧率，降低风险。</li>
+</ul>
+<h3 id="精益画布的9个空格"><a href="#精益画布的9个空格" class="headerlink" title="精益画布的9个空格"></a>精益画布的9个空格</h3><h3 id="精益创业的访谈"><a href="#精益创业的访谈" class="headerlink" title="精益创业的访谈"></a>精益创业的访谈</h3><h3 id="华为BLM工具"><a href="#华为BLM工具" class="headerlink" title="华为BLM工具"></a>华为BLM工具</h3><h3 id="市场洞察的5个看"><a href="#市场洞察的5个看" class="headerlink" title="市场洞察的5个看"></a>市场洞察的5个看</h3><h3 id="BLM战略意图的3个方面"><a href="#BLM战略意图的3个方面" class="headerlink" title="BLM战略意图的3个方面"></a>BLM战略意图的3个方面</h3><h3 id="BLM创新焦点的4种策略"><a href="#BLM创新焦点的4种策略" class="headerlink" title="BLM创新焦点的4种策略"></a>BLM创新焦点的4种策略</h3><h3 id="BLM业务设计的6个要素"><a href="#BLM业务设计的6个要素" class="headerlink" title="BLM业务设计的6个要素"></a>BLM业务设计的6个要素</h3><h3 id="BLM战略执行的4个方面"><a href="#BLM战略执行的4个方面" class="headerlink" title="BLM战略执行的4个方面"></a>BLM战略执行的4个方面</h3></div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">看我整理的这么好，来打赏点呗~</div><div id="qr" style="display:none;"><div style="display:inline-block"><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/20200930114156633.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQxMTM3Mw==,size_16,color_FFFFFF,t_70"><img loading="lazy" src="https://img-blog.csdnimg.cn/20200930114156633.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQxMTM3Mw==,size_16,color_FFFFFF,t_70" alt="支付宝" title="支付宝"></a><div><span style="color:#00A3EE"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-alipay-line"></use></svg></span></div></div><div style="display:inline-block"><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/20200930114243891.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQxMTM3Mw==,size_16,color_FFFFFF,t_70"><img loading="lazy" src="https://img-blog.csdnimg.cn/20200930114243891.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTQxMTM3Mw==,size_16,color_FFFFFF,t_70" alt="微信支付" title="微信支付"></a><div><span style="color:#2DC100"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-pay-line"></use></svg></span></div></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>机智の老何</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://hank20200929.github.io/2024/07/19/Lean-Methods-and-Product-Development/" title="【阅读笔记】产品心经——精益方法和产品开发">https://hank20200929.github.io/2024/07/19/Lean-Methods-and-Product-Development/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2024/07/23/byrtsoftlink/" rel="prev" title="博雅软通"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">博雅软通</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2024/07/18/Core-competencies-of-pm/" rel="next" title="【阅读笔记】产品心经：产品经理应该知道的72件事——核心素养、深刻认知产品"><span class="post-nav-text">【阅读笔记】产品心经：产品经理应该知道的72件事——核心素养、深刻认知产品</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>点击按钮跳转 GitHub Issues 评论。</span><br><span>若没有本文 Issue，您可以使用 Comment 模版新建。</span><br><a class="hty-button hty-button--raised" id="github-issues" target="_blank" rel="noopener" href="https://github.com/YunYouJun/yunyoujun.github.io/issues?q=is:issue+【阅读笔记】产品心经——精益方法和产品开发">GitHub Issues</a></div><div id="valine-container"></div><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function initValine() {
+  const valineConfig = {"enable":true,"appId":"R6zMhu6tVOtUxK8fQk5mfgQt-gzGzoHsz","appKey":"4jG3KwGXwMS6EQwc0hDKiUSp","placeholder":"Just go go","avatar":null,"pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"serverURLs":"https://r6zmhu6t.lc-cn-n1-shared.com","enableQQ":true,"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = window.location.pathname
+  new Valine(valineConfig)
+}
+setTimeout(initValine, 1000)</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2019 – 2024 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 机智の老何</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(๑•̀ㅂ•́)و✧</span><script>function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2020-09-29T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div id="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv" title="总访客量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user-line"></use></svg></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg></span><span id="busuanzi_value_site_pv"></span></span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script></body></html>
